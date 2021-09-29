@@ -19,99 +19,24 @@
         return $con;
     }
 
+    function gettoken($con, int $user_id){
 
-    
-    /**
-     * Class RandomStringGenerator
-     * @package Utils
-     *
-     * Solution taken from here:
-     * http://stackoverflow.com/a/13733588/1056679
-     */
-    class RandomStringGenerator
-    {
-        /** @var string */
-        protected $alphabet;
+        $query = $con->prepare("SELECT * FROM tokens WHERE user_id = ?");
+        $query->bind_param('i', $user_id); // 's' specifies the variable type => 'string'
+                
+        $query->execute();
 
-        /** @var int */
-        protected $alphabetLength;
+        return $query->get_result()->fetch_all(MYSQLI_BOTH);
+    }
 
+    function extendtime($con, $token_id){
+        $time = new DateTime();
+        $time->add(new DateInterval('PT20M'));
+        $stamp = $time->format('Y-m-d H:i');
 
-        /**
-         * @param string $alphabet
-         */
-        public function __construct($alphabet = '')
-        {
-            if ('' !== $alphabet) {
-                $this->setAlphabet($alphabet);
-            } else {
-                $this->setAlphabet(
-                    implode(range('a', 'z'))
-                    . implode(range('A', 'Z'))
-                    . implode(range(0, 9))
-                );
-            }
-        }
-
-        /**
-         * @param string $alphabet
-         */
-        public function setAlphabet($alphabet)
-        {
-            $this->alphabet = $alphabet;
-            $this->alphabetLength = strlen($alphabet);
-        }
-
-        /**
-         * @param int $length
-         * @return string
-         */
-        public function generate($length)
-        {
-            $token = '';
-
-            for ($i = 0; $i < $length; $i++) {
-                $randomKey = $this->getRandomInteger(0, $this->alphabetLength);
-                $token .= $this->alphabet[$randomKey];
-            }
-
-            return $token;
-        }
-
-        /**
-         * @param int $min
-         * @param int $max
-         * @return int
-         */
-        protected function getRandomInteger($min, $max)
-        {
-            $range = ($max - $min);
-
-            if ($range < 0) {
-                // Not so random...
-                return $min;
-            }
-
-            $log = log($range, 2);
-
-            // Length in bytes.
-            $bytes = (int) ($log / 8) + 1;
-
-            // Length in bits.
-            $bits = (int) $log + 1;
-
-            // Set all lower bits to 1.
-            $filter = (int) (1 << $bits) - 1;
-
-            do {
-                $rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
-
-                // Discard irrelevant bits.
-                $rnd = $rnd & $filter;
-
-            } while ($rnd >= $range);
-
-            return ($min + $rnd);
-        }
+        $stmt = $con->prepare('UPDATE tokens SET expires_at = ? WHERE token_id = ?');
+        $stmt->bind_param('si', $stamp, $token_id);
+                            
+        $stmt->execute();
     }
 ?>

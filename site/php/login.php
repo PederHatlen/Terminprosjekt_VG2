@@ -30,6 +30,7 @@
                 $username = $_POST['username'];
                 $pwd = $_POST['password'];
 
+                $token;
 
                 $con = connect();
 
@@ -41,8 +42,42 @@
                 $rawdata = $stmt->get_result();
                 $result = $rawdata->fetch_array(MYSQLI_BOTH);
 
-                if ($rawdata->num_rows > 0 && password_verify($pwd, $result['password'])) {
+                $user_id = $result["id"];
+
+                if (count($result) > 0 && password_verify($pwd, $result['password'])) {
                     echo "Riktig passord!<br>";
+                    
+                    $result = gettoken($con, $user_id);
+
+                    if (count($result) > 0) {
+                        //Bør skrive sql kode som automatisk sletter alle som er expired
+                        for ($i=0; $i < count($result); $i++) { 
+                            if (new DateTime($result[$i]["expires_at"]) < new DateTime()) {
+                                $stmt = $con->prepare('DELETE FROM tokens WHERE token_id = ?');
+                                $stmt->bind_param('s', $result[$i]["token_id"]); // 's' specifies the variable type => 'string'
+                            
+                                $stmt->execute();
+                            }else{
+                                $token = $result[$i]["token_id"];
+                                extendtime($con, $token);
+                            }
+                        }
+                    }else{
+                        $time = new DateTime();
+                        $time->add(new DateInterval('PT20M'));
+                        $stamp = $time->format('Y-m-d H:i');
+                        $datetime = new DateTime();
+                        $datetime = $datetime->format('Y-m-d H:i');
+
+                        $stmt = $con->prepare('INSERT into tokens (user_id, token, created_at, expires_at) VALUES (?, UUID(), ?, ?)');
+                        $stmt->bind_param('iss', $user_id, $datetime, $stamp); // 's' specifies the variable type => 'string'
+                    
+                        $stmt->execute();
+
+                        $result = gettoken($con, $user_id)[0];
+
+                        echo "<script>window.localStorage.setItem('LoginToken', '". $result["token"] . "');</script>";
+                    }
                 }else{
                     echo '<p>Feil brukernavn eller passord.</p>';
                 }
