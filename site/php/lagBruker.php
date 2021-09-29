@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>BinærChat | LagBruker</title>
-    <link rel="icon" type="../image/png" href="img/favicon.png">
+    <link rel="icon" type="image/png" href="../img/favicon.png">
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
     </header>
     <div class="content">
         <h2>Lage bruker til binærchat</h2>
-        <p>Har du allerede en bruker? <a href="php/login.php">Logg inn</a></p>
+        <p>Har du allerede en bruker? <a href="login.php">Logg inn</a></p>
 
         <h3>Bare lov med binære brukernavn!</h3>
         <form action="" method="post">
@@ -30,8 +30,33 @@
 
             // Hente data fra post dataen og legge til stemmen, hvis det var post data.
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                $parti = $_POST['partivalg'];
-                addVote($parti);
+                $username = $_POST['username'];
+                $pwd = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                echo $username;
+
+
+                $con = connect();
+
+                $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
+                $stmt->bind_param('s', $username); // 's' specifies the variable type => 'string'
+               
+                $stmt->execute();
+               
+                $result = $stmt->get_result();
+                
+                if (mysqli_num_rows($result) > 0) {
+                    echo "Brukernavnet er allerede tatt :(";
+                }else{
+                    echo "Brukernavnet er ledig!";
+                    $stmt = $con->prepare('INSERT into users (username, password) VALUES (?, ?)');
+                    $stmt->bind_param('ss', $username, $pwd); // 's' specifies the variable type => 'string'
+                
+                    $stmt->execute();
+                }
+
+
+
+                $con->close();
             }
         ?>
 
@@ -39,6 +64,6 @@
     <footer>
         <span>Peder 2021</span>
     </footer>
-    <script src="../js/signupscript.js"></script>
+    <script src="../js/script.js"></script>
 </body>
 </html>

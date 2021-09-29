@@ -17,6 +17,9 @@ pwdEL.oninput = checkinput;
 pwdConEL.oninput = checkinput;
 checkinput()
 
+function name(params) {
+    
+}
 
 function checkinput() {
     if (usernameEL.value != "" && pwdEL.value != "" && pwdEL.value === pwdConEL.value) {
