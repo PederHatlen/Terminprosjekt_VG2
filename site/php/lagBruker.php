@@ -32,7 +32,6 @@
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $username = $_POST['username'];
                 $pwd = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                echo $username;
 
 
                 $con = connect();
@@ -47,14 +46,12 @@
                 if (mysqli_num_rows($result) > 0) {
                     echo "Brukernavnet er allerede tatt :(";
                 }else{
-                    echo "Brukernavnet er ledig!";
                     $stmt = $con->prepare('INSERT into users (username, password) VALUES (?, ?)');
                     $stmt->bind_param('ss', $username, $pwd); // 's' specifies the variable type => 'string'
                 
                     $stmt->execute();
+                    echo "Brukeren er registrert!";
                 }
-
-
 
                 $con->close();
             }
