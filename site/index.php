@@ -12,6 +12,10 @@
 <body>
     <header>
         <h1><a href="index.html">BinærChat [Temp name]</a></h1>
+        <?php
+        include 'php/phpRepo.php';
+        echo $usernametext;
+        ?>
     </header>
     <div class="content">
         <h2>Velkommen til Binærchat!</h2>

@@ -21,7 +21,7 @@ CREATE TABLE conversations (
     conversation_id INT not null PRIMARY KEY AUTO_INCREMENT,
     user1_id INT not null,
     user2_id  INT not null,
-    created_at DATETIME not Null
+    created_at DATETIME not Null DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE messages (
@@ -29,5 +29,5 @@ CREATE TABLE messages (
     conversation_id INT not null,
     sender_id INT not null,
     message VARCHAR(255) not null,
-    sent_at DATETIME not Null
+    sent_at DATETIME not Null DEFAULT CURRENT_TIMESTAMP
 );

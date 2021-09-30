@@ -11,7 +11,11 @@
 </head>
 <body>
     <header>
-        <h1><a href="../index.html">BinærChat [Temp name]</a></h1>
+        <h1><a href="../index.php">BinærChat [Temp name]</a></h1>
+        <?php
+        include 'phpRepo.php';
+        echo $usernametext;
+        ?>
     </header>
     <div class="content">
         <h2>Lage bruker til binærchat</h2>
@@ -26,7 +30,6 @@
         </form>
 
         <?php
-            include 'phpRepo.php';
 
             // Hente data fra post dataen og legge til stemmen, hvis det var post data.
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -50,7 +53,24 @@
                     $stmt->bind_param('ss', $username, $pwd); // 's' specifies the variable type => 'string'
                 
                     $stmt->execute();
-                    echo "Brukeren er registrert!";
+
+
+                    $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
+                    $stmt->bind_param('s', $username); // 's' specifies the variable type => 'string'
+                
+                    $stmt->execute();
+                    
+                    $rawdata = $stmt->get_result();
+                    $userresult = $rawdata->fetch_array(MYSQLI_BOTH);
+
+                    maketoken($con, $userresult["id"]);
+
+                    $result = gettoken($con, $userresult["id"])[0];
+
+                    $_SESSION["logintoken"] = $result["token"];
+                    $_SESSION["username"] = $userresult["username"];
+
+                    echo '<p>Brukeren er registrert, og inlogget.</p><script>document.querySelector("#username_display").innerHTML = "Logget in som: '. $_SESSION["username"] .'";</script>';
                 }
 
                 $con->close();

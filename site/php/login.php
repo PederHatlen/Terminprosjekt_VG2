@@ -11,7 +11,11 @@
 </head>
 <body>
     <header>
-        <h1><a href="../index.html">BinærChat [Temp name]</a></h1>
+        <h1><a href="../index.php">BinærChat [Temp name]</a></h1>
+        <?php
+        include 'phpRepo.php';
+        echo $usernametext;
+        ?>
     </header>
     <div class="content">
         <h2>Lage bruker til binærchat</h2>
@@ -23,65 +27,37 @@
             <input type="submit" value="log in" id="submit"><br>
         </form>
         <?php
-            include 'phpRepo.php';
+            $con = connect();
 
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $username = $_POST['username'];
                 $pwd = $_POST['password'];
 
-                $token;
-
-                $con = connect();
-
                 $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
                 $stmt->bind_param('s', $username); // 's' specifies the variable type => 'string'
                
                 $stmt->execute();
-               
+                 
                 $rawdata = $stmt->get_result();
-                $result = $rawdata->fetch_array(MYSQLI_BOTH);
+                $userresult = $rawdata->fetch_array(MYSQLI_BOTH);
 
-                $user_id = $result["id"];
+                $user_id = $userresult["id"];
 
-                if (count($result) > 0 && password_verify($pwd, $result['password'])) {
-                    $result = gettoken($con, $user_id);
-
-                    $validtoken = FALSE;
+                if (count($userresult) > 0 && password_verify($pwd, $userresult['password'])) {
+                    $result = gettoken($con, $userresult["id"])[0];
 
                     if (count($result) > 0) {
-                        //Bør skrive sql kode som automatisk sletter alle som er expired
-                        for ($i=0; $i < count($result); $i++) { 
-                            if (new DateTime($result[$i]["expires_at"]) < new DateTime()) {
-                                $stmt = $con->prepare('DELETE FROM tokens WHERE token_id = ?');
-                                $stmt->bind_param('s', $result[$i]["token_id"]); // 's' specifies the variable type => 'string'
-                            
-                                $stmt->execute();
-                            }else{
-                                $token = $result[$i]["token_id"];
-                                extendtime($con, $token);
-                                $validtoken = TRUE;
-                            }
-                        }
+                        $token_id = $result["token_id"];
+                        extendtime($con, $token_id);
+                    }else{
+                        maketoken($con, $userresult["id"]);
                     }
-                    if (!$validtoken){
-                        $time = new DateTime();
-                        $time->add(new DateInterval('PT20M'));
-                        $stamp = $time->format('Y-m-d H:i');
-                        $datetime = new DateTime();
-                        $datetime = $datetime->format('Y-m-d H:i');
+                    $result = gettoken($con, $userresult["id"])[0];
 
-                        $stmt = $con->prepare('INSERT into tokens (user_id, token, created_at, expires_at) VALUES (?, UUID(), ?, ?)');
-                        $stmt->bind_param('iss', $user_id, $datetime, $stamp); // 's' specifies the variable type => 'string'
-                    
-                        $stmt->execute();
-                    }
-                    $result = gettoken($con, $user_id)[0];
-                    echo "Innloggingen fungerte!<br>
-                    <script>
-                        localStorage.setItem('LoginToken', '". $result["token"] . "');
-                        localStorage.setItem('Username', '" . $user_id . "');
-                        window.location.replace('../index.html');
-                    </script>";
+                    $_SESSION["logintoken"] = $result["token"];
+                    $_SESSION["username"] = $userresult["username"];
+
+                    echo '<p>Innloggingen fungerte!</p>';
                 }else{
                     echo '<p>Feil brukernavn eller passord.</p>';
                 }
