@@ -22,7 +22,6 @@
             <input type="password" name="password" id="password" placeholder="Passord"><br>
             <input type="submit" value="log in" id="submit"><br>
         </form>
-
         <?php
             include 'phpRepo.php';
 
@@ -45,9 +44,9 @@
                 $user_id = $result["id"];
 
                 if (count($result) > 0 && password_verify($pwd, $result['password'])) {
-                    echo "Riktig passord!<br>";
-                    
                     $result = gettoken($con, $user_id);
+
+                    $validtoken = FALSE;
 
                     if (count($result) > 0) {
                         //Bør skrive sql kode som automatisk sletter alle som er expired
@@ -60,9 +59,11 @@
                             }else{
                                 $token = $result[$i]["token_id"];
                                 extendtime($con, $token);
+                                $validtoken = TRUE;
                             }
                         }
-                    }else{
+                    }
+                    if (!$validtoken){
                         $time = new DateTime();
                         $time->add(new DateInterval('PT20M'));
                         $stamp = $time->format('Y-m-d H:i');
@@ -73,11 +74,14 @@
                         $stmt->bind_param('iss', $user_id, $datetime, $stamp); // 's' specifies the variable type => 'string'
                     
                         $stmt->execute();
-
-                        $result = gettoken($con, $user_id)[0];
-
-                        echo "<script>window.localStorage.setItem('LoginToken', '". $result["token"] . "');</script>";
                     }
+                    $result = gettoken($con, $user_id)[0];
+                    echo "Innloggingen fungerte!<br>
+                    <script>
+                        localStorage.setItem('LoginToken', '". $result["token"] . "');
+                        localStorage.setItem('Username', '" . $user_id . "');
+                        window.location.replace('../index.html');
+                    </script>";
                 }else{
                     echo '<p>Feil brukernavn eller passord.</p>';
                 }
@@ -85,7 +89,6 @@
                 $con->close();
             }
         ?>
-
     </div>
     <footer>
         <span>Peder 2021</span>
