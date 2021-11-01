@@ -17,11 +17,13 @@
             include 'php/phpRepo.php';
             echo $usernametext;
             ?>
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
-                <rect x="25" y="50" width="250" height="50"/>
-                <rect x="25" y="125" width="250" height="50"/>
-                <rect x="25" y="200" width="250" height="50"/>
-            </svg>
+            <a class="" href="">
+                <svg class="menuicon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
+                    <rect x="25" y="50" width="250" height="50"/>
+                    <rect x="25" y="125" width="250" height="50"/>
+                    <rect x="25" y="200" width="250" height="50"/>
+                </svg>
+            </a>
         </div>
         
 

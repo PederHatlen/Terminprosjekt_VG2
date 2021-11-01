@@ -29,6 +29,23 @@ header{
     font-weight: bolder;
     justify-content: space-between;
 }
+.rightheader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+#username_display{
+    color: white;
+}
+.menulink{
+    
+}
+.menuicon{
+    fill: #ffffff;
+    height: 75%;
+}
+
 footer{
     display: flex;
     align-items: center;
