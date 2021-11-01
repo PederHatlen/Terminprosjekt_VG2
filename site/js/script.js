@@ -5,3 +5,4 @@ document.querySelectorAll("input").forEach(element => {
         }
     });
 });
+

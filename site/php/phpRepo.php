@@ -7,7 +7,7 @@
     $stmt->execute();
     $con->close();
 
-    $usernametext = ('<span id="username_display">' . (isset($_SESSION["username"])? 'Logget in som: ' . $_SESSION["username"]:'Ikke pålogget') . '</span>');
+    $usernametext = ('<span id="username_display">' . (isset($_SESSION["username"])? ($_SESSION["username"]):'Ikke pålogget') . '</span>');
 
 
     function connect()
