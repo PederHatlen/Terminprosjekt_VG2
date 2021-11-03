@@ -28,6 +28,6 @@ CREATE TABLE messages (
     message_id INT not null PRIMARY KEY AUTO_INCREMENT,
     conversation_id INT not null,
     sender_id INT not null,
-    message VARCHAR(255) not null,
+    messagetext VARCHAR(255) not null,
     sent_at DATETIME not Null DEFAULT CURRENT_TIMESTAMP
 );

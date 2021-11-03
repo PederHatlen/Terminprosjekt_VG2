@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <h1><a href="../index.php">BinærChat [Temp name]</a></h1>
+        <h1><a href="../index.php">BinærChat</a></h1>
         <?php
         include 'phpRepo.php';
         echo $usernametext;

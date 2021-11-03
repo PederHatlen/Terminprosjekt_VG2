@@ -1,3 +1,44 @@
+<?php
+    include 'phpRepo.php';
+    $con = connect();
+    $signinworked = FALSE;
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $username = $_POST['username'];
+        $pwd = $_POST['password'];
+
+        $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
+        $stmt->bind_param('s', $username); // 's' specifies the variable type => 'string'
+       
+        $stmt->execute();
+         
+        $rawdata = $stmt->get_result();
+        $userresult = $rawdata->fetch_array(MYSQLI_BOTH);
+
+        $user_id = $userresult["id"];
+
+        if (count($userresult) > 0 && password_verify($pwd, $userresult['password'])) {
+            $result = gettoken($con, $userresult["id"]);
+
+            if (count($result) > 0) {
+                $token_id = $result["token_id"];
+                extendtime($con, $token_id);
+            }else{
+                maketoken($con, $userresult["id"]);
+            }
+            $result = gettoken($con, $userresult["id"])[0];
+
+            $_SESSION["logintoken"] = $result["token"];
+            $_SESSION["username"] = $userresult["username"];
+
+            $signinworked = TRUE;
+            header('Location: ../index.php');
+        }
+        $con->close();
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="no">
 <head>
@@ -11,14 +52,13 @@
 </head>
 <body>
     <header>
-        <h1><a href="../index.php">BinærChat [Temp name]</a></h1>
+        <h1><a href="../index.php">BinærChat</a></h1>
         <?php
-        include 'phpRepo.php';
-        echo $usernametext;
+            echo ('<span id="username_display">' . (isset($_SESSION["username"])? ($_SESSION["username"]):'Ikke pålogget') . '</span>');
         ?>
     </header>
     <div class="content">
-        <h2>Lage bruker til binærchat</h2>
+        <h2>Logg inn på binærchat</h2>
         <p>Har du ikke laget en bruker? <a href="lagBruker.php">Lag bruker</a></p>
 
         <form action="" method="post">
@@ -27,43 +67,12 @@
             <input type="submit" value="log in" id="submit"><br>
         </form>
         <?php
-            $con = connect();
-
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                $username = $_POST['username'];
-                $pwd = $_POST['password'];
-
-                $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
-                $stmt->bind_param('s', $username); // 's' specifies the variable type => 'string'
-               
-                $stmt->execute();
-                 
-                $rawdata = $stmt->get_result();
-                $userresult = $rawdata->fetch_array(MYSQLI_BOTH);
-
-                $user_id = $userresult["id"];
-
-                if (count($userresult) > 0 && password_verify($pwd, $userresult['password'])) {
-                    $result = gettoken($con, $userresult["id"])[0];
-
-                    if (count($result) > 0) {
-                        $token_id = $result["token_id"];
-                        extendtime($con, $token_id);
-                    }else{
-                        maketoken($con, $userresult["id"]);
-                    }
-                    $result = gettoken($con, $userresult["id"])[0];
-
-                    $_SESSION["logintoken"] = $result["token"];
-                    $_SESSION["username"] = $userresult["username"];
-
-                    echo '<p>Innloggingen fungerte!</p>';
-                }else{
-                    echo '<p>Feil brukernavn eller passord.</p>';
-                }
-
-                $con->close();
+            if ($signinworked) {
+                echo '<p>Innloggingen fungerte!</p>';
+            }else{
+                echo '<p>Feil brukernavn eller passord.</p>';
             }
+
         ?>
     </div>
     <footer>
