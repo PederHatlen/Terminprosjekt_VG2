@@ -5,9 +5,25 @@
     $con = connect();
     $stmt = $con->prepare('DELETE FROM tokens WHERE expires_at < CURRENT_TIMESTAMP');
     $stmt->execute();
+
+    $stmt = $con->prepare('SELECT id from users WHERE username = ?');
+    $stmt->bind_param('s', $_SESSION["username"]); // 's' specifies the variable type => 'string'
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+
+    //Validate logintoken
+    if (isset($_SESSION["logintoken"]) && isset($_SESSION["username"])){
+        if (isset($result["id"]) && !validatetoken($con, $_SESSION["logintoken"], $result["id"])){
+            unset($_SESSION["username"]);
+            unset($_SESSION["logintoken"]);
+        }
+    }
     $con->close();
 
-    $usernametext = ('<span id="username_display">' . (isset($_SESSION["username"])? ($_SESSION["username"]):'Ikke pålogget') . '</span>'); 
+
+    function usernametext(){
+        return ('<span id="username_display">' . (isset($_SESSION["username"])? ($_SESSION["username"]):'Ikke pålogget') . '</span>');
+    }
 
 
     function connect()
@@ -48,7 +64,6 @@
 
         $query = $con->prepare("SELECT * FROM tokens WHERE user_id = ?");
         $query->bind_param('i', $user_id);
-                
         $query->execute();
 
         return $query->get_result()->fetch_all(MYSQLI_BOTH);
@@ -69,16 +84,16 @@
         $stmt = $con->prepare('DELETE FROM tokens WHERE expires_at < CURRENT_TIMESTAMP');
         $stmt->execute();
 
-        $stmt = $con->prepare('SELECT * FROM tokens WHERE token = ? AND username = ? AND expires_at > CURRENT_TIMESTAMP');
+        $stmt = $con->prepare('SELECT * FROM tokens WHERE token = ? AND user_id = ? AND expires_at > CURRENT_TIMESTAMP');
         $stmt->bind_param('si', $token, $username);
 
         $stmt->execute();
 
-        $result = $stmt->get_result()->fetch_all(MYSQLI_BOTH);
+        $result = $stmt->get_result()->fetch_assoc();
 
         if (count($result) > 0) {
-            $token = $result[$i]["token_id"];
-            extendtime($con, $token);
+            $token_id = $result["token_id"];
+            extendtime($con, $token_id);
             return TRUE;
         }else{
             return FALSE;

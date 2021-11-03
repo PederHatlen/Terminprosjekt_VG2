@@ -1,3 +1,54 @@
+<?php
+    include 'phpRepo.php';
+    $message;
+    // Hente data fra post dataen og legge til stemmen, hvis det var post data.
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $username = $_POST['username'];
+        $pwd = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+
+        $con = connect();
+
+        $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
+        $stmt->bind_param('s', $username); // 's' specifies the variable type => 'string'
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        
+        if (mysqli_num_rows($result) > 0) {
+            $message = "Brukernavnet er allerede tatt :(";
+            
+        }else{
+            $stmt = $con->prepare('INSERT into users (username, password) VALUES (?, ?)');
+            $stmt->bind_param('ss', $username, $pwd); // 's' specifies the variable type => 'string'
+        
+            $stmt->execute();
+
+
+            $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
+            $stmt->bind_param('s', $username); // 's' specifies the variable type => 'string'
+        
+            $stmt->execute();
+            
+            $rawdata = $stmt->get_result();
+            $userresult = $rawdata->fetch_array(MYSQLI_BOTH);
+
+            maketoken($con, $userresult["id"]);
+
+            $result = gettoken($con, $userresult["id"])[0];
+
+            $_SESSION["logintoken"] = $result["token"];
+            $_SESSION["username"] = $userresult["username"];
+
+            $message = '<p>Brukeren er registrert, og inlogget.</p>';
+
+        }
+
+        $con->close();
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="no">
 <head>
@@ -13,8 +64,7 @@
     <header>
         <h1><a href="../index.php">BinærChat</a></h1>
         <?php
-        include 'phpRepo.php';
-        echo $usernametext;
+        echo usernametext();
         ?>
     </header>
     <div class="content">
@@ -31,50 +81,6 @@
 
         <?php
 
-            // Hente data fra post dataen og legge til stemmen, hvis det var post data.
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                $username = $_POST['username'];
-                $pwd = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-
-                $con = connect();
-
-                $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
-                $stmt->bind_param('s', $username); // 's' specifies the variable type => 'string'
-               
-                $stmt->execute();
-               
-                $result = $stmt->get_result();
-                
-                if (mysqli_num_rows($result) > 0) {
-                    echo "Brukernavnet er allerede tatt :(";
-                }else{
-                    $stmt = $con->prepare('INSERT into users (username, password) VALUES (?, ?)');
-                    $stmt->bind_param('ss', $username, $pwd); // 's' specifies the variable type => 'string'
-                
-                    $stmt->execute();
-
-
-                    $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
-                    $stmt->bind_param('s', $username); // 's' specifies the variable type => 'string'
-                
-                    $stmt->execute();
-                    
-                    $rawdata = $stmt->get_result();
-                    $userresult = $rawdata->fetch_array(MYSQLI_BOTH);
-
-                    maketoken($con, $userresult["id"]);
-
-                    $result = gettoken($con, $userresult["id"])[0];
-
-                    $_SESSION["logintoken"] = $result["token"];
-                    $_SESSION["username"] = $userresult["username"];
-
-                    echo '<p>Brukeren er registrert, og inlogget.</p><script>document.querySelector("#username_display").innerHTML = "Logget in som: '. $_SESSION["username"] .'";</script>';
-                }
-
-                $con->close();
-            }
         ?>
 
     </div>

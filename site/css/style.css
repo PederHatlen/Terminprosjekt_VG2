@@ -38,13 +38,6 @@ header{
 #username_display{
     color: white;
 }
-.menulink{
-    
-}
-.menuicon{
-    fill: #ffffff;
-    height: 75%;
-}
 
 footer{
     display: flex;

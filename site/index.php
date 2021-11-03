@@ -15,7 +15,7 @@
         <div class="rightheader">
             <?php
             include 'php/phpRepo.php';
-            echo $usernametext;
+            echo usernametext();
             ?>
         </div>
         
@@ -26,7 +26,9 @@
         <?php
             
             if (isset($_SESSION["username"])) {
-                echo '<span>Du er pålogget som ' . $_SESSION["username"] . '</span> <a href="php/logoff.php">Logg av</a>';
+                echo '<span>Du er pålogget som ' . $_SESSION["username"] . '</span>
+                <a href="php/logoff.php">Logg av</a>
+                <p>For å finne samtalene dine kan du gå her: <a href="php/conversations.php">Samtaler</a></p>';
             }
             else {
                 echo '<span>Du er ikke pålogget.</span>

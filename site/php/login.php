@@ -54,7 +54,7 @@
     <header>
         <h1><a href="../index.php">BinærChat</a></h1>
         <?php
-            echo ('<span id="username_display">' . (isset($_SESSION["username"])? ($_SESSION["username"]):'Ikke pålogget') . '</span>');
+            echo usernametext();
         ?>
     </header>
     <div class="content">
@@ -72,7 +72,6 @@
             }else{
                 echo '<p>Feil brukernavn eller passord.</p>';
             }
-
         ?>
     </div>
     <footer>
