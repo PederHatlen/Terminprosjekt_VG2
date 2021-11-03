@@ -21,7 +21,9 @@
         <h2>Samtaler</h2>
         <input type="text" name="searchterm" id="searchterm" onkeyup="" placeholder="Søk etter person">
 
-        <ul>
+        <ul id="conversationList">
+            <li>Hello</li>
+            <li>hi</li>
             <?php
                 
             ?>
