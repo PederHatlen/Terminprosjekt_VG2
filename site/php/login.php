@@ -1,7 +1,7 @@
 <?php
     include 'phpRepo.php';
     $con = connect();
-    $signinworked = FALSE;
+    $msgText = '';
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = $_POST['username'];
@@ -31,8 +31,10 @@
             $_SESSION["logintoken"] = $result["token"];
             $_SESSION["username"] = $userresult["username"];
 
-            $signinworked = TRUE;
+            $msgText = '<p>Innloggingen fungerte!</p>';
             header('Location: ../index.php');
+        }else{
+            $msgText = '<p>Feil brukernavn eller passord.</p>';
         }
         $con->close();
     }
@@ -67,11 +69,7 @@
             <input type="submit" value="log in" id="submit"><br>
         </form>
         <?php
-            if ($signinworked) {
-                echo '<p>Innloggingen fungerte!</p>';
-            }else{
-                echo '<p>Feil brukernavn eller passord.</p>';
-            }
+            echo $msgText;
         ?>
     </div>
     <footer>

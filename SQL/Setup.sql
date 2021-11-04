@@ -15,7 +15,7 @@ CREATE TABLE tokens (
     token  VARCHAR(255) not null UNIQUE,
     created_at DATETIME not Null,
     expires_at DATETIME not Null,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE conversations (
@@ -23,8 +23,8 @@ CREATE TABLE conversations (
     user1_id INT not null,
     user2_id  INT not null,
     created_at DATETIME not Null DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user1_id) REFERENCES users(user_id),
-    FOREIGN KEY (user2_id) REFERENCES users(user_id)
+    FOREIGN KEY (user1_id) REFERENCES users(id),
+    FOREIGN KEY (user2_id) REFERENCES users(id)
 );
 
 CREATE TABLE messages (
@@ -34,5 +34,5 @@ CREATE TABLE messages (
     messagetext VARCHAR(255) not null,
     sent_at DATETIME not Null DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id),
-    FOREIGN KEY (sender_id) REFERENCES users(user_id)
+    FOREIGN KEY (sender_id) REFERENCES users(id)
 );

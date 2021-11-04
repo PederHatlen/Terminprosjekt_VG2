@@ -17,7 +17,7 @@ body{
     grid-template-areas:
         'Header'
         'Content'
-        'Footer'
+        'Footer';
 }
 
 header{
@@ -83,13 +83,17 @@ input[type=submit]{margin: 5px 0;}
 input[type=submit]:hover{
     background-color: #aaa;
 }
-
-#conversationList{
+#tableoptions{
+    display: flex;
+    justify-content: space-between;
+}
+#conversationtable{
     list-style-type: none;
-    padding: 0.5rem;
+    padding: 0.25rem;
     margin: 0.5rem 0;
     background-color: #000;
-    font-size: 1.25rem;
+    font-size: 1rem;
+    width: 100%;
 }
 
 

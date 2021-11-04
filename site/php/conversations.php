@@ -19,15 +19,17 @@
     </header>
     <div class="content">
         <h2>Samtaler</h2>
-        <input type="text" name="searchterm" id="searchterm" onkeyup="" placeholder="Søk etter person">
+        <form id="tableoptions">
+            <input type="text" name="searchterm" id="searchterm" onkeyup="" placeholder="Søk etter person">
+            <input type="submit" name="" id="searchterm" onkeyup="" placeholder="Søk etter person">
+        </div>
 
-        <ul id="conversationList">
-            <li>Hello</li>
-            <li>hi</li>
-            <?php
-                
-            ?>
-        </ul>
+        <table id="conversationtable">
+            <tr>
+                <td>Hello</td>
+                <td>hi</td>
+            </tr>
+        </table>
     </div>
     <footer>
         <span>Peder 2021</span>
