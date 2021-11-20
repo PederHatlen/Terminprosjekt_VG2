@@ -66,7 +66,7 @@
         <form action="" method="post">
             <input type="text" name="username" id="username" placeholder="Brukernavn"><br>
             <input type="password" name="password" id="password" placeholder="Passord"><br>
-            <input type="submit" value="log in" id="submit"><br>
+            <input type="submit" value="log in" id="submit" class="submitwmargin"><br>
         </form>
         <?php
             echo $msgText;

@@ -78,7 +78,7 @@ input:focus-visible{
     outline: none;
     background-color: #ddd;
 }
-input[type=submit]{margin: 5px 0;}
+.submitwmargin{margin: 5px 0;}
 
 input[type=submit]:hover{
     background-color: #aaa;

@@ -19,9 +19,12 @@
     </header>
     <div class="content">
         <h2>Samtaler</h2>
-        <form id="tableoptions">
+        <div id="tableoptions">
             <input type="text" name="searchterm" id="searchterm" onkeyup="" placeholder="Søk etter person">
-            <input type="submit" name="" id="searchterm" onkeyup="" placeholder="Søk etter person">
+            <form>
+                <input type="text" name="person" id="person" onkeyup="" placeholder="Brukernavn">
+                <input type="submit" name="submit" value="Lag samtale">
+            </form>
         </div>
 
         <table id="conversationtable">

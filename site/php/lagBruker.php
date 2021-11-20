@@ -76,7 +76,7 @@
             <input type="text" name="username" id="username" placeholder="Brukernavn"><br>
             <input type="password" name="password" id="password" placeholder="Passord"><br>
             <input type="password" name="passwordControll" id="passwordControll" placeholder="Gjenta passord"><br>
-            <input type="submit" value="Lag bruker" id="submit"><br>
+            <input type="submit" value="Lag bruker" id="submit" class="submitwmargin"><br>
         </form>
 
         <?php
