@@ -6,10 +6,11 @@
     $stmt = $con->prepare('DELETE FROM tokens WHERE expires_at < CURRENT_TIMESTAMP');
     $stmt->execute();
 
-    $stmt = $con->prepare('SELECT id from users WHERE username = ?');
+    $stmt = $con->prepare('SELECT user_id from users WHERE username = ?');
     $stmt->bind_param('s', $_SESSION["username"]); // 's' specifies the variable type => 'string'
     $stmt->execute();
     $result = $stmt->get_result()->fetch_assoc();
+    $_SESSION["user_id"] = $result;
 
     //Validate logintoken
     if (isset($_SESSION["logintoken"]) && isset($_SESSION["username"])){
@@ -91,7 +92,7 @@
 
         $result = $stmt->get_result()->fetch_assoc();
 
-        if (count($result) > 0) {
+        if ($result != null) {
             $token_id = $result["token_id"];
             extendtime($con, $token_id);
             return TRUE;

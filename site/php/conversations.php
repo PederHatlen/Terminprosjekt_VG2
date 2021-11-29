@@ -1,3 +1,19 @@
+<?php
+    include 'phpRepo.php';
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        
+    }
+
+    $stmt = $con->prepare('SELECT * FROM conversations left join conversations_users on conversations.conversation_id = conversations_users.conversation_id where users.username = ?');
+    $stmt->bind_param('s', $_SESSION["username"]); // 's' specifies the variable type => 'string'
+    
+    $stmt->execute();
+        
+    $rawdata = $stmt->get_result();
+    $conversations = $rawdata->fetch_array(MYSQLI_BOTH);
+?>
+
 <!DOCTYPE html>
 <html lang="no">
 <head>
@@ -12,11 +28,8 @@
 <body>
     <header>
         <h1><a href="../index.php">BinærChat</a></h1>
-        <?php
-            include 'phpRepo.php';
-            echo usernametext();
-        ?>
-    </header>
+        <?php echo usernametext();?>
+    </header><
     <div class="content">
         <h2>Samtaler</h2>
         <div id="tableoptions">
@@ -32,6 +45,11 @@
                 <td>Hello</td>
                 <td>hi</td>
             </tr>
+            <?php
+                for ($i=0; $i < count($conversations); $i++) { 
+                    echo($conversations[1]);
+                }
+            ?>
         </table>
     </div>
     <footer>
