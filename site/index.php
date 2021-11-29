@@ -24,7 +24,6 @@
     <div class="content">
         <h2>Velkommen til Binærchat!</h2>
         <?php
-            
             if (isset($_SESSION["username"])) {
                 echo '<span>Du er pålogget som ' . $_SESSION["username"] . '</span>
                 <a href="php/logoff.php">Logg av</a>

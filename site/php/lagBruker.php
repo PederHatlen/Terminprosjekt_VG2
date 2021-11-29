@@ -15,7 +15,7 @@
         
         $result = $stmt->get_result();
         
-        if (mysqli_num_rows($result) > 0) {
+        if (mysqli_num_rows($result) != null) {
             $message = "Brukernavnet er allerede tatt :(";
             
         }else{
@@ -33,15 +33,17 @@
             $rawdata = $stmt->get_result();
             $userresult = $rawdata->fetch_array(MYSQLI_BOTH);
 
-            maketoken($con, $userresult["id"]);
+            maketoken($con, $userresult["user_id"]);
 
-            $result = gettoken($con, $userresult["id"])[0];
+            $result = gettoken($con, $userresult["user_id"])[0];
 
             $_SESSION["logintoken"] = $result["token"];
             $_SESSION["username"] = $userresult["username"];
+            $_SESSION["user_id"] = $userresult["user_id"];
 
             $message = '<p>Brukeren er registrert, og inlogget.</p>';
-
+            
+            header('Location: ../index.php');
         }
 
         $con->close();
@@ -80,7 +82,7 @@
         </form>
 
         <?php
-
+            echo($message);
         ?>
 
     </div>

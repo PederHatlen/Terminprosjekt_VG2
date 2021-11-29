@@ -15,21 +15,22 @@
         $rawdata = $stmt->get_result();
         $userresult = $rawdata->fetch_array(MYSQLI_BOTH);
 
-        $user_id = $userresult["id"];
+        if ($userresult != null && password_verify($pwd, $userresult['password'])) {
+            $user_id = $userresult["user_id"];
 
-        if (count($userresult) > 0 && password_verify($pwd, $userresult['password'])) {
-            $result = gettoken($con, $userresult["id"]);
+            $result = gettoken($con, $user_id);
 
-            if (count($result) > 0) {
+            if ($result != null) {
                 $token_id = $result["token_id"];
                 extendtime($con, $token_id);
             }else{
-                maketoken($con, $userresult["id"]);
+                maketoken($con, $user_id);
             }
-            $result = gettoken($con, $userresult["id"])[0];
+            $result = gettoken($con, $user_id)[0];
 
             $_SESSION["logintoken"] = $result["token"];
             $_SESSION["username"] = $userresult["username"];
+            $_SESSION["user_id"] = $user_id;
 
             $msgText = '<p>Innloggingen fungerte!</p>';
             header('Location: ../index.php');

@@ -2,6 +2,7 @@
     include 'phpRepo.php';
     unset($_SESSION["username"]);
     unset($_SESSION["logintoken"]);
+    unset($_SESSION["user_id"]);
     header('Location: ../index.php');
 ?>
 
