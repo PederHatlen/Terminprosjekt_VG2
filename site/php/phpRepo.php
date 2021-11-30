@@ -13,9 +13,7 @@
         // Create connection
         $con = mysqli_connect($servername, $username, $password, $dbname);
         // Check connection
-        if (!$con) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
+        if (!$con) {die("Connection failed: " . mysqli_connect_error());}
     
         //Angi UTF-8 som tegnsett
         $con->set_charset("utf8");
@@ -36,14 +34,11 @@
     }
 
     function gettoken($con, int $user_id){
-        $stmt = $con->prepare('DELETE FROM tokens WHERE expires_at < CURRENT_TIMESTAMP');
-        $stmt->execute();
-
-        $query = $con->prepare("SELECT * FROM tokens WHERE user_id = ?");
+        $query = $con->prepare("SELECT * FROM tokens WHERE user_id = ? AND expires_at > CURRENT_TIMESTAMP order by expires_at DESC limit 1");
         $query->bind_param('i', $user_id);
         $query->execute();
 
-        return $query->get_result()->fetch_all(MYSQLI_BOTH);
+        return $query->get_result()->fetch_assoc();
     }
 
     function extendtime($con, $token_id){
@@ -58,17 +53,14 @@
     }
 
     function validatetoken($con, $token, $username){
-        $stmt = $con->prepare('DELETE FROM tokens WHERE expires_at < CURRENT_TIMESTAMP');
-        $stmt->execute();
-
-        $stmt = $con->prepare('SELECT * FROM tokens WHERE token = ? AND user_id = ? AND expires_at > CURRENT_TIMESTAMP');
+        $stmt = $con->prepare('SELECT * FROM tokens WHERE token = ? AND user_id = ? AND expires_at > CURRENT_TIMESTAMP order by expires_at DESC');
         $stmt->bind_param('si', $token, $username);
 
         $stmt->execute();
 
         $result = $stmt->get_result()->fetch_assoc();
 
-        if ($result != null) {
+        if (!is_null($result)) {
             $token_id = $result["token_id"];
             extendtime($con, $token_id);
             return TRUE;
@@ -79,22 +71,13 @@
 
 
     $con = connect();
-    $stmt = $con->prepare('DELETE FROM tokens WHERE expires_at < CURRENT_TIMESTAMP');
-    $stmt->execute();
-
-    $stmt = $con->prepare('SELECT user_id from users WHERE username = ?');
-    $stmt->bind_param('s', $_SESSION["username"]); // 's' specifies the variable type => 'string'
-    $stmt->execute();
-    $result = $stmt->get_result()->fetch_assoc();
-    $_SESSION["user_id"] = $result;
 
     //Validate logintoken
-    if (isset($_SESSION["logintoken"]) && isset($_SESSION["username"])){
-        if (isset($result) && !validatetoken($con, $_SESSION["logintoken"], $result)){
-            unset($_SESSION["username"]);
-            unset($_SESSION["logintoken"]);
-            unset($_SESSION["user_id"]);
-        }
+    if (($_SESSION["logintoken"] ?? null) == null || ($_SESSION["user_id"] ?? null) == null || !validatetoken($con, $_SESSION["logintoken"], $_SESSION["user_id"])){
+        //echo((($_SESSION["logintoken"] ?? null)? "True":"False")." | ".(($_SESSION["user_id"] ?? null)? "True":"False")." | ".(validatetoken($con, $_SESSION["logintoken"], $_SESSION["user_id"])? "True":"False"));
+        unset($_SESSION["username"]);
+        unset($_SESSION["logintoken"]);
+        unset($_SESSION["user_id"]);
     }
     $con->close();
 ?>

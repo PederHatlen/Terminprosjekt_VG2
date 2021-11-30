@@ -11,8 +11,8 @@ CREATE TABLE users (
 
 CREATE TABLE tokens (
     token_id INT not null PRIMARY KEY AUTO_INCREMENT,
-    user_id INT not null UNIQUE,
-    token  VARCHAR(255) not null UNIQUE,
+    user_id INT not null,
+    token VARCHAR(255) not null UNIQUE,
     created_at DATETIME not Null,
     expires_at DATETIME not Null,
     FOREIGN KEY (user_id) REFERENCES users(user_id)

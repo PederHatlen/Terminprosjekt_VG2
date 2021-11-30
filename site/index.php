@@ -25,16 +25,16 @@
         <h2>Velkommen til Binærchat!</h2>
         <?php
             if (isset($_SESSION["username"])) {
-                echo '<span>Du er pålogget som ' . $_SESSION["username"] . '</span>
+                echo('<span>Du er pålogget som ' . $_SESSION["username"] . '</span>
                 <a href="php/logoff.php">Logg av</a>
-                <p>For å finne samtalene dine kan du gå her: <a href="php/conversations.php">Samtaler</a></p>';
+                <p>For å finne samtalene dine kan du gå her: <a href="php/conversations.php">Samtaler</a></p>');
             }
             else {
-                echo '<span>Du er ikke pålogget.</span>
+                echo('<span>Du er ikke pålogget.</span>
                 <p>Hvis du ikke har laget en bruker før kan du gjøre det her: </p>
                 <a href="php/lagBruker.php">Lag bruker</a>
                 <span>Eller</span>
-                <a href="php/login.php">Logg in</a>';
+                <a href="php/login.php">Logg in</a>');
             }
         ?>
     </div>
