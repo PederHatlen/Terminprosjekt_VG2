@@ -2,31 +2,7 @@
     //Global events
     session_start();
 
-    $con = connect();
-    $stmt = $con->prepare('DELETE FROM tokens WHERE expires_at < CURRENT_TIMESTAMP');
-    $stmt->execute();
-
-    $stmt = $con->prepare('SELECT user_id from users WHERE username = ?');
-    $stmt->bind_param('s', $_SESSION["username"]); // 's' specifies the variable type => 'string'
-    $stmt->execute();
-    $result = $stmt->get_result()->fetch_assoc();
-    $_SESSION["user_id"] = $result;
-
-    //Validate logintoken
-    if (isset($_SESSION["logintoken"]) && isset($_SESSION["username"])){
-        if (isset($result["id"]) && !validatetoken($con, $_SESSION["logintoken"], $result["id"])){
-            unset($_SESSION["username"]);
-            unset($_SESSION["logintoken"]);
-        }
-    }
-    $con->close();
-
-
-    function usernametext(){
-        return ('<span id="username_display">' . (isset($_SESSION["username"])? ($_SESSION["username"]):'Ikke pålogget') . '</span>');
-    }
-
-
+    function usernametext(){return ('<span id="username_display">' . (isset($_SESSION["username"])? ($_SESSION["username"]):'Ikke pålogget') . '</span>');}
     function connect()
     {
         $servername = "localhost";
@@ -100,4 +76,25 @@
             return FALSE;
         }
     }
+
+
+    $con = connect();
+    $stmt = $con->prepare('DELETE FROM tokens WHERE expires_at < CURRENT_TIMESTAMP');
+    $stmt->execute();
+
+    $stmt = $con->prepare('SELECT user_id from users WHERE username = ?');
+    $stmt->bind_param('s', $_SESSION["username"]); // 's' specifies the variable type => 'string'
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+    $_SESSION["user_id"] = $result;
+
+    //Validate logintoken
+    if (isset($_SESSION["logintoken"]) && isset($_SESSION["username"])){
+        if (isset($result) && !validatetoken($con, $_SESSION["logintoken"], $result)){
+            unset($_SESSION["username"]);
+            unset($_SESSION["logintoken"]);
+            unset($_SESSION["user_id"]);
+        }
+    }
+    $con->close();
 ?>

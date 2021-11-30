@@ -6,7 +6,7 @@ CREATE TABLE users (
     user_id INT not null PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255) not null UNIQUE,
     password VARCHAR(255) not null,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT current_timestamp
 );
 
 CREATE TABLE tokens (
@@ -20,10 +20,10 @@ CREATE TABLE tokens (
 
 CREATE TABLE conversations (
     conversation_id INT not null PRIMARY KEY AUTO_INCREMENT,
-    created_at DATETIME not Null DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME not null DEFAULT current_timestamp
 );
 
-CREATE TABLE conversations_users (
+CREATE TABLE conversation_users (
     conversation_id INT not null,
     user_id INT not null,
     FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id),
@@ -36,7 +36,7 @@ CREATE TABLE messages (
     conversation_id INT not null,
     sender_id INT not null,
     messagetext VARCHAR(255) not null,
-    sent_at DATETIME not Null DEFAULT CURRENT_TIMESTAMP,
+    sent_at DATETIME not Null DEFAULT current_timestamp,
     FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id),
     FOREIGN KEY (sender_id) REFERENCES users(user_id)
 );

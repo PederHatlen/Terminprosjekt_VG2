@@ -1,11 +1,10 @@
 <?php
     include 'phpRepo.php';
-    $message;
+    $message = "";
     // Hente data fra post dataen og legge til stemmen, hvis det var post data.
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = $_POST['username'];
         $pwd = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
 
         $con = connect();
 
