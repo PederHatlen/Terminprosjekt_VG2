@@ -33,7 +33,7 @@
         $stmt->execute();
     }
 
-    function gettoken($con, int $user_id){
+    function gettoken($con, $user_id){
         $query = $con->prepare("SELECT * FROM tokens WHERE user_id = ? AND expires_at > CURRENT_TIMESTAMP order by expires_at DESC limit 1");
         $query->bind_param('i', $user_id);
         $query->execute();
@@ -52,9 +52,9 @@
         $stmt->execute();
     }
 
-    function validatetoken($con, $token, $username){
+    function validatetoken($con, $token, $user_id){
         $stmt = $con->prepare('SELECT * FROM tokens WHERE token = ? AND user_id = ? AND expires_at > CURRENT_TIMESTAMP order by expires_at DESC');
-        $stmt->bind_param('si', $token, $username);
+        $stmt->bind_param('si', $token, $user_id);
 
         $stmt->execute();
 
@@ -67,6 +67,21 @@
         }else{
             return FALSE;
         }
+    }
+
+    function login($con, $user_id, $user_name){
+        $token = gettoken($con, $user_id);
+
+        if (!is_null($token["token_id"] ?? null)) {
+            $token_id = $token["token_id"];
+            extendtime($con, $token_id);
+        }else{maketoken($con, $user_id);}
+
+        $token = gettoken($con, $user_id);
+
+        $_SESSION["logintoken"] = $token["token"];
+        $_SESSION["username"] = $user_name;
+        $_SESSION["user_id"] = $user_id;
     }
 
 

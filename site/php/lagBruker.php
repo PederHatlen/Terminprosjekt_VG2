@@ -16,33 +16,21 @@
         
         if (mysqli_num_rows($result) != null) {
             $message = "Brukernavnet er allerede tatt :(";
-            
         }else{
             $stmt = $con->prepare('INSERT into users (username, password) VALUES (?, ?)');
             $stmt->bind_param('ss', $username, $pwd); // 's' specifies the variable type => 'string'
-        
             $stmt->execute();
-
 
             $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
             $stmt->bind_param('s', $username); // 's' specifies the variable type => 'string'
-        
             $stmt->execute();
-            
-            $rawdata = $stmt->get_result();
-            $userresult = $rawdata->fetch_array(MYSQLI_BOTH);
+            $userquery_res = $stmt->get_result()->fetch_array(MYSQLI_BOTH);
 
-            maketoken($con, $userresult["user_id"]);
-
-            $result = gettoken($con, $userresult["user_id"])[0];
-
-            $_SESSION["logintoken"] = $result["token"];
-            $_SESSION["username"] = $userresult["username"];
-            $_SESSION["user_id"] = $userresult["user_id"];
+            login($con, $userquery_res["user_id"], $userquery_res["username"]);
 
             $message = '<p>Brukeren er registrert, og inlogget.</p>';
             
-            header('Location: ../index.php');
+            //header('Location: ../index.php');
         }
 
         $con->close();

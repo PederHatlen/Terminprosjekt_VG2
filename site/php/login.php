@@ -13,28 +13,10 @@
         $stmt->execute();
          
         $rawdata = $stmt->get_result();
-        $userresult = $rawdata->fetch_array(MYSQLI_BOTH);
+        $userquery_res = $rawdata->fetch_array(MYSQLI_BOTH);
 
-        if (!is_null($userresult) && password_verify($pwd, $userresult['password'])) {
-            $user_id = $userresult["user_id"];
-
-            $result = gettoken($con, $user_id);
-
-            if (!is_null($result["token_id"] ?? null)) {
-                $token_id = $result["token_id"];
-                extendtime($con, $token_id);
-                echo("extend(login)");
-            }else{
-                maketoken($con, $user_id);
-                echo("new(login)");
-            }
-
-            $result = gettoken($con, $user_id);
-
-            $_SESSION["logintoken"] = $result["token"];
-            $_SESSION["username"] = $userresult["username"];
-            $_SESSION["user_id"] = $user_id;
-
+        if (!is_null($userquery_res) && password_verify($pwd, $userquery_res['password'])) {
+            login($con, $userquery_res["user_id"], $userquery_res["username"]);
             $msgText = '<p>Innloggingen fungerte!</p>';
             header('Location: ../index.php');
         }else{
