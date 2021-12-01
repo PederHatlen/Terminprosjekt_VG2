@@ -29,7 +29,6 @@
 
         $stmt = $con->prepare('INSERT into tokens (user_id, token, created_at, expires_at) VALUES (?, UUID(), ?, ?)');
         $stmt->bind_param('iss', $user_id, $datetime_stamp, $expires_stamp); // 's' specifies the variable type => 'string'
-    
         $stmt->execute();
     }
 
@@ -55,9 +54,7 @@
     function validatetoken($con, $token, $user_id){
         $stmt = $con->prepare('SELECT * FROM tokens WHERE token = ? AND user_id = ? AND expires_at > CURRENT_TIMESTAMP order by expires_at DESC');
         $stmt->bind_param('si', $token, $user_id);
-
         $stmt->execute();
-
         $result = $stmt->get_result()->fetch_assoc();
 
         if (!is_null($result)) {
@@ -84,9 +81,7 @@
         $_SESSION["user_id"] = $user_id;
     }
 
-
     $con = connect();
-
     //Validate logintoken
     if (($_SESSION["logintoken"] ?? null) == null || ($_SESSION["user_id"] ?? null) == null || !validatetoken($con, $_SESSION["logintoken"], $_SESSION["user_id"])){
         //echo((($_SESSION["logintoken"] ?? null)? "True":"False")." | ".(($_SESSION["user_id"] ?? null)? "True":"False")." | ".(validatetoken($con, $_SESSION["logintoken"], $_SESSION["user_id"])? "True":"False"));
