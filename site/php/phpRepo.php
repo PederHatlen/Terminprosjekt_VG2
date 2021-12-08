@@ -31,7 +31,6 @@
         $stmt->bind_param('iss', $user_id, $datetime_stamp, $expires_stamp); // 's' specifies the variable type => 'string'
         $stmt->execute();
     }
-
     function gettoken($con, $user_id){
         $query = $con->prepare("SELECT * FROM tokens WHERE user_id = ? AND expires_at > CURRENT_TIMESTAMP order by expires_at DESC limit 1");
         $query->bind_param('i', $user_id);
@@ -39,7 +38,6 @@
 
         return $query->get_result()->fetch_assoc();
     }
-
     function extendtime($con, $token_id){
         $time = new DateTime();
         $time->add(new DateInterval('PT20M'));
@@ -50,7 +48,6 @@
                             
         $stmt->execute();
     }
-
     function validatetoken($con, $token, $user_id){
         $stmt = $con->prepare('SELECT * FROM tokens WHERE token = ? AND user_id = ? AND expires_at > CURRENT_TIMESTAMP order by expires_at DESC');
         $stmt->bind_param('si', $token, $user_id);
@@ -65,7 +62,6 @@
             return FALSE;
         }
     }
-
     function login($con, $user_id, $user_name){
         $token = gettoken($con, $user_id);
 
@@ -80,14 +76,15 @@
         $_SESSION["username"] = $user_name;
         $_SESSION["user_id"] = $user_id;
     }
-
-    $con = connect();
-    //Validate logintoken
-    if (($_SESSION["logintoken"] ?? null) == null || ($_SESSION["user_id"] ?? null) == null || !validatetoken($con, $_SESSION["logintoken"], $_SESSION["user_id"])){
-        //echo((($_SESSION["logintoken"] ?? null)? "True":"False")." | ".(($_SESSION["user_id"] ?? null)? "True":"False")." | ".(validatetoken($con, $_SESSION["logintoken"], $_SESSION["user_id"])? "True":"False"));
-        unset($_SESSION["username"]);
-        unset($_SESSION["logintoken"]);
-        unset($_SESSION["user_id"]);
+    function isLoggedIn($con){
+        //Validate logintoken
+        if (($_SESSION["logintoken"] ?? null) == null || ($_SESSION["user_id"] ?? null) == null || !validatetoken($con, $_SESSION["logintoken"], $_SESSION["user_id"])){
+            unset($_SESSION["username"]);
+            unset($_SESSION["logintoken"]);
+            unset($_SESSION["user_id"]);
+            return FALSE;
+        }else{
+            return TRUE;
+        }
     }
-    $con->close();
 ?>

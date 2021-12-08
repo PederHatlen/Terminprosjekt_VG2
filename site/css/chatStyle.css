@@ -1,0 +1,29 @@
+.content{
+    /* padding-bottom: 1rem; */
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        'infoText'
+        'chatWindow'
+        'sendArea';
+}
+#chatInfo{
+    grid-area: infoText;
+    background-color: black;
+    padding: 0 1rem;
+}
+
+#chatWindow{
+    grid-area: chatWindow;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+}
+
+#messageForm{
+    display: flex;
+}
+#usrmsg{
+    flex-grow: 1;
+}

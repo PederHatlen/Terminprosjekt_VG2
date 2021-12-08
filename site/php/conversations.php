@@ -2,6 +2,7 @@
     include 'phpRepo.php';
     $con = connect();
     $message = "";
+    if (!isLoggedIn($con)) {header('Location: ../index.php');}
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conversation_id = null;
@@ -11,7 +12,7 @@
         $stmt->execute();
         $user2_id = $stmt->get_result()->fetch_assoc()["user_id"];
 
-        $stmt = $con->prepare('SELECT * FROM conversations left join conversation_users on conversations.conversation_id = conversation_users.conversation_id where conversation_users.user_id = ? and conversation_users.user_id = ?');
+        $stmt = $con->prepare('SELECT * FROM conversations left join conversation_users as conv_users1 on conversations.conversation_id = conv_users1.conversation_id left join conversation_users as conv_users2 on conversations.conversation_id = conv_users2.conversation_id where conv_users1.user_id = ? and conv_users2.user_id = ?');
         $stmt->bind_param('ii', $_SESSION["user_id"], $user2_id);
         $stmt->execute();
         $rawdata = $stmt->get_result();
@@ -40,11 +41,6 @@
             $message = "Samtalen finnes allerede";
         }
     }
-
-    $stmt = $con->prepare('SELECT * FROM conversations left join conversation_users on conversations.conversation_id = conversation_users.conversation_id where conversation_users.user_id = ?');
-    $stmt->bind_param('i', $_SESSION["user_id"]);
-    $stmt->execute();
-    $conversations = $stmt->get_result()->fetch_array(MYSQLI_BOTH);
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +50,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>BinærChat | Login</title>
+    <title>BinærChat | Samtaler</title>
     <link rel="icon" type="image/png" href="../img/favicon.png">
     <link rel="stylesheet" href="../css/style.css">
 </head>
@@ -84,18 +80,26 @@
         <?php echo($message);?>
 
         <table id="conversationtable">
-            <?php
-                if ($conversations != null){
-                    for ($i=0; $i < count($conversations); $i++) {
-                        $stmt = $con->prepare('SELECT * FROM conversation_users where conversation_id = ? and user_id != ?');
-                        $stmt->bind_param('ii', $conversations[$i]["conversation_id"], $_SESSION["user_id"]);
-                        $stmt->execute();
-                        $rawdata = $stmt->get_result();
+            <tbody>
+                <?php
+                    $stmt = $con->prepare('SELECT * FROM conversation_users where user_id = ?');
+                    $stmt->bind_param('i', $_SESSION["user_id"]);
+                    $stmt->execute();
+                    $conversations = $stmt->get_result(); //->fetch_array(MYSQLI_BOTH);
 
-                        echo("<tr><td>".$conversations[$i])."</td></tr>";
-                    }
-                }else{echo("<tr><td>Du har ingen samtaler.</td><tr>");}
-            ?>
+                    if ($conversations != null){
+                        echo("<tr><td>Person</td><td>Sist aktiv</td></tr>");
+                        // echo(var_dump($conversations));
+                        while ($row = $conversations->fetch_row()) {
+                            $stmt = $con->prepare('SELECT * FROM conversation_users left join users on conversation_users.user_id = users.user_id where conversation_users.conversation_id = ? and conversation_users.user_id != ?');
+                            $stmt->bind_param('ii', $row[0], $_SESSION["user_id"]);
+                            $stmt->execute();
+                            $rawdata = $stmt->get_result()->fetch_array(MYSQLI_BOTH);
+                            echo("<tr><td><a class='chatlink' href='chat.php?chatid=". $row[0] ."'>".$rawdata["username"]."</a></td><td></td></tr>");
+                        }
+                    }else{echo("<tr><td>Du har ingen samtaler.</td><tr>");}
+                ?>
+            </tbody>
         </table>
     </div>
     <footer>

@@ -30,7 +30,7 @@
 
             $message = '<p>Brukeren er registrert, og inlogget.</p>';
             
-            //header('Location: ../index.php');
+            header('Location: ../index.php');
         }
 
         $con->close();
