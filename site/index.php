@@ -37,9 +37,11 @@
                 <a href="php/login.php">Logg in</a>');
             }
         ?>
+        <p>Hvis du trenger hjelp eller har spørsmål kan du gå på <a href="php/hjelp.php">Hjelp</a> siden.</p>
     </div>
     <footer> 
         <span>Peder 2021</span>
+        <a href="php/hjelp.php">Hjelp</a>
     </footer>
 </body>
 </html>

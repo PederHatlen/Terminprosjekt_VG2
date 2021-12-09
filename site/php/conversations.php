@@ -4,7 +4,7 @@
     $message = "";
     if (!isLoggedIn($con)) {header('Location: ../index.php');}
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" and $_POST["person"] != null) {
         $conversation_id = null;
 
         $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');

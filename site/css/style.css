@@ -43,6 +43,7 @@ footer{
     display: flex;
     align-items: center;
     background-color: #05456E;
+    justify-content: space-between;
 }
 footer span, header span{
     padding: 0 2rem;
@@ -56,10 +57,16 @@ h1{
     padding: 0 2rem;
     background-color: #222;
 }
-a{color: #fff;}
+a{
+    color: #fff;
+    text-underline-offset: 1px;
+}
 .content a{
     background-color: #000;
     padding: 0.25rem;
+}
+footer a{
+    padding: 0 2rem;
 }
 a:hover{opacity: 50%;}
 
@@ -123,7 +130,14 @@ input[type=submit]:hover{
     opacity: 100%;
 }
 
-
+.question{
+    padding: 0.5rem 1rem;
+    background-color: #000;
+}
+.question h3{margin: 0.5rem 0;}
+.question a{padding: 0; margin: 0;}
+.question p{padding: 0.2rem 0; margin: 0;}
+/* .question .answer{display: none;} */
 
 @media (orientation: portrait) {
     body{width: 100%;}
