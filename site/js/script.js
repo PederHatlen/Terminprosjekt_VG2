@@ -1,6 +1,6 @@
 document.querySelectorAll("input").forEach(element => {
     element.onkeydown = function(e) {
-        if(e.key != 0 && e.key != 1 && e.code != "Backspace" && e.code != "Tab" && e.code != enter && !e.ctrlKey ) {
+        if(e.key != 0 && e.key != 1 && e.code != "Backspace" && e.code != "Tab" && e.code != "Enter" && !e.ctrlKey ) {
             console.log(e.code);
             e.preventDefault();
         }

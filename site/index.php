@@ -15,6 +15,7 @@
         <div class="rightheader">
             <?php
             include 'php/phpRepo.php';
+            unset($_SESSION["chatid"]);
             echo usernametext();
             ?>
         </div>

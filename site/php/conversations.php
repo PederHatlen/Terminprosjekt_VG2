@@ -29,14 +29,18 @@
             $stmt->execute();
             $conversation_id = $stmt->get_result()->fetch_assoc()["conversation_id"];
 
-            $stmt = $con->prepare('INSERT INTO conversation_users (conversation_id, user_id) VALUES (?, ?)');
-            $stmt->bind_param('ii', $conversation_id, $_SESSION["user_id"]);
-            $stmt->execute();
 
             $stmt = $con->prepare('INSERT INTO conversation_users (conversation_id, user_id) VALUES (?, ?)');
-            $stmt->bind_param('ii', $conversation_id, $user2_id);
+            $temp_UID = $_SESSION["user_id"];
+            $stmt->bind_param('ii', $conversation_id, $temp_UID);
             $stmt->execute();
+
+            $temp_UID = $user2_id;
+            $stmt->execute();
+
             $message = "Samtalen ble laget!";
+            $_SESSION["chatid"] = $conversation_id;
+            header('Location: chat.php');
         }else{
             $message = "Samtalen finnes allerede";
         }
@@ -53,6 +57,7 @@
     <title>BinærChat | Samtaler</title>
     <link rel="icon" type="image/png" href="../img/favicon.png">
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/conversationsStyle.css">
 </head>
 <body>
     <header>
@@ -66,8 +71,8 @@
             <input type="button" name="shownewsamtale" id="shownewsamtale" value="Ny samtale" onclick="document.querySelector('#addconv').style.display = 'flex'">
         </div>
         <div id="addconv">
-            <div>
-                <div style="display: flex; justify-content: space-between; padding: 0;">
+            <div id="addconv_box">
+                <div id="addconvText">
                     <h2>Lag ny samtale</h2>
                     <a id="exit" onclick="document.querySelector('#addconv').style.display = ''" href="#">x</a>
                 </div>
@@ -86,16 +91,31 @@
                     $stmt->bind_param('i', $_SESSION["user_id"]);
                     $stmt->execute();
                     $conversations = $stmt->get_result(); //->fetch_array(MYSQLI_BOTH);
-
-                    if ($conversations != null){
+                    if (mysqli_num_rows($conversations) != 0){
                         echo("<tr><td>Person</td><td>Sist aktiv</td></tr>");
                         // echo(var_dump($conversations));
                         while ($row = $conversations->fetch_row()) {
+                            $conversation_id = $row[0];
+
                             $stmt = $con->prepare('SELECT * FROM conversation_users left join users on conversation_users.user_id = users.user_id where conversation_users.conversation_id = ? and conversation_users.user_id != ?');
                             $stmt->bind_param('ii', $row[0], $_SESSION["user_id"]);
                             $stmt->execute();
-                            $rawdata = $stmt->get_result()->fetch_array(MYSQLI_BOTH);
-                            echo("<tr><td><a class='chatlink' href='chat.php?chatid=". $row[0] ."'>".$rawdata["username"]."</a></td><td></td></tr>");
+                            $username = $stmt->get_result()->fetch_array(MYSQLI_BOTH)["username"];
+
+                            // echo $row[0];
+                            $stmt = $con->prepare('SELECT sent_at FROM messages where conversation_id = ? order by sent_at desc limit 1');
+                            $stmt->bind_param('i', $conversation_id);
+                            $stmt->execute();
+                            $sent_at = $stmt->get_result()->fetch_assoc()["sent_at"];
+                            $date = date_create($sent_at);
+                            $fdate = null;
+                            if (strtotime($sent_at) < strtotime('-1 day')) {
+                                $fdate = date_format($date, 'jS M y');
+                            }else{
+                                $fdate = date_format($date, 'H:i:s');
+                            }
+
+                            echo("<tr><td><a class='chatlink' href='chat.php?chatid=". $conversation_id ."'>".($username == "1"? "Torshken":$username)."</a></td><td>". $fdate ."</td></tr>");
                         }
                     }else{echo("<tr><td>Du har ingen samtaler.</td><tr>");}
                 ?>

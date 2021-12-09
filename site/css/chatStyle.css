@@ -16,9 +16,15 @@
 
 #chatWindow{
     grid-area: chatWindow;
-    width: 100%;
     height: 100%;
     background-color: black;
+    padding: 0 1rem;
+}
+
+.time{
+    /* opacity: 0.75; */
+    font-stretch: 80%;
+    font-weight: 500;
 }
 
 #messageForm{
@@ -26,4 +32,9 @@
 }
 #usrmsg{
     flex-grow: 1;
+    font-size: 1.2rem;
+}
+input[type="submit"]{
+    font-size: 1.25rem;
+    font-weight: 200;
 }
