@@ -1,7 +1,10 @@
+/* The options for the table */
 #tableoptions{
     display: flex;
     justify-content: space-between;
 }
+
+/* Table styling */
 #conversationtable{
     list-style-type: none;
     padding: 0.25rem;
@@ -10,6 +13,11 @@
     font-size: 1rem;
     width: 100%;
 }
+th{text-align: left;}
+td .chatlink{padding: 0;}
+
+
+/* Adding conversation - styling */
 #addconv{
     left: 0;
     top: 0;

@@ -1,3 +1,4 @@
+/* Content in the chat is also a Grid */
 .content{
     /* padding-bottom: 1rem; */
     display: grid;
@@ -8,12 +9,16 @@
         'chatWindow'
         'sendArea';
 }
+
+/* Where the participant list is among other things (Will also be expanded) */
 #chatInfo{
     grid-area: infoText;
     background-color: black;
     padding: 0 1rem;
 }
 
+
+/* Acctual window the messages appear in */
 #chatWindow{
     grid-area: chatWindow;
     height: 100%;
@@ -21,12 +26,18 @@
     padding: 0 1rem;
 }
 
+
+
+
+/* Message styling (Will most likely expand in the future) */
 .time{
-    /* opacity: 0.75; */
     font-stretch: 80%;
     font-weight: 500;
 }
 
+
+
+/* New message form */
 #messageForm{
     display: flex;
 }

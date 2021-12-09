@@ -1,35 +1,42 @@
 <?php
+    // Main PHP bulk, it is before the document because redirecting does not work otherwise
     include 'phpRepo.php';
     $message = "";
-    // Hente data fra post dataen og legge til stemmen, hvis det var post data.
+
+    // if post data, retrieve it and make variables
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = $_POST['username'];
-        $pwd = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $pwd = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hashing the password, PHP includes salt. Password_default hashing because it knows best
 
         $con = connect();
 
+        // Finding if user allready exists
         $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
         $stmt->bind_param('s', $username); // 's' specifies the variable type => 'string'
         $stmt->execute();
         
         $result = $stmt->get_result();
         
+        // If user allready exists/output from query is not null
         if (mysqli_num_rows($result) != null) {
             $message = "Brukernavnet er allerede tatt :(";
         }else{
+            // Making a new user, W. username and hashed password, server SQL code does rest
             $stmt = $con->prepare('INSERT into users (username, password) VALUES (?, ?)');
             $stmt->bind_param('ss', $username, $pwd); // 's' specifies the variable type => 'string'
             $stmt->execute();
 
+            // Retrieving user so user id can be stored (would use output, but does not exist in mysqli)
             $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
             $stmt->bind_param('s', $username); // 's' specifies the variable type => 'string'
             $stmt->execute();
             $userquery_res = $stmt->get_result()->fetch_array(MYSQLI_BOTH);
 
+            // Login function found in phprepo
             login($con, $userquery_res["user_id"], $userquery_res["username"]);
 
             $message = '<p>Brukeren er registrert, og inlogget.</p>';
-            
+            // If succesfull, redirect to index
             header('Location: ../index.php');
         }
 
@@ -52,15 +59,16 @@
 <body>
     <header>
         <h1><a href="../index.php">BinærChat</a></h1>
-        <?php
-        echo usernametext();
-        ?>
+        <?php echo usernametext();?>
     </header>
     <div class="content">
+        <!-- Page info and explaination -->
         <h2>Lage bruker til binærchat</h2>
         <p>Har du allerede en bruker? <a href="login.php">Logg inn</a></p>
 
         <h3>Bare lov med binære brukernavn!</h3>
+
+        <!-- Form for inputting userdate (u.name & pwd), password has too be typed twice, done with JS -->
         <form action="" method="post">
             <input type="text" name="username" id="username" placeholder="Brukernavn"><br>
             <input type="password" name="password" id="password" placeholder="Passord"><br>
@@ -68,14 +76,14 @@
             <input type="submit" value="Lag bruker" id="submit" class="submitwmargin"><br>
         </form>
 
-        <?php
-            echo($message);
-        ?>
+        <!-- Output info message -->
+        <?php echo($message);?>
 
     </div>
     <footer>
         <span>Peder 2021</span>
     </footer>
+    <!-- Extra script, becouse page needs extra functionality -->
     <script src="../js/script.js"></script>
     <script src="../js/lagbrukerscript.js"></script>
 </body>

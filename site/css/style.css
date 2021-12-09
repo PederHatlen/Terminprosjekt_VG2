@@ -1,9 +1,11 @@
+/* Custom font from google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata&display=swap');
 
-body, html{
-    height: 100%;
-}
+/* Styling of html and body to make them 100% of the screen height */
+body, html{height: 100%;}
 
+/* Genneral styling */
+/* Declaring grid areas for body (Used on all pages) + extra styling for body*/
 body{
     padding: 0;
     margin: 0 auto;
@@ -20,6 +22,34 @@ body{
         'Footer';
 }
 
+a{
+    color: #fff;
+    text-underline-offset: 1px;
+}
+input{
+    padding: 4px;
+    border: #000 solid 1px;
+    font-family: inherit;
+    color: #000;
+    background-color: #fff;
+    font-family: 'Inconsolata', monospace;
+}
+input::placeholder{
+    color: #000;
+}
+input:focus-visible{
+    outline: none;
+    background-color: #ddd;
+}
+.submitwmargin{margin: 5px 0;}
+
+input[type=submit]:hover, input[type=button]:hover{
+    background-color: #aaa;
+}
+
+
+
+/* Header */
 header{
     grid-area: Header;
     display: flex;
@@ -38,7 +68,13 @@ header{
 #username_display{
     color: white;
 }
+h1{
+    margin: 0;
+    padding: 0 2rem;
+}
 
+
+/* Footer */
 footer{
     display: flex;
     align-items: center;
@@ -48,19 +84,16 @@ footer{
 footer span, header span{
     padding: 0 2rem;
 }
-h1{
-    margin: 0;
-    padding: 0 2rem;
-}
+
+
+
+/* Main content for all pages */
 .content{
     grid-area: Content;
     padding: 0 2rem;
     background-color: #222;
 }
-a{
-    color: #fff;
-    text-underline-offset: 1px;
-}
+
 .content a{
     background-color: #000;
     padding: 0.25rem;
@@ -71,26 +104,8 @@ footer a{
 a:hover{opacity: 50%;}
 
 
-input{
-    padding: 4px;
-    border: #000 solid 1px;
-    font-family: inherit;
-    color: #000;
-    background-color: #fff;
-}
-input::placeholder{
-    color: #000;
-}
-input:focus-visible{
-    outline: none;
-    background-color: #ddd;
-}
-.submitwmargin{margin: 5px 0;}
 
-input[type=submit]:hover{
-    background-color: #aaa;
-}
-
+/* Extra styling for the help page */
 .question{
     padding: 0.5rem 1rem;
     background-color: #000;
@@ -98,8 +113,9 @@ input[type=submit]:hover{
 .question h3{margin: 0.5rem 0;}
 .question a{padding: 0; margin: 0;}
 .question p{padding: 0.2rem 0; margin: 0;}
-/* .question .answer{display: none;} */
 
+
+/* In case the display device is portrait/a phone */
 @media (orientation: portrait) {
     body{width: 100%;}
 }

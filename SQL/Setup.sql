@@ -2,6 +2,7 @@ CREATE DATABASE binærchatdb;
 
 USE binærchatdb;
 
+-- Users, the password is hashed and salted in php, created_at is just there for context/debuging
 CREATE TABLE users (
     user_id INT not null PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255) not null UNIQUE,
@@ -9,6 +10,7 @@ CREATE TABLE users (
     created_at DATETIME DEFAULT current_timestamp
 );
 
+-- Just tokens with the normal created_at and expires_at
 CREATE TABLE tokens (
     token_id INT not null PRIMARY KEY AUTO_INCREMENT,
     user_id INT not null,
@@ -18,12 +20,14 @@ CREATE TABLE tokens (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
+-- Is acctually just id, but needed a way to retrieve it after createon + created_at is usefull
 CREATE TABLE conversations (
     conversation_id INT not null PRIMARY KEY AUTO_INCREMENT,
     created_by INT not null,
     created_at DATETIME not null DEFAULT current_timestamp
 );
 
+-- Where all the users are stared, and bound to a conversation, is theoretically ready for group chats
 CREATE TABLE conversation_users (
     conversation_id INT not null,
     user_id INT not null,
@@ -32,6 +36,7 @@ CREATE TABLE conversation_users (
     PRIMARY KEY (conversation_id, user_id)
 );
 
+-- All the messages from all the chats are stored here, thay are retrieved by conversation_id
 CREATE TABLE messages (
     message_id INT not null PRIMARY KEY AUTO_INCREMENT,
     conversation_id INT not null,
