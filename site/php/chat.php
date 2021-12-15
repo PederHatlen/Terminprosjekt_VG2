@@ -95,5 +95,6 @@
         <span>Peder 2021</span>
     </footer>
     <script src="../js/script.js"></script>
+    <script src="../js/chatScript.js"></script>
 </body>
 </html>
