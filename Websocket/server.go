@@ -19,7 +19,7 @@ var u = websocket.Upgrader{
 func main() {
 	closeHandler()
 	fmt.Println("sup fucker, it's", time.Now().Format("15:04:05"))
-
+	sql_test()
 	http.HandleFunc("/echo", func(w http.ResponseWriter, r *http.Request) {
 		conn, _ := u.Upgrade(w, r, nil) // error ignored for sake of simplicity
 

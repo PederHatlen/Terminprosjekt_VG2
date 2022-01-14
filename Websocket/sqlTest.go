@@ -17,7 +17,7 @@ type Users struct {
 	Created_at string `json:"created_at"`
 }
 
-func mains() {
+func sql_test() {
 
 	fmt.Println(time.Now())
 
