@@ -3,10 +3,11 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"log"
+	"strconv"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/gorilla/websocket"
 )
 
 type Users struct {
@@ -16,7 +17,8 @@ type Users struct {
 	Created_at string `json:"created_at"`
 }
 
-func main() {
+func mains() {
+
 	fmt.Println(time.Now())
 
 	db, err := sql.Open("mysql", "root:@/binærchatdb")
@@ -39,6 +41,6 @@ func main() {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
 		// and then print out the tag's Name attribute
-		log.Printf(user.Username)
+		fmt.Printf(strconv.FormatInt(int64(user.ID), 10) + " " + user.Username + " " + user.Password + " " + user.Created_at + "\n")
 	}
 }
