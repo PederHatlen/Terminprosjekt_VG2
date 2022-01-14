@@ -1,15 +1,17 @@
 import asyncio
 import datetime
-import random
 import websockets
+import mysql
 
-async def show_time(websocket):
+async def show_time(websocket, users):
     while websocket.open:
-        await websocket.send(datetime.datetime.utcnow().isoformat() + "Z")
-        await asyncio.sleep(random.random() * 2 + 1)
+        await websocket.send("<p>" + await websocket.recv() + "</p>")
+        await asyncio.sleep(1)
 
 async def main():
-    async with websockets.serve(show_time, "localhost", 5678):
+    users = {}
+
+    async with websockets.serve(show_time, host = "localhost", port = 5678):
         await asyncio.Future()  # run forever
 
 if __name__ == "__main__":
