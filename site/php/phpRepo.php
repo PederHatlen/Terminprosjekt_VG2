@@ -7,7 +7,7 @@
     
     // Basic connect functions
     function connect(){
-        $servername = "localhost";
+        $servername = "localhost:3306";
         $username = "root";
         $password = "";
         $dbname = "binærchatdb";

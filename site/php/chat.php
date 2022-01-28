@@ -60,7 +60,7 @@
             while ($row = $participants->fetch_row()) {
                 echo ($row[3] == "1"? "Torshken":$row[3]);
             }
-        ?></h3></div>
+        ?></h3><h4 id="connectionInfo"></h4></div>
         <div id="chatWindow"><?php
             // Displaying all chat-messages with usernames, on later expansions colors might also be added
             $stmt = $con->prepare('SELECT * FROM messages left join users on messages.sender_id = users.user_id where conversation_id = ?');
@@ -94,6 +94,30 @@
     <footer>
         <span>Peder 2021</span>
     </footer>
+    <script>
+        let chatWindow = document.getElementById("chatWindow");
+        let messageFormEL = document.getElementById("messageForm");
+        let messageEL = document.getElementById("usrmsg");
+        let connectionInfoEL = document.getElementById("connectionInfo");
+        let socket = new WebSocket("ws://" + window.location.host + ":5678?");
+
+        socket.onopen = function () {
+            connectionInfoEL.innerHTML += "Connected!";
+            socket.send(<?php echo('"'.$_SESSION["chatid"].', '.$_SESSION["user_id"].', '.$_SESSION["username"].', '.$_SESSION["logintoken"].'"');?>)
+            
+            socket.onmessage = function (e) {chatWindow.innerHTML += e.data;};
+        };
+        socket.onerror = function (e) {connectionInfo.innerHTML += "Someone forgot to start the websocket server.";}
+
+        messageFormEL.onsubmit = function (e) {
+            e.preventDefault();
+            send();
+        }
+        function send(message = messageEL.value) {
+            socket.send(message);
+            messageEL.value = "";
+        }
+    </script>
     <script src="../js/script.js"></script>
     <script src="../js/chatScript.js"></script>
 </body>

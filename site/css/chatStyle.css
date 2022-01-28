@@ -15,6 +15,9 @@
     grid-area: infoText;
     background-color: black;
     padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 
@@ -25,10 +28,13 @@
     background-color: black;
     padding: 0 1rem;
 }
-
-
-
-
+#connectionInfo{
+    font-weight: bolder;
+    color: lightgray;
+    background-color: rgb(55, 55, 75);
+    padding: 0.25rem;
+    margin: 0;
+}
 /* Message styling (Will most likely expand in the future) */
 .time{
     font-stretch: 80%;
