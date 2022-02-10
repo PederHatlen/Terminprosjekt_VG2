@@ -103,11 +103,13 @@
 
         socket.onopen = function () {
             connectionInfoEL.innerHTML += "Connected!";
+            
             socket.send(<?php echo('"'.$_SESSION["chatid"].', '.$_SESSION["user_id"].', '.$_SESSION["username"].', '.$_SESSION["logintoken"].'"');?>)
             
             socket.onmessage = function (e) {chatWindow.innerHTML += e.data;};
         };
-        socket.onerror = function (e) {connectionInfo.innerHTML += "Someone forgot to start the websocket server.";}
+        socket.onerror = function (e) {connectionInfo.innerHTML = "Someone forgot to start the websocket server.";}
+        socket.onclose = function (e) {connectionInfo.innerHTML = "Disconnected :("}
 
         messageFormEL.onsubmit = function (e) {
             e.preventDefault();

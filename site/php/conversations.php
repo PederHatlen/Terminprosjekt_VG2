@@ -112,28 +112,18 @@
                     // The second bulk of PHP on this page, this is for retrieving the right information for the table
 
                     // Finding all the conversation the user is inn
-                    $stmt = $con->prepare('SELECT * FROM conversation_users where user_id = ?');
+                    $stmt = $con->prepare('SELECT conversation_users.conversation_id, lastMSG, users.username from conversation_users left join (SELECT conversation_id, MAX(sent_at) AS lastMSG FROM messages GROUP BY conversation_id) messages using(conversation_id) left join (SELECT * FROM conversation_users left join users using(user_id)) users on conversation_users.conversation_id = users.conversation_id and conversation_users.user_id != users.user_id where conversation_users.user_id = ? ORDER BY lastMSG desc;');
                     $stmt->bind_param('i', $_SESSION["user_id"]);
                     $stmt->execute();
-                    $conversations = $stmt->get_result();
+                    $result = $stmt->get_result();
                     // If there is anny, go throught them, else make table row with info
-                    if (mysqli_num_rows($conversations) != 0){
+                    if (mysqli_num_rows($result) != 0){
                         echo("<tr id='tableHeader'><th>Person</th><th>Sist aktiv</th></tr>");
 
-                        while ($row = $conversations->fetch_row()) {
+                        while ($row = $result->fetch_row()) {
                             $conversation_id = $row[0];
-
-                            // Getting the username from current conversation, for displaying in table
-                            $stmt = $con->prepare('SELECT * FROM conversation_users left join users on conversation_users.user_id = users.user_id where conversation_users.conversation_id = ? and conversation_users.user_id != ?');
-                            $stmt->bind_param('ii', $row[0], $_SESSION["user_id"]);
-                            $stmt->execute();
-                            $username = $stmt->get_result()->fetch_array(MYSQLI_BOTH)["username"];
-
-                            // Getting the timestamp from the last message
-                            $stmt = $con->prepare('SELECT sent_at FROM messages where conversation_id = ? order by sent_at desc limit 1');
-                            $stmt->bind_param('i', $conversation_id);
-                            $stmt->execute();
-                            $sent_at = $stmt->get_result()->fetch_assoc()["sent_at"];
+                            $sent_at = $row[1];
+                            $username = $row[2];
 
                             // If there is anny messages format the time properly
                             if ($sent_at != null){

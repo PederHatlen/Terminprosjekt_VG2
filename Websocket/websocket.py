@@ -1,13 +1,11 @@
 import asyncio
-from datetime import date, datetime
+import datetime
 import socket
 import websockets
 import re
 import MySQLdb
 
 conversations = {}
-conn = MySQLdb.connect("localhost", "root", "", "binærchatdb")
-cursor = conn.cursor()
 
 async def handler(websocket):
     global conversations
@@ -36,15 +34,16 @@ async def handler(websocket):
     while websocket.open:
         try:
             message = await websocket.recv()
-            message = re.sub("/[^10 ]+/g", "", str(message))
+            message = re.sub(r"/[^10 ]+/g", "", str(message))
             if not message.isspace():
                 cursor.execute("""INSERT INTO messages (conversation_id, sender_id, messagetext) VALUES (%s, %s, %s)""", [str(clientDeets[0]), str(clientDeets[1]), str(message)])
                 conn.commit()
-                time = datetime.now()
+                time = datetime.datetime.now()
                 for i in conversations[clientDeets[0]]:
                     await i.send("<p><p><span class='time'>[" + time.strftime("%H:%M:%S") + "]</span> " + ("Torshken" if str(clientDeets[2]) == "1" else clientDeets[2]) + ": " + str(message) + "</p>")
                     print("Sendt to {0}".format(websocket.remote_address[0]))
-        except await websockets.exceptions.ConnectionClosed: break
+        except:
+            break
         await asyncio.sleep(1)
     conn.close()
     conversations[clientDeets[0]].remove(websocket)
@@ -53,6 +52,16 @@ async def handler(websocket):
 
 async def main():
     global conversations
+    global conn
+    global cursor
+
+    try: conn = MySQLdb.connect("localhost", "root", "", "binærchatdb")
+    except: 
+        print("Can't connect to database.")
+        return False
+    else: 
+        print("Connection was succesfull!")
+    cursor = conn.cursor()
 
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))

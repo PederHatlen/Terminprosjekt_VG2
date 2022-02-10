@@ -8,5 +8,5 @@ document.querySelectorAll("input").forEach(element => {
 });
 
 function cleanInput(inn){
-    return inn.replace(/[^10 ]+/g, '');
+    return inn.replace(/[^10]+/g, '');
 }
