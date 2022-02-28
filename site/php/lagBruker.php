@@ -61,7 +61,7 @@
         <h1><a href="../index.php">BinærChat</a></h1>
         <?php echo usernametext();?>
     </header>
-    <div class="content">
+    <main>
         <!-- Page info and explaination -->
         <h2>Lage bruker til binærchat</h2>
         <p>Har du allerede en bruker? <a href="login.php">Logg inn</a></p>
@@ -79,7 +79,7 @@
         <!-- Output info message -->
         <?php echo($message);?>
 
-    </div>
+</main>
     <footer>
         <span>Peder 2021</span>
     </footer>

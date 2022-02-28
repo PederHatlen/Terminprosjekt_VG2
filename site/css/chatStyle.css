@@ -1,5 +1,6 @@
 /* Content in the chat is also a Grid */
-.content{
+main{
+    height: 100%;
     /* padding-bottom: 1rem; */
     display: grid;
     grid-template-columns: 1fr;
@@ -20,13 +21,14 @@
     align-items: center;
 }
 
-
 /* Acctual window the messages appear in */
 #chatWindow{
     grid-area: chatWindow;
     height: 100%;
     background-color: black;
     padding: 0 1rem;
+    overflow-y: scroll;
+    line-break: anywhere;
 }
 #connectionInfo{
     font-weight: bolder;
@@ -41,8 +43,6 @@
     font-weight: 500;
 }
 
-
-
 /* New message form */
 #messageForm{
     display: flex;
@@ -55,7 +55,6 @@ input[type="submit"]{
     font-size: 1.25rem;
     font-weight: 200;
 }
-
 
 @media (orientation: portrait) {
     .content{padding: 0;}

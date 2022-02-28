@@ -25,7 +25,7 @@
             <?php echo usernametext();?>
         </div>
     </header>
-    <div class="content">
+    <main>
         <h2>Velkommen til Binærchat!</h2>
         <?php
             // If user is logged in, greet them and give links, else link to sign-in/make account
@@ -42,9 +42,9 @@
                 <a href="php/login.php">Logg in</a>');
             }
         ?>
-        <!-- Helppage (always here) -->
+        <!-- Help-page (always here) -->
         <p>Hvis du trenger hjelp eller har spørsmål kan du gå på <a href="php/hjelp.php">Hjelp</a> siden.</p>
-    </div>
+        </main>
     <!-- Footer for extra info -->
     <footer> 
         <span>Peder 2021</span>

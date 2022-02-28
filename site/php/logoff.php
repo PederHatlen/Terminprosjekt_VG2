@@ -25,8 +25,7 @@
     <header>
         <h1><a href="../index.php">BinærChat</a></h1>
     </header>
-    <div class="content">
-    </div>
+    <main></main>
     <footer>
         <span>Peder 2021</span>
     </footer>

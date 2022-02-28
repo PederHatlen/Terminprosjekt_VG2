@@ -80,7 +80,7 @@
         <h1><a href="../index.php">BinærChat</a></h1>
         <?php echo usernametext();?>
     </header>
-    <div class="content">
+    <main>
         <h2>Samtaler</h2>
 
         <!-- Options for sorting/making new conversations (Not fully implemented yet) -->
@@ -144,7 +144,7 @@
                 ?>
             </tbody>
         </table>
-    </div>
+                </main>
     <footer>
         <span>Peder 2021</span>
     </footer>

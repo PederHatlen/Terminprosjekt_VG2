@@ -48,7 +48,7 @@
         <h1><a href="../index.php">BinærChat</a></h1>
         <?php echo usernametext();?>
     </header>
-    <div class="content">
+    <main>
         <!-- Page text / explaination -->
         <h2>Logg inn på binærchat</h2>
         <p>Har du ikke laget en bruker? <a href="lagBruker.php">Lag bruker</a></p>
@@ -63,7 +63,7 @@
             // Messages for debugging/event info, made inn main PHP code
             echo $msgText;
         ?>
-    </div>
+    </main>
     <footer>
         <span>Peder 2021</span>
     </footer>

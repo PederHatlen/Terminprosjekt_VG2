@@ -18,7 +18,7 @@
         <h1><a href="../index.php">BinærChat</a></h1>
         <?php echo usernametext();?>
     </header>
-    <div class="content">
+    <main>
         <!-- Page is split up into parts where one question is answered/topic is discussed -->
         <h2>Hjelp</h2>
         <div class="question">
@@ -44,7 +44,7 @@
             <p class="answer"><a href="https://youtu.be/wCQSIub_g7M">How to read text in binary</a></wbr><b> (Tom Scott, YouTube)</b></p>
             <p class="answer"><a href="https://youtu.be/LpuPe81bc2w">Binary Numbers and Base Systems as Fast as Possible</a></wbr><b> (Techquickie, YouTube)</b></p>
         </div>
-    </div>
+</main>
     <footer>
         <span>Peder 2021</span>
         <!-- Wow, that's a cool guy, wonder what he has done -->

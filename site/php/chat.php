@@ -54,7 +54,7 @@
         <h1><a href="../index.php">BinærChat</a></h1>
         <?php echo usernametext();?>
     </header>
-    <div class="content">
+    <main>
         <div id="chatInfo"><h3>Chatter med: <?php 
             // Outputing all conversation participants, intended for future expansion to group chats, also translates user 1 to Torshken (ME)
             while ($row = $participants->fetch_row()) {
@@ -90,7 +90,7 @@
             <input type="submit" value="Send">
         </form>
         <?php echo $msgText;?>
-    </div>
+        </main>
     <footer>
         <span>Peder 2021</span>
     </footer>

@@ -88,13 +88,13 @@ footer span, header span{
 
 
 /* Main content for all pages */
-.content{
+main{
     grid-area: Content;
     padding: 0 2rem;
     background-color: #222;
 }
 
-.content a{
+main a{
     background-color: #000;
     padding: 0.25rem;
 }
