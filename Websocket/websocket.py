@@ -49,9 +49,9 @@ async def handler(websocket):
         while websocket.open:
             try:
                 message = await websocket.recv()
-                message = re.sub(r"""/[^10 ]+""", "", str(message[:255]))
+                message = re.sub(r"[^10 ]+", "", str(message[:255])).strip()
                 # message = REpattern.sub(str(message[:255]), "")
-                if not message.isspace():
+                if len(message) != 0:
                     cursor.execute("""INSERT INTO messages (conversation_id, sender_id, messagetext) VALUES (%s, %s, %s)""", [str(clientDeets[0]), str(clientDeets[1]), str(message)])
                     conn.commit()
                     time = datetime.datetime.now()
