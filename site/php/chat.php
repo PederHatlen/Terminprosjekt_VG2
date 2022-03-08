@@ -81,7 +81,7 @@
         ?></div>
         <!-- Form for making messages, goes to chatpost.php -->
         <form name="message" action="chatpost.php" id="messageForm" method="post">
-            <input type="text" class="input" name="usrmsg" id="usrmsg" placeholder="Skriv inn en melding (Husk at den må være binær)">
+            <input type="text" class="input" name="usrmsg" id="usrmsg" placeholder="Skriv inn en melding (Husk at den må være binær og under 255 tegn)" autofocus>
             <input type="submit" class="input" value="Send">
         </form>
         <?php echo $msgText;?>

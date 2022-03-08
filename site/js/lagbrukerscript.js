@@ -7,10 +7,10 @@ let submitbtn = document.getElementById("submit");
 // Checking the input on the second password field if it matches the first, then unlock submit button
 function checkinput() {
     if (usernameEL.value != "" && pwdEL.value != "" && pwdEL.value === pwdConEL.value) {
-        submitbtn.style.backgroundColor = "";
+        // submitbtn.style.backgroundColor = "white";
         submitbtn.disabled = false;
     }else{
-        submitbtn.style.backgroundColor = "Gray";
+        // submitbtn.style.backgroundColor = "";
         submitbtn.disabled = true;
     }
 }

@@ -50,10 +50,10 @@
         <p>Har du ikke laget en bruker? <a href="lagBruker.php">Lag bruker</a></p>
 
         <!-- Form for inputting login details, text removing/formating done in JS (script.js) -->
-        <form action="" method="post">
-            <input type="text" name="username" id="username" placeholder="Brukernavn"><br>
-            <input type="password" name="password" id="password" placeholder="Passord"><br>
-            <input type="submit" value="log in" id="submit" class="submitwmargin"><br>
+        <form action="" method="post" class="verticalForm">
+            <input type="text" name="username" id="username" placeholder="Brukernavn" required autofocus>
+            <input type="password" name="password" id="password" placeholder="Passord" required>
+            <input type="submit" value="log in" id="submit" class="submitwmargin">
         </form>
         <?php
             // Messages for debugging/event info, made inn main PHP code

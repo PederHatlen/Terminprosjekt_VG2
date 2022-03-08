@@ -66,11 +66,11 @@
         <h3>Bare lov med binære brukernavn!</h3>
 
         <!-- Form for inputting userdate (u.name & pwd), password has too be typed twice, done with JS -->
-        <form action="" method="post">
-            <input type="text" class="input" name="username" id="username" placeholder="Brukernavn"><br>
-            <input type="password" class="input" name="password" id="password" placeholder="Passord"><br>
-            <input type="password" class="input" name="passwordControll" id="passwordControll" placeholder="Gjenta passord"><br>
-            <input type="submit" value="Lag bruker" id="submit" class="submitwmargin"><br>
+        <form action="" method="post" class="verticalForm">
+            <input type="text" class="input" name="username" id="username" placeholder="Brukernavn" required autofocus>
+            <input type="password" class="input" name="password" id="password" placeholder="Passord" required>
+            <input type="password" class="input" name="passwordControll" id="passwordControll" placeholder="Gjenta passord" required>
+            <input type="submit" value="Lag bruker" id="submit" class="submitwmargin defaultDisabled" disabled>
         </form>
 
         <!-- Output info message -->

@@ -60,5 +60,5 @@ input[type="submit"]{
 }
 
 @media (orientation: portrait) {
-    .content{padding: 0;}
+    main{padding: 0;}
 }

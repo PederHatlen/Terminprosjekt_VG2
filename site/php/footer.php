@@ -1,4 +1,4 @@
 <footer> 
-    <span>Peder 2021</span>
-    <a href="help.php">Hjelp</a>
+    <span>Peder 2022</span>
+    <a href="/BinærChat/php/help.php">Hjelp</a>
 </footer>

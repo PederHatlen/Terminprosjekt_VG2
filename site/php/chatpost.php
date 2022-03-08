@@ -8,7 +8,7 @@
     // Post requirement
     if ($_SERVER["REQUEST_METHOD"] != "POST" or ctype_space($_POST["usrmsg"])) {
         header('Location: ../chat.php');
-    }else{$msgtext = preg_replace("/[^10 ]+/", "", $_POST["usrmsg"]);}
+    }else{$msgtext = preg_replace("/[^10]+/", "", $_POST["usrmsg"]);}
 
     // Chat id is sett, and user is logged in
     if (isset($_SESSION["chatid"]) and isLoggedIn($con)) {

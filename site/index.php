@@ -18,13 +18,8 @@
 </head>
 <body>
     <!-- Main nav-bar, or header -->
-    <header>
-        <h1><a href="index.php">BinærChat</a></h1>
-        <div class="rightheader">
-            <!-- Code to insert username in top right, data is stored in session variables declared in phprepo -->
-            <?php echo usernametext();?>
-        </div>
-    </header>
+
+    <?php include 'php/header.php';?>
     <main>
         <h2>Velkommen til Binærchat!</h2>
         <?php

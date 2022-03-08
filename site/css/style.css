@@ -21,12 +21,11 @@ body{
         'Content'
         'Footer';
 }
-
 a{
     color: #fff;
     text-underline-offset: 1px;
 }
-input{
+input, textarea{
     padding: 4px;
     border: #000 solid 1px;
     font-family: inherit;
@@ -34,19 +33,23 @@ input{
     background-color: #fff;
     font-family: 'Inconsolata', monospace;
 }
-input::placeholder{
+input::placeholder, textarea::placeholder{
     color: #000;
 }
-input:focus-visible{
+input:focus-visible, textarea:focus-visible{
     outline: none;
     background-color: #ddd;
 }
 .submitwmargin{margin: 5px 0;}
-
-input[type=submit]:hover, input[type=button]:hover{
+input[type=submit]:hover, input[type=button]:hover, button:hover{
     background-color: #aaa;
 }
-
+input:disabled, input[disabled]{
+    background-color: gray;
+}
+input:disabled:hover, input[disabled]:hover{
+    background-color: gray;
+}
 
 
 /* Header */
@@ -86,7 +89,6 @@ footer span, header span{
 }
 
 
-
 /* Main content for all pages */
 main{
     grid-area: Content;
@@ -102,9 +104,15 @@ footer a{
 }
 a:hover{opacity: 50%;}
 
+.verticalForm{
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+}
 
 
 /* Extra styling for the help page */
+#helpMain{padding-bottom: 2rem;}
 .question{
     padding: 0.5rem 1rem;
     background-color: #000;

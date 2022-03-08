@@ -47,11 +47,12 @@ CREATE TABLE messages (
     FOREIGN KEY (sender_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE brukerstøtte (
+-- Basic help-ticket system
+CREATE TABLE help_tickets (
     ticket_id INT not null PRIMARY KEY AUTO_INCREMENT,
     messagetext varchar(255) not null,
     email varchar(255) not null,
-    user_id int(255),
+    user_id int(255), -- Can be non existent if user f.x has problems logging in
     sent_at DATETIME not Null DEFAULT current_timestamp,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
