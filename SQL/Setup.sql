@@ -46,3 +46,12 @@ CREATE TABLE messages (
     FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id),
     FOREIGN KEY (sender_id) REFERENCES users(user_id)
 );
+
+CREATE TABLE brukerstøtte (
+    ticket_id INT not null PRIMARY KEY AUTO_INCREMENT,
+    messagetext varchar(255) not null,
+    email varchar(255) not null,
+    user_id int(255),
+    sent_at DATETIME not Null DEFAULT current_timestamp,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+);

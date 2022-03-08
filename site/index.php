@@ -43,12 +43,12 @@
             }
         ?>
         <!-- Help-page (always here) -->
-        <p>Hvis du trenger hjelp eller har spørsmål kan du gå på <a href="php/hjelp.php">Hjelp</a> siden.</p>
-        </main>
+        <p>Hvis du trenger hjelp eller har spørsmål kan du gå på <a href="php/help.php">Hjelp</a> siden.</p>
+    </main>
     <!-- Footer for extra info -->
     <footer> 
         <span>Peder 2021</span>
-        <a href="php/hjelp.php">Hjelp</a>
+        <a href="php/help.php">Hjelp</a>
     </footer>
 </body>
 </html>

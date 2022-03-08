@@ -76,10 +76,7 @@
     <link rel="stylesheet" href="../css/conversationsStyle.css">
 </head>
 <body>
-    <header>
-        <h1><a href="../index.php">BinærChat</a></h1>
-        <?php echo usernametext();?>
-    </header>
+    <?php include 'header.php';?>
     <main>
         <h2>Samtaler</h2>
 
@@ -145,9 +142,7 @@
             </tbody>
         </table>
     </main>
-    <footer>
-        <span>Peder 2021</span>
-    </footer>
+    <?php include 'footer.php';?>
     <script src="../js/script.js"></script>
 </body>
 </html>

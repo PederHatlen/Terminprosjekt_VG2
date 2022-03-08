@@ -57,10 +57,7 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <header>
-        <h1><a href="../index.php">BinærChat</a></h1>
-        <?php echo usernametext();?>
-    </header>
+    <?php include 'header.php';?>
     <main>
         <!-- Page info and explaination -->
         <h2>Lage bruker til binærchat</h2>
@@ -80,9 +77,8 @@
         <?php echo($message);?>
 
     </main>
-    <footer><span>Peder 2021</span></footer>
+    <?php include 'footer.php';?>
     <!-- Extra script, becouse page needs extra functionality -->
-    <!-- <script src="../js/script.js"></script> -->
     <script src="../js/lagbrukerscript.js"></script>
 </body>
 </html>

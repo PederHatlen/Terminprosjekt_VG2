@@ -43,11 +43,7 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <header>
-        <!-- Same for all pages, link to index, and username/login indication -->
-        <h1><a href="../index.php">BinærChat</a></h1>
-        <?php echo usernametext();?>
-    </header>
+    <?php include 'header.php';?>
     <main>
         <!-- Page text / explaination -->
         <h2>Logg inn på binærchat</h2>
@@ -64,9 +60,7 @@
             echo $msgText;
         ?>
     </main>
-    <footer>
-        <span>Peder 2021</span>
-    </footer>
+    <?php include 'footer.php';?>
     <script src="../js/script.js"></script>
 </body>
 </html>

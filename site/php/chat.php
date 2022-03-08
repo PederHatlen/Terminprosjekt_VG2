@@ -50,16 +50,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wdth@60;70;80&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1><a href="../index.php">BinærChat</a></h1>
-        <?php echo usernametext();?>
-    </header>
+    <?php include 'header.php';?>
     <main>
         <div id="chatInfo"><h3>Chatter med: <?php 
             // Outputing all conversation participants, intended for future expansion to group chats, also translates user 1 to Torshken (ME)
-            while ($row = $participants->fetch_row()) {
-                echo ($row[3] == "1"? "Torshken":$row[3]);
-            }
+            while ($row = $participants->fetch_row()) {echo ($row[3] == "1"? "Torshken":$row[3]);}
         ?></h3><h4 id="connectionInfo"></h4></div>
         <div id="chatWindow"><?php
             // Displaying all chat-messages with usernames, on later expansions colors might also be added
@@ -90,10 +85,8 @@
             <input type="submit" class="input" value="Send">
         </form>
         <?php echo $msgText;?>
-        </main>
-    <footer>
-        <span>Peder 2021</span>
-    </footer>
+    </main>
+    <?php include 'footer.php';?>
 
     <!-- Script is integrated because of data from php that needs to be integrated. -->
     <script>

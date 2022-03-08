@@ -14,10 +14,7 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <header>
-        <h1><a href="../index.php">BinærChat</a></h1>
-        <?php echo usernametext();?>
-    </header>
+    <?php include 'header.php';?>
     <main>
         <!-- Page is split up into parts where one question is answered/topic is discussed -->
         <h2>Hjelp</h2>
@@ -45,10 +42,7 @@
             <p class="answer"><a href="https://youtu.be/LpuPe81bc2w">Binary Numbers and Base Systems as Fast as Possible</a></wbr><b> (Techquickie, YouTube)</b></p>
         </div>
 </main>
-    <footer>
-        <span>Peder 2021</span>
-        <!-- Wow, that's a cool guy, wonder what he has done -->
-    </footer>
+    <?php include 'footer.php';?>
     <script src="../js/script.js"></script>
 </body>
 </html>
