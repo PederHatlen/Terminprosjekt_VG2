@@ -1,5 +1,29 @@
-<!-- This page is only for help, not much php exept login things, and username display -->
-<?php include 'phpRepo.php';?>
+<!-- This page is only for help, php is only used to get basic page things, and help ticket sending -->
+<?php 
+    include 'phpRepo.php';
+    $message = "";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_POST["ticketQuestion"]) && isset($_POST["email"])){
+            if (filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
+                $con = connect();
+                if (isset($_SESSION["user_id"])){
+                    $stmt = $con->prepare('INSERT into help_tickets (messagetext, email, user_id) VALUES (?, ?, ?)');
+                    $stmt->bind_param('ssi', $_POST["ticketQuestion"], $_POST["email"], $_SESSION["user_id"]); // 's' specifies the variable type => 'string'
+                    $stmt->execute();
+                }else{
+                    $stmt = $con->prepare('INSERT into help_tickets (messagetext, email) VALUES (?, ?)');
+                    $stmt->bind_param('ss', $_POST["ticketQuestion"], $_POST["email"]); // 's' specifies the variable type => 'string'
+                    $stmt->execute();
+                }
+                $con->close();
+                $message = "Spørsmålet ble sendt inn.";
+            }else{
+                $message = "Det er ikke en gyldig epost.";
+            }
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="no">
 <head>
@@ -15,7 +39,7 @@
 </head>
 <body>
     <?php include 'header.php';?>
-    <main>
+    <main id="helpMain">
         <!-- Page is split up into parts where one question is answered/topic is discussed -->
         <h2>Hjelp</h2>
         <div class="question">
@@ -41,8 +65,39 @@
             <p class="answer"><a href="https://youtu.be/wCQSIub_g7M">How to read text in binary</a></wbr><b> (Tom Scott, YouTube)</b></p>
             <p class="answer"><a href="https://youtu.be/LpuPe81bc2w">Binary Numbers and Base Systems as Fast as Possible</a></wbr><b> (Techquickie, YouTube)</b></p>
         </div>
-</main>
+        <hr>
+        <div class="question">
+            <h3>Jeg har andre spørsmål</h3>
+            <p class="answer">Da kan du ta kontakt ved enten å sende mail til <a href="mailto:pehaa002@osloskolen.no" target="_blank">pehaa002@osloskolen.no</a>.</p>
+            <p class="answer">Eller send inn et spørsmål her.</p>
+            <form action="" id="ticketForm" method="post" class="verticalForm">
+                <textarea name="ticketQuestion" id="ticketQuestion" class="input" placeholder="Spørsmål* (255 tegn)" rows="5" form="ticketForm" maxlength="255" required></textarea>
+                <input type="email" name="email" id="ticketEmail" class="input" placeholder="epost*" required>
+                <input type="submit" value="Send" id="submitBTN" class="submitwmargin defaultDisabled" disabled>
+            </form>
+            <?php echo "<p>".$message."</p>"; ?>
+            <span>Ved å sende dette spørsmålet vil dataen du sender bli lagret, og vil bli kunne sett av en hjelper.</span><br>
+            <span>Hvis du er logget in vil også id-en din ble sendt med.</span>
+        </div>
+    </main>
     <?php include 'footer.php';?>
-    <script src="../js/script.js"></script>
+    <script>
+        let ticketQuestionEl = document.getElementById("ticketQuestion");
+        let ticketEmailEl = document.getElementById("ticketEmail");
+        let submitBTNEl = document.getElementById("submitBTN");
+
+        Array.from(document.getElementsByClassName("input")).forEach(element => {
+            element.oninput = function(e) {
+                console.log(ticketQuestionEl.value);
+                emailverified = String(ticketEmailEl.value).toLowerCase().match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+                ticketEmailEl.style.backgroundColor = (emailverified? "":"red");
+                if ((ticketQuestionEl.value.length > 0) && (emailverified != null)){
+                    submitBTNEl.disabled = false;
+                }else{
+                    submitBTNEl.disabled = true;
+                }
+            };
+        });
+    </script>
 </body>
 </html>
