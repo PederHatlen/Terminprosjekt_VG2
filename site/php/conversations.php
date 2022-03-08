@@ -98,7 +98,7 @@
                 </div>
                 <!-- Form for making new conversation, goes to this document -->
                 <form action="" method="post">
-                    <input type="text" name="person" id="person" onkeyup="" placeholder="Brukernavn">
+                    <input type="text" class="input" name="person" id="person" onkeyup="" placeholder="Brukernavn">
                     <input type="submit" name="submit" value="Lag samtale">
                 </form>
             </div>
@@ -144,7 +144,7 @@
                 ?>
             </tbody>
         </table>
-                </main>
+    </main>
     <footer>
         <span>Peder 2021</span>
     </footer>

@@ -86,14 +86,16 @@
         ?></div>
         <!-- Form for making messages, goes to chatpost.php -->
         <form name="message" action="chatpost.php" id="messageForm" method="post">
-            <input type="text" name="usrmsg" id="usrmsg" placeholder="Skriv inn en melding (Husk at den må være binær)">
-            <input type="submit" value="Send">
+            <input type="text" class="input" name="usrmsg" id="usrmsg" placeholder="Skriv inn en melding (Husk at den må være binær)">
+            <input type="submit" class="input" value="Send">
         </form>
         <?php echo $msgText;?>
         </main>
     <footer>
         <span>Peder 2021</span>
     </footer>
+
+    <!-- Script is integrated because of data from php that needs to be integrated. -->
     <script>
         let chatWindow = document.getElementById("chatWindow");
         let messageFormEL = document.getElementById("messageForm");
@@ -107,20 +109,21 @@
             socket.send(<?php echo('"'.$_SESSION["chatid"].', '.$_SESSION["user_id"].', '.$_SESSION["username"].', '.$_SESSION["logintoken"].'"');?>)
             
             socket.onmessage = function (e) {chatWindow.innerHTML += e.data;};
+            
+            messageFormEL.onsubmit = function (e) {
+                e.preventDefault();
+                send();
+            }
         };
         socket.onerror = function (e) {connectionInfo.innerHTML = "Someone forgot to start the websocket server.";}
         socket.onclose = function (e) {connectionInfo.innerHTML = "Disconnected :("}
 
-        messageFormEL.onsubmit = function (e) {
-            e.preventDefault();
-            send();
-        }
         function send(message = messageEL.value) {
             socket.send(message);
             messageEL.value = "";
         }
+
     </script>
     <script src="../js/script.js"></script>
-    <script src="../js/chatScript.js"></script>
 </body>
 </html>

@@ -78,8 +78,6 @@ async def main():
     global conversations
     global conn
     global cursor
-    global REpattern
-    REpattern = re.compile("[^10 ]")
 
     try: conn = MySQLdb.connect("localhost", "root", "", "binærchatdb")
     except: 

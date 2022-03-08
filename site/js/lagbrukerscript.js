@@ -1,16 +1,8 @@
 // Declarring/finding ellements used later
-let usernameEL = document.querySelector("#username");
-
-let pwdEL = document.querySelector("#password");
-let pwdConEL = document.querySelector("#passwordControll");
-
-let submitbtn = document.querySelector("#submit");
-
-// Apply checkinput function when there is anny change in the input fields values
-usernameEL.oninput = checkinput;
-pwdEL.oninput = checkinput;
-pwdConEL.oninput = checkinput;
-checkinput()
+let usernameEL = document.getElementById("username");
+let pwdEL = document.getElementById("password");
+let pwdConEL = document.getElementById("passwordControll");
+let submitbtn = document.getElementById("submit");
 
 // Checking the input on the second password field if it matches the first, then unlock submit button
 function checkinput() {
@@ -22,3 +14,17 @@ function checkinput() {
         submitbtn.disabled = true;
     }
 }
+
+// Cleaning the input with regEx
+function cleanInput(inn){
+    return inn.replace(/[^10]+/g, '');
+}
+
+Array.from(document.getElementsByClassName("input")).forEach(element => {
+    // If a key other than 1, 0 or some other comfort buttons are pressed, prevent it from being registered
+    element.oninput = function(e) {
+        e.target.value = cleanInput(e.target.value);
+        checkinput();
+    };
+});
+checkinput();

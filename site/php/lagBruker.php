@@ -70,21 +70,19 @@
 
         <!-- Form for inputting userdate (u.name & pwd), password has too be typed twice, done with JS -->
         <form action="" method="post">
-            <input type="text" name="username" id="username" placeholder="Brukernavn"><br>
-            <input type="password" name="password" id="password" placeholder="Passord"><br>
-            <input type="password" name="passwordControll" id="passwordControll" placeholder="Gjenta passord"><br>
+            <input type="text" class="input" name="username" id="username" placeholder="Brukernavn"><br>
+            <input type="password" class="input" name="password" id="password" placeholder="Passord"><br>
+            <input type="password" class="input" name="passwordControll" id="passwordControll" placeholder="Gjenta passord"><br>
             <input type="submit" value="Lag bruker" id="submit" class="submitwmargin"><br>
         </form>
 
         <!-- Output info message -->
         <?php echo($message);?>
 
-</main>
-    <footer>
-        <span>Peder 2021</span>
-    </footer>
+    </main>
+    <footer><span>Peder 2021</span></footer>
     <!-- Extra script, becouse page needs extra functionality -->
-    <script src="../js/script.js"></script>
+    <!-- <script src="../js/script.js"></script> -->
     <script src="../js/lagbrukerscript.js"></script>
 </body>
 </html>

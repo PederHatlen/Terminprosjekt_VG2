@@ -1,10 +1,13 @@
 /* Content in the chat is also a Grid */
+body{
+    grid-template-rows: 5rem calc(100% - (5rem + 3rem)) 3rem;
+}
 main{
     height: 100%;
     /* padding-bottom: 1rem; */
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: 3rem calc(100% - (3rem + 2.5rem)) 2.5rem;
     grid-template-areas:
         'infoText'
         'chatWindow'
