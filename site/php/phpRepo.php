@@ -1,6 +1,14 @@
 <?php
-    // Start tracking of session
-    session_start();
+    $start = microtime(true);    // PerformanceTracking
+    session_start();    // Start tracking of session
+
+    if (isset($_GET["devmode"])){
+        if (strtolower($_GET["devmode"]) == "false"){unset($_SESSION["devmode"]);}
+        else {
+            $_SESSION["devmode"] = "true";
+        }
+        header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
+    }
 
     // Code that retrives saved username, and makes the user text in the top right corner on all sites
     function usernametext(){return ('<span id="username_display">' . (isset($_SESSION["username"])? ($_SESSION["username"]):'Ikke pålogget') . '</span>');}

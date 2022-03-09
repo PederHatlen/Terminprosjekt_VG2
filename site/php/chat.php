@@ -1,4 +1,6 @@
 <?php
+    if (isset($_GET["chatid"])){$_SESSION["chatid"] = $_GET["chatid"];}
+
     // Main PHP bulk, it is before the document because redirecting does not work otherwise
     include 'phpRepo.php';
     $con = connect();
@@ -9,9 +11,6 @@
     if (!isLoggedIn($con)) {header('Location: ../index.php');}
 
     if (isset($_SESSION["chatid"])) {
-        $conversation_id = $_SESSION["chatid"];
-    }else if (isset($_GET["chatid"])) {
-        $_SESSION["chatid"] = $_GET["chatid"];
         $conversation_id = $_SESSION["chatid"];
     }else{
         unset($_SESSION["chatid"]);
@@ -98,6 +97,7 @@
 
         socket.onopen = function () {
             connectionInfoEL.innerHTML += "Connected!";
+            connectionInfoEL.style.backgroundColor = "green";
             
             socket.send(<?php echo('"'.$_SESSION["chatid"].', '.$_SESSION["user_id"].', '.$_SESSION["username"].', '.$_SESSION["logintoken"].'"');?>)
             
@@ -109,7 +109,10 @@
             }
         };
         socket.onerror = function (e) {connectionInfo.innerHTML = "Someone forgot to start the websocket server.";}
-        socket.onclose = function (e) {connectionInfo.innerHTML = "Disconnected :("}
+        socket.onclose = function (e) {
+            connectionInfo.innerHTML = "Disconnected :(";
+            connectionInfoEL.style.backgroundColor = "red";
+        }
 
         function send(message = messageEL.value) {
             socket.send(message);
