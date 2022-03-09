@@ -71,8 +71,8 @@
             <p class="answer">Da kan du ta kontakt ved enten å sende mail til <a href="mailto:pehaa002@osloskolen.no" target="_blank">pehaa002@osloskolen.no</a>.</p>
             <p class="answer">Eller send inn et spørsmål her.</p>
             <form action="" id="ticketForm" method="post" class="verticalForm">
-                <textarea name="ticketQuestion" id="ticketQuestion" class="input" placeholder="Spørsmål* (255 tegn)" rows="5" form="ticketForm" maxlength="255" required></textarea>
                 <input type="email" name="email" id="ticketEmail" class="input" placeholder="epost*" required>
+                <textarea name="ticketQuestion" id="ticketQuestion" class="input" placeholder="Spørsmål* (255 tegn)" form="ticketForm" maxlength="255" required></textarea>
                 <input type="submit" value="Send" id="submitBTN" class="submitwmargin defaultDisabled" disabled>
             </form>
             <?php echo "<p>".$message."</p>"; ?>
