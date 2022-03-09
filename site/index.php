@@ -18,7 +18,6 @@
 </head>
 <body>
     <!-- Main nav-bar, or header -->
-
     <?php include 'php/header.php';?>
     <main>
         <h2>Velkommen til Binærchat!</h2>
@@ -41,9 +40,6 @@
         <p>Hvis du trenger hjelp eller har spørsmål kan du gå på <a href="php/help.php">Hjelp</a> siden.</p>
     </main>
     <!-- Footer for extra info -->
-    <footer> 
-        <span>Peder 2021</span>
-        <a href="php/help.php">Hjelp</a>
-    </footer>
+    <?php include 'php/footer.php';?>
 </body>
 </html>
