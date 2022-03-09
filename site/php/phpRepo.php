@@ -7,13 +7,11 @@
     
     // Basic connect functions
     function connect(){
-        $servername = "localhost:3306";
-        $username = "root";
-        $password = "";
-        $dbname = "binærchatdb";
-    
-        // Create connection
-        $con = mysqli_connect($servername, $username, $password, $dbname);
+        define("extServer", False);
+        include 'dblogin.php';
+        
+        // login Details is retrieved from dblogin.php, which is gitignored
+        $con = mysqli_connect(constant("DB_HOST"), constant("DB_USERNAME"), constant("DB_PASSWORD"), "binærchatdb");
         // Check connection
         if (!$con) {die("Connection failed: " . mysqli_connect_error());}
     
