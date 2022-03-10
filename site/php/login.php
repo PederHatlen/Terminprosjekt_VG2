@@ -23,6 +23,7 @@
             login($con, $userquery_res["user_id"], $userquery_res["username"]);
             $msgText = '<p>Innloggingen fungerte!</p>';
             header('Location: ../index.php');
+            exit;
         }else{
             $msgText = '<p>Feil brukernavn eller passord.</p>';
         }

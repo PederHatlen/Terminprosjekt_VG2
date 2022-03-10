@@ -38,6 +38,7 @@
             $message = '<p>Brukeren er registrert, og inlogget.</p>';
             // If succesfull, redirect to index
             header('Location: ../index.php');
+            exit;
         }
 
         $con->close();

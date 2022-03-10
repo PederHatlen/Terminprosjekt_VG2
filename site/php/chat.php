@@ -13,6 +13,7 @@
     if (!isLoggedIn($con)) {
         unset($_SESSION["chatid"]);
         header('Location: login.php');
+        exit;
     }
 
     if (isset($_SESSION["chatid"])) {
@@ -20,6 +21,7 @@
     }else{
         unset($_SESSION["chatid"]);
         header('Location: ../index.php');
+        exit;
     }
 
     $stmt = $con->prepare('SELECT * FROM conversation_users WHERE conversation_id = ? and user_id = ?');
@@ -29,6 +31,7 @@
     if ($res == null) {
         unset($_SESSION["chatid"]);
         header('Location: ../index.php');
+        exit;
     }
 
     // After security check, all participants are gathered from conversation_users for displaying purposes

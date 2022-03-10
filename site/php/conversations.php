@@ -3,7 +3,10 @@
     require 'phpRepo.php';
     $con = connect();
     $message = "";
-    if (!isLoggedIn($con)) {header('Location: ../index.php');}
+    if (!isLoggedIn($con)) {
+        header('Location: ../index.php');
+        exit;
+    }
 
     // If post data (New conversation)
     if ($_SERVER["REQUEST_METHOD"] == "POST" and $_POST["person"] != null) {
@@ -53,6 +56,7 @@
                 $message = "Samtalen ble laget!";
                 $_SESSION["chatid"] = $conversation_id;
                 header('Location: chat.php');
+                exit;
             }else{
                 $message = "Samtalen finnes allerede.";
             }
