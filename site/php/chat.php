@@ -2,7 +2,7 @@
     if (isset($_GET["chatid"])){$_SESSION["chatid"] = $_GET["chatid"];}
 
     // Main PHP bulk, it is before the document because redirecting does not work otherwise
-    include 'phpRepo.php';
+    require 'phpRepo.php';
     $con = connect();
     $msgText = '';
     $conversation_id;

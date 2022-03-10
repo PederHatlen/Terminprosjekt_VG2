@@ -1,6 +1,6 @@
 <!-- This page is only for help, php is only used to get basic page things, and help ticket sending -->
 <?php 
-    include 'phpRepo.php';
+    require 'phpRepo.php';
     $message = "";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {

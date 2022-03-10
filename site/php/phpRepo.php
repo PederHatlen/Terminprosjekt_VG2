@@ -15,8 +15,7 @@
     
     // Basic connect functions
     function connect(){
-        define("extServer", False);
-        include 'dblogin.php';
+        require 'dblogin.php';
         
         // login Details is retrieved from dblogin.php, which is gitignored
         $con = mysqli_connect(constant("DB_HOST"), constant("DB_USERNAME"), constant("DB_PASSWORD"), "binærchatdb");

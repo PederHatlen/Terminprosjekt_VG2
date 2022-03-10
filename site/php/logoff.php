@@ -1,7 +1,7 @@
 <?php
     // Small document for logging user off. PHP is before the document because redirecting does not work otherwise
 
-    include 'phpRepo.php';
+    require 'phpRepo.php';
     // like if user is in vallid, session variables are cleared
     unset($_SESSION["username"]);
     unset($_SESSION["logintoken"]);

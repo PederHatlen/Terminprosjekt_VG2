@@ -1,6 +1,6 @@
 <?php
     // Document for putting chat messages into the database
-    include 'phpRepo.php';
+    require 'phpRepo.php';
     $con = connect();
     $msgtext = "";
 

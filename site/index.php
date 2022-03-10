@@ -1,5 +1,5 @@
 <?php
-    include 'php/phpRepo.php'; // PHPRepo is where all basic functions are: Connection, token, login etc.  
+    require 'php/phpRepo.php'; // PHPRepo is where all basic functions are: Connection, token, login etc.  
     unset($_SESSION["chatid"]); // Remove what chat they where inn (is set in chat.php)
 ?>
 
