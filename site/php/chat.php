@@ -35,10 +35,10 @@
     }
 
     // After security check, all participants are gathered from conversation_users for displaying purposes
-    $stmt = $con->prepare('SELECT * FROM conversation_users left join users on conversation_users.user_id = users.user_id where conversation_users.conversation_id = ? and conversation_users.user_id != ?');
+    $stmt = $con->prepare('SELECT username FROM conversation_users left join users on conversation_users.user_id = users.user_id where conversation_users.conversation_id = ? and conversation_users.user_id != ?');
     $stmt->bind_param('ii', $conversation_id, $_SESSION["user_id"]);
     $stmt->execute();
-    $participants = $stmt->get_result();
+    $participants = $stmt->get_result()->fetch_all();
 ?>
 
 <!DOCTYPE html>
@@ -59,10 +59,33 @@
 <body>
     <?php include 'header.php';?>
     <main>
-        <div id="chatInfo"><h3>Chatter med: <?php 
-            // Outputing all conversation participants, intended for future expansion to group chats, also translates user 1 to Torshken (ME)
-            while ($row = $participants->fetch_row()) {echo ($row[3] == "1"? "Torshken":$row[3]);}
-        ?></h3><h4 id="connectionInfo"></h4></div>
+        <div id="chatInfo">
+            <div id="leftInfo">
+                <div id="menu">
+                    <a href="#" id="menuIconButton" onclick="togglesettings();">
+                        <svg xmlns="http://www.w3.org/2000/svg" id="menuIcon" width="1.5em" height="1.5em" viewBox="0 0 10 10" style="fill: #ffffff;">
+                            <rect y="1.2" width="10" height="1.5"/>
+                            <rect y="7.2" width="10" height="1.5"/>
+                            <rect y="4.2" width="10" height="1.5"/>
+                        </svg>
+                    </a>
+                    <div id="settingsContent" style="display: none;">
+                        <form action="" method="post">
+                            <input type="text" id="addPersonName" name="addPersonName" placeholder="Legg til person">
+                            <input type="submit" value="legg til">
+                        </form>
+                    </div>
+                </div>
+                <h3>Chatter med: <?php 
+                // Outputing all conversation participants, intended for future expansion to group chats, also translates user 1 to Torshken (ME)
+                for ($i=0; $i < count($participants); $i++) {
+                    echo ($participants[$i][0] == "1"? "Torshken":$participants[$i][0]);
+                    if ($i != count($participants)-1){echo ", ";}
+                }
+                ?></h3>
+            </div>
+            <h4 id="connectionInfo"></h4>
+        </div>
         <div id="chatWindow"><?php
             // Displaying all chat-messages with usernames, on later expansions colors might also be added
             $stmt = $con->prepare('SELECT * FROM messages left join users on messages.sender_id = users.user_id where conversation_id = ?');
@@ -89,7 +112,7 @@
         <!-- Form for making messages, goes to chatpost.php -->
         <form name="message" action="chatpost.php" id="messageForm" method="post">
             <input type="text" class="input" name="usrmsg" id="usrmsg" placeholder="Skriv inn en melding (Husk at den må være binær og under 255 tegn)" autofocus>
-            <input type="submit" class="input" value="Send">
+            <input type="submit" id="sendBTN" class="input" value="Send">
         </form>
         <?php echo $msgText;?>
     </main>
@@ -102,6 +125,9 @@
         let messageEL = document.getElementById("usrmsg");
         let connectionInfoEL = document.getElementById("connectionInfo");
         let socket = new WebSocket("ws://" + window.location.host + ":5678?");
+
+        let settingsContentEl = document.getElementById("settingsContent");
+        let menuIconBTN = document.getElementById("menuIconButton");
 
         socket.onopen = function () {
             connectionInfoEL.innerHTML += "Connected!";
@@ -128,6 +154,15 @@
         function send(message = messageEL.value) {
             socket.send(message);
             messageEL.value = "";
+        }
+        function togglesettings(){
+            if (settingsContentEl.style.display == "none"){
+                settingsContentEl.style.display = "inline-block";
+                menuIconBTN.style.backgroundColor = "#111";
+            }else{
+                settingsContentEl.style.display = "none";
+                menuIconBTN.style.backgroundColor = "";
+            }
         }
         chatWindow.scrollTop = chatWindow.scrollHeight;
     </script>

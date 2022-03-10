@@ -18,10 +18,36 @@ main{
 #chatInfo{
     grid-area: infoText;
     background-color: black;
-    padding: 0 1rem;
+    padding-right: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+#chatInfo h3, #chatInfo h4{margin: auto 0 auto 0;}
+
+#leftInfo{
+    display: flex;
+    height: 100%;
+}
+#menu{
+    margin: 0;
+    padding: 0;
+}
+#menuIconButton{
+    display: block;
+    background: none;
+    margin: 0;
+    padding: 0.75rem 1rem;
+    margin-right: 0.5rem;
+}
+#menuIcon{
+    display: block;
+}
+#settingsContent{
+    position: absolute;
+    padding: 1rem;
+    margin: 0;
+    background-color: #111;
 }
 
 /* Acctual window the messages appear in */
@@ -54,7 +80,7 @@ main{
     flex-grow: 1;
     font-size: 1.2rem;
 }
-input[type="submit"]{
+#sendBTN{
     font-size: 1.25rem;
     font-weight: 200;
 }
