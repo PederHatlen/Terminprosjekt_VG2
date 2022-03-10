@@ -106,7 +106,10 @@
             
             socket.send(<?php echo('"'.$_SESSION["chatid"].', '.$_SESSION["user_id"].', '.$_SESSION["username"].', '.$_SESSION["logintoken"].'"');?>)
             
-            socket.onmessage = function (e) {chatWindow.innerHTML += e.data;};
+            socket.onmessage = function (e) {
+                chatWindow.innerHTML += e.data;
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            };
             
             messageFormEL.onsubmit = function (e) {
                 e.preventDefault();
@@ -123,7 +126,7 @@
             socket.send(message);
             messageEL.value = "";
         }
-
+        chatWindow.scrollTop = chatWindow.scrollHeight;
     </script>
     <script src="../js/script.js"></script>
 </body>
