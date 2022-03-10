@@ -2,7 +2,12 @@
     $start = microtime(true);    // PerformanceTracking
     session_start();    // Start tracking of session
 
-    if (isset($_GET["devmode"])){
+    // Global Settings
+    define("extServer", False); // Using external server (Parameters can be set in dblogin.php (gitignored))
+    define("allowDevMode", false);
+    
+
+    if (isset($_GET["devmode"]) and constant("allowDevMode") == true){
         if (strtolower($_GET["devmode"]) == "false"){unset($_SESSION["devmode"]);}
         else {
             $_SESSION["devmode"] = "true";
