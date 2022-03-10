@@ -1,14 +1,19 @@
 <?php
-    if (isset($_GET["chatid"])){$_SESSION["chatid"] = $_GET["chatid"];}
-
     // Main PHP bulk, it is before the document because redirecting does not work otherwise
     require 'phpRepo.php';
     $con = connect();
     $msgText = '';
     $conversation_id;
 
+    if (isset($_GET["chatid"])){
+        $_SESSION["chatid"] = $_GET["chatid"];
+    }
+
     // Stricter security, User has to be logged inn, have the right chat id, and have permits to chat, else they will be ridirected to index
-    if (!isLoggedIn($con)) {header('Location: ../index.php');}
+    if (!isLoggedIn($con)) {
+        unset($_SESSION["chatid"]);
+        header('Location: login.php');
+    }
 
     if (isset($_SESSION["chatid"])) {
         $conversation_id = $_SESSION["chatid"];
