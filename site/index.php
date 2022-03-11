@@ -6,15 +6,10 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-    <!-- General html set-up -->
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Customisations to site look (Title, shortcut-icon and stylesheet) -->
-    <title>BinærChat</title>
-    <link rel="icon" type="image/png" href="img/favicon.png">
-    <link rel="stylesheet" href="css/style.css">
+    <?php 
+        $pageName = "";
+        require 'php/head.php';
+    ?>
 </head>
 <body>
     <!-- Main nav-bar, or header -->
@@ -40,6 +35,7 @@
         <p>Hvis du trenger hjelp eller har spørsmål kan du gå på <a href="php/help.php">Hjelp</a> siden.</p>
     </main>
     <!-- Footer for extra info -->
+    <script src="js/script.js"></script>
     <?php include 'php/footer.php';?>
 </body>
 </html>

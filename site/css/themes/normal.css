@@ -1,0 +1,10 @@
+:root{
+    --header-color: #05456E;
+    --footer-color: var(--header-color);
+
+    --page-main1: #222;
+    --page-main2: #111;
+    --page-main3: #000;
+
+    --text-color: white;
+}

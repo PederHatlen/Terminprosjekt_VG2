@@ -44,15 +44,11 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>BinærChat | Chat</title>
-    <link rel="icon" type="image/png" href="../img/favicon.png">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/chatStyle.css">
-
+    <?php 
+        $pageName = "| chat";
+        require 'head.php';
+    ?>
+    <link rel="stylesheet" href="/BinærChat/css/chatStyle.css">
     <!-- Slimmer fontstyle for timestamp -->
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wdth@60;70;80&display=swap" rel="stylesheet">
 </head>
@@ -70,9 +66,18 @@
                         </svg>
                     </a>
                     <div id="settingsContent" style="display: none;">
+                        <h3>Legg til person</h3>
                         <form action="" method="post">
+                            <input type="hidden" name="form" value="addPerson">
                             <input type="text" id="addPersonName" name="addPersonName" placeholder="Legg til person">
                             <input type="submit" value="legg til">
+                        </form>
+                        <hr>
+                        <h3>Endre egen farge</h3>
+                        <form action="" method="post">
+                            <input type="hidden" name="form" value="changeColor">
+                            <input type="color" name="color" id="changeColor">
+                            <input type="submit" value="Endre">
                         </form>
                     </div>
                 </div>
@@ -159,9 +164,11 @@
             if (settingsContentEl.style.display == "none"){
                 settingsContentEl.style.display = "inline-block";
                 menuIconBTN.style.backgroundColor = "#111";
+                menuIconBTN.style.borderColor = "background: var(--text-color);";
             }else{
                 settingsContentEl.style.display = "none";
                 menuIconBTN.style.backgroundColor = "";
+                menuIconBTN.style.border = "";
             }
         }
         chatWindow.scrollTop = chatWindow.scrollHeight;

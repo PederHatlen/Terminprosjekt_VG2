@@ -27,15 +27,10 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-    <!-- Technical details for browser -->
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- As sed previously styling and genneral design traits -->
-    <title>BinærChat | Hjelp</title>
-    <link rel="icon" type="image/png" href="../img/favicon.png">
-    <link rel="stylesheet" href="../css/style.css">
+    <?php 
+        $pageName = "| Hjelp";
+        require 'head.php';
+    ?>
 </head>
 <body>
     <?php include 'header.php';?>

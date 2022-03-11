@@ -3,15 +3,20 @@
     session_start();    // Start tracking of session
 
     // Global Settings
-    define("extServer", False); // Using external server (Parameters can be set in dblogin.php (gitignored))
-    define("allowDevMode", false);
+    define("extServer", false); // Using external server (Parameters can be set in dblogin.php (gitignored))
 
+    define("allowDevMode", false);
+    define("allowUnicornMode", true);
 
     if (isset($_GET["devmode"]) and constant("allowDevMode") == true){
         if (strtolower($_GET["devmode"]) == "false"){unset($_SESSION["devmode"]);}
-        else {
-            $_SESSION["devmode"] = "true";
-        }
+        else {$_SESSION["devmode"] = "true";}
+        header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
+        exit;
+    }
+    if (isset($_GET["unicorn"]) and constant("allowUnicornMode") == true){
+        if (isset($_SESSION["unicorn"])){unset($_SESSION["unicorn"]);}
+        else {$_SESSION["unicorn"] = "true";}
         header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
         exit;
     }

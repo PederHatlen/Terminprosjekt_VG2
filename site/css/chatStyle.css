@@ -17,7 +17,8 @@ main{
 /* Where the participant list is among other things (Will also be expanded) */
 #chatInfo{
     grid-area: infoText;
-    background-color: black;
+    background: black;
+    background: var(--page-main3, #000);
     padding-right: 1rem;
     display: flex;
     justify-content: space-between;
@@ -39,6 +40,8 @@ main{
     margin: 0;
     padding: 0.75rem 1rem;
     margin-right: 0.5rem;
+    border: 2px solid transparent;
+    box-sizing: border-box;
 }
 #menuIcon{
     display: block;
@@ -47,14 +50,17 @@ main{
     position: absolute;
     padding: 1rem;
     margin: 0;
-    background-color: #111;
+    background: #111;
+    background: var(--page-main2, #111);
+    border: 2px white solid;
 }
 
 /* Acctual window the messages appear in */
 #chatWindow{
     grid-area: chatWindow;
     height: 100%;
-    background-color: black;
+    background: black;
+    background: var(--page-main3, #000);
     padding: 0 1rem;
     overflow-y: scroll;
     line-break: anywhere;
@@ -62,7 +68,6 @@ main{
 #connectionInfo{
     font-weight: bolder;
     color: lightgray;
-    background-color: rgb(55, 55, 75);
     padding: 0.25rem;
     margin: 0;
 }
