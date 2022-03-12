@@ -25,6 +25,15 @@
         header('Location: ../index.php');
         exit;
     }
+    $stmt = $con->prepare('SELECT * FROM conversations WHERE conversation_id = ?');
+    $stmt->bind_param('i', $conversation_id);
+    $stmt->execute();
+    $conversationInfo = $stmt->get_result()->fetch_assoc();
+    if ($conversationInfo == null){
+        unset($_SESSION["chatid"]);
+        header('Location: ../index.php');
+        exit;
+    }
 
     $stmt = $con->prepare('SELECT * FROM conversation_users WHERE conversation_id = ? and user_id = ?');
     $stmt->bind_param('ii', $conversation_id, $_SESSION["user_id"]);
@@ -58,7 +67,7 @@
                             
                             if ($user_id != null){
                                 $stmt = $con->prepare('SELECT * FROM conversation_users WHERE conversation_id = ? and user_id = ?');
-                                $stmt->bind_param('ii', $conversation_id, $user_id["removePersonID"]);
+                                $stmt->bind_param('ii', $conversation_id, $user_id["user_id"]);
                                 $stmt->execute();
                                 $res = $stmt->get_result()->fetch_assoc();
 
@@ -67,6 +76,11 @@
                                     $stmt->bind_param('ii', $conversation_id, $user_id["user_id"]);
                                     $stmt->execute();
 
+                                    if ($conversationInfo["isGroupChat"] == 0) {
+                                        $stmt = $con->prepare('UPDATE conversations SET isGroupChat = 1 WHERE conversation_id = ?');
+                                        $stmt->bind_param('i', $conversation_id);
+                                        $stmt->execute();
+                                    }
                                     $msgText = "Brukeren ble lagt til.";
                                 }else{$msgText = "Brukeren er allerede i chaten.";}
                             }else{$msgText = "Brukeren finnes ikke.";}
@@ -173,21 +187,19 @@
         </div>
         <div id="chatWindow"><?php
             // Displaying all chat-messages with usernames, on later expansions colors might also be added
-            $stmt = $con->prepare('SELECT * FROM messages left join users on messages.sender_id = users.user_id where conversation_id = ?');
+            $stmt = $con->prepare('SELECT users.username, conversation_users.color, messages.messagetext, messages.sent_at FROM messages join users on users.user_id = messages.sender_id join conversation_users on conversation_users.user_id = messages.sender_id and conversation_users.conversation_id = messages.conversation_id where messages.conversation_id = ? order by messages.sent_at asc');
             $stmt->bind_param('i', $conversation_id);
             $stmt->execute();
-            $messages = $stmt->get_result();
+            $messages = $stmt->get_result()->fetch_all();
 
             // output every message
-            if (mysqli_num_rows($messages) != 0){
-                while ($row = $messages->fetch_row()) {
-                    $date = date_create($row[4]);
-                    if ( strtotime($row[4]) < strtotime('-1 day')) {
-                        $fdate = date_format($date, 'jS M y');
-                    }else{
-                        $fdate = date_format($date, 'H:i:s');
-                    }
-                    echo("<p><span class='time'>[" . $fdate . "]</span> " . ($row[6]==1? "Torshken":$row[6]) . ": " . $row[3] . "");
+            if (count($messages) != 0){
+                for ($i=0; $i < count($messages); $i++) { 
+                    $date = date_create($messages[$i][3]);
+                    if (strtotime($messages[$i][3]) < strtotime('-1 day')) {$fdate = date_format($date, 'jS M y');}
+                    else{$fdate = date_format($date, 'H:i:s');}
+
+                    echo("<p><span class=\"info\" style=\"color: ". $messages[$i][1] .";\"><span class='time'>[" . $fdate . "]</span> " . ($messages[$i][0]==1? "Torshken":$messages[$i][0]) . ":</span> " . $messages[$i][2] . "");
                 }
             }else{
                 // In case of no messages
