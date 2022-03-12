@@ -42,7 +42,7 @@ input, textarea, select{
 }
 input:focus-visible, textarea:focus-visible, select:focus-visible{
     outline: none;
-    background: #ddd;
+    background: #aaa;
 }
 .submitwmargin{margin: 5px 0;}
 input[type=submit]:hover, input[type=button]:hover, button:hover{
@@ -51,7 +51,7 @@ input[type=submit]:hover, input[type=button]:hover, button:hover{
 input:disabled, input[disabled]{
     background: gray;
 }
-input:disabled:hover{
+input:disabled:hover, input:disabled:focus{
     background: gray;
 }
 
