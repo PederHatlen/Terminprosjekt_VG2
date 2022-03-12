@@ -22,13 +22,13 @@
         if (mysqli_num_rows($user2_id) != null){
             $user2_id = $user2_id->fetch_assoc()["user_id"];
 
-            $stmt = $con->prepare('SELECT * FROM conversations left join conversation_users as conv_users1 on conversations.conversation_id = conv_users1.conversation_id left join conversation_users as conv_users2 on conversations.conversation_id = conv_users2.conversation_id where conv_users1.user_id = ? and conv_users2.user_id = ?');
+            $stmt = $con->prepare('SELECT * FROM conversations left join conversation_users as conv_users1 on conversations.conversation_id = conv_users1.conversation_id left join conversation_users as conv_users2 on conversations.conversation_id = conv_users2.conversation_id where conv_users1.user_id = ? and conv_users2.user_id = ? and conversations.isGroupChat = 0');
             $stmt->bind_param('ii', $_SESSION["user_id"], $user2_id);
             $stmt->execute();
-            $rawdata = $stmt->get_result();
+            $userConversations = $stmt->get_result()->fetch_all();
 
             // If conversation doesn't exist, make new convo
-            if ($rawdata->fetch_array(MYSQLI_BOTH) == null){
+            if ($userConversations == null){
                 // Datetime, made in php because then the timestamp can be saved, and used to find the conversation after creation (temporarily)
                 $timestamp = new DateTime();
                 $timestamp = $timestamp->format('Y-m-d H:i');
@@ -162,7 +162,7 @@
                                 $fdate = "Ingen aktivitet";
                             }
 
-                            echo("<tr><td><a class='chatlink' href='chat.php?chatid=". $conversation_id ."'>".$usernames."</a></td><td>". $fdate ."</td></tr>");
+                            echo("<tr class=\"clickeableRow\" tabindex=0 onclick=\"window.location='chat.php?chatid=". $conversation_id ."';\"><td><span>".$usernames."</span></td><td>". $fdate ."</td></tr>");
                         }
                     }else{echo("<tr id='tableHeader'><th>Du har ingen samtaler.</th><tr>");}
                 ?>
@@ -171,5 +171,13 @@
     </main>
     <?php include 'footer.php';?>
     <script src="../js/script.js"></script>
+    <script>
+        Array.from(document.getElementsByClassName("clickeableRow")).forEach(element => {
+            element.onkeydown = function(e){
+                if(e.key == "Enter"){window.location="chat.php?chatid="+ <?php echo $conversation_id;?>
+            }
+        }
+        });
+    </script>
 </body>
 </html>
