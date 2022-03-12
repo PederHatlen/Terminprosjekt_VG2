@@ -11,7 +11,7 @@ Det er lett inspirert av [**Tom Scott**](https://www.tomscott.com/) og [**Mat Gr
 - De-cluttering.
 - Noen fikser i UI-en.
 - Analyser, testing og bedre dokumentasjon.
-- Andre ting.
+- Kommer mer ettervert.
 
 ---
 
