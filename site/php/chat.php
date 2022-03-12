@@ -29,8 +29,8 @@
     $stmt = $con->prepare('SELECT * FROM conversation_users WHERE conversation_id = ? and user_id = ?');
     $stmt->bind_param('ii', $conversation_id, $_SESSION["user_id"]);
     $stmt->execute();
-    $res = $stmt->get_result()->fetch_assoc();
-    if ($res == null) {
+    $conversation_user = $stmt->get_result()->fetch_assoc();
+    if ($conversation_user == null){
         unset($_SESSION["chatid"]);
         header('Location: ../index.php');
         exit;
@@ -38,34 +38,63 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST["form"])){
-            switch ($_POST["form"]) {
-                case 'addPerson':
-                    if (isset($_POST["addPersonName"])) {
-                        $stmt = $con->prepare('SELECT user_id FROM users WHERE username = ?');
-                        $stmt->bind_param('s', $_POST["addPersonName"]);
-                        $stmt->execute();
-                        $res = $stmt->get_result()->fetch_assoc();
+            if ($_POST["form"] == "changeColor"){
+                if (isset($_POST["color"]) and preg_match('/^#([0-9A-F]{3}){1,2}$/i', $_POST["color"])){
+                    $stmt = $con->prepare('UPDATE conversation_users SET color = ? WHERE conversation_id = ? and user_id = ? ');
+                    $stmt->bind_param('sii', $_POST["color"], $conversation_id, $_SESSION["user_id"]);
+                    $stmt->execute();
 
-                        if ($res != null){
-                            $stmt = $con->prepare('INSERT INTO conversation_users (conversation_id, user_id) VALUES (?, ?)');
-                            $stmt->bind_param('ii', $conversation_id, $res["user_id"]);
+                    $msgText = "Fargen din ble oppdatert.";
+                }else{$msgText = "Den fargen er ikke støttet.";}
+            }else if ($conversation_user["isAdmin"]){
+                switch ($_POST["form"]){
+                    case 'addPerson':
+                        if (isset($_POST["addPersonName"])){
+    
+                            $stmt = $con->prepare('SELECT user_id FROM users WHERE username = ?');
+                            $stmt->bind_param('s', $_POST["addPersonName"]);
                             $stmt->execute();
+                            $user_id = $stmt->get_result()->fetch_assoc();
+                            
+                            if ($user_id != null){
+                                $stmt = $con->prepare('SELECT * FROM conversation_users WHERE conversation_id = ? and user_id = ?');
+                                $stmt->bind_param('ii', $conversation_id, $user_id["removePersonID"]);
+                                $stmt->execute();
+                                $res = $stmt->get_result()->fetch_assoc();
 
-                            $msgText = "Brukeren ble lagt til ";
-                        }else{$msgText = "Brukeren finnes ikke";}
-                    }else{$msgText = "Det ble ikke sendt med nokk data";}
-                    break;
+                                if ($res == null){
+                                    $stmt = $con->prepare('INSERT INTO conversation_users (conversation_id, user_id) VALUES (?, ?)');
+                                    $stmt->bind_param('ii', $conversation_id, $user_id["user_id"]);
+                                    $stmt->execute();
 
-                case 'changeColor':
-                    
-                    break;
+                                    $msgText = "Brukeren ble lagt til.";
+                                }else{$msgText = "Brukeren er allerede i chaten.";}
+                            }else{$msgText = "Brukeren finnes ikke.";}
+                        }else{$msgText = "Det ble ikke sendt med nokk data";}
+                        break;
+                    case 'removePerson':
+                        if (isset($_POST["removePersonID"])){
+                            $stmt = $con->prepare('SELECT * FROM conversation_users WHERE conversation_id = ? and user_id = ?');
+                            $stmt->bind_param('ii', $conversation_id, $_POST["removePersonID"]);
+                            $stmt->execute();
+                            $res = $stmt->get_result()->fetch_assoc();
+                            
+                            if ($res != null){
+                                $stmt = $con->prepare('DELETE FROM conversation_users WHERE conversation_id = ? and user_id = ?');
+                                $stmt->bind_param('ii', $conversation_id, $_POST["removePersonID"]);
+                                $stmt->execute();
+
+                                $msgText = "Personen ble fjernet.";
+                            }else{$msgText = "Det er ikke en person i chatten.";}
+                        }else{$msgText = "Det ble ikke sendt med nokk data";}
+                        break;
+                }
             }
         }
     }
 
-
     // After security check, all participants are gathered from conversation_users for displaying purposes
-    $stmt = $con->prepare('SELECT username FROM conversation_users left join users on conversation_users.user_id = users.user_id where conversation_users.conversation_id = ? and conversation_users.user_id != ?');
+    $stmt = $con->prepare('SELECT username, conversation_users.user_id FROM conversation_users join users on conversation_users.user_id = users.user_id where conversation_users.conversation_id = ? and conversation_users.user_id != ?');
     $stmt->bind_param('ii', $conversation_id, $_SESSION["user_id"]);
     $stmt->execute();
     $participants = $stmt->get_result()->fetch_all();
@@ -96,26 +125,39 @@
                         </svg>
                     </a>
                     <div id="settingsContent" style="display: none;">
-                        <h3>Legg til person</h3>
-                        <form action="" method="post" class="horisontalForm">
-                            <input type="hidden" name="form" value="addPerson">
-                            <input type="text" id="addPersonName" name="addPersonName" placeholder="Legg til person">
-                            <input type="submit" value="legg til">
-                        </form>
-                        <hr>
                         <h3>Endre egen farge</h3>
                         <form action="" method="post" class="horisontalForm">
                             <input type="hidden" name="form" value="changeColor">
-                            <input type="color" name="color" id="changeColor">
+                            <input type="text" name="color" id="changeColor" pattern="^#([0-9A-Fa-f]{3}){1,2}$" placeholder="Hex Color">
                             <input type="submit" value="Endre">
                         </form>
-                        <hr>
-                        <h3>Fjern person</h3>
-                        <form action="" method="post" class="horisontalForm">
-                            <input type="hidden" name="form" value="changeColor">
-                            <select name="personToRemove" id="personSelect">
-                            <input type="submit" value="Endre">
-                        </form>
+                        
+                        <?php 
+                            if ($conversation_user["isAdmin"]){
+                                echo "<hr><br>
+                                <h3>Admin instillinger</h3>
+                                <h3>Legg til person</h3>
+                                <form action=\"\" method=\"post\" class=\"horisontalForm\">
+                                    <input type=\"hidden\" name=\"form\" value=\"addPerson\">
+                                    <input type=\"text\" id=\"addPersonName\" name=\"addPersonName\" placeholder=\"Legg til person\">
+                                    <input type=\"submit\" value=\"legg til\">
+                                </form>";
+
+                                echo "<br>
+                                <h3>Fjern person</h3>
+                                <form action=\"\" method=\"post\" class=\"horisontalForm\" name=\"removePersonForm\" id=\"removePersonForm\">
+                                    <input type=\"hidden\" name=\"form\" value=\"removePerson\">
+                                    <select name=\"removePersonID\" id=\"removePersonID\" form=\"removePersonForm\">";
+                                        // Outputing all conversation participants, for removing people from conversation
+                                        echo "<option value=\"".$_SESSION["user_id"]."\">".($_SESSION["username"] == "1"? "Torshken":$_SESSION["username"])."</option>";
+                                        for ($i=0; $i < count($participants); $i++) {
+                                            echo "<option value=\"".$participants[$i][1]."\">".($participants[$i][0] == "1"? "Torshken":$participants[$i][0])."</option>";
+                                        }
+                                    echo "</select>
+                                    <input type=\"submit\" class=\"remove\" value=\"Fjern\">
+                                </form>";
+                            }
+                        ?>
                     </div>
                 </div>
                 <h3>Chatter med: <?php 

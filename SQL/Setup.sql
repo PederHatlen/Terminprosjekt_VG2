@@ -31,6 +31,8 @@ CREATE TABLE conversations (
 CREATE TABLE conversation_users (
     conversation_id INT not null,
     user_id INT not null,
+    color char(7) not null,
+    isAdmin TINYINT NOT NULL DEFAULT 0,
     FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     PRIMARY KEY (conversation_id, user_id)

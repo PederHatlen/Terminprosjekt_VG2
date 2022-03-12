@@ -40,13 +40,19 @@
                 $conversation_id = $stmt->insert_id;
 
                 // Preparing a statement for binding users to conversation, se Setup.sql for database structure
-                $stmt = $con->prepare('INSERT INTO conversation_users (conversation_id, user_id) VALUES (?, ?)');
-                $temp_UID = $_SESSION["user_id"];
-                $stmt->bind_param('ii', $conversation_id, $temp_UID);
-                $stmt->execute();
+                $stmt = $con->prepare('INSERT INTO conversation_users (conversation_id, user_id, color, isAdmin) VALUES (?, ?, ?, ?)');
+                $stmt->bind_param('iisi', $conversation_id, $insert_UID, $color, $isAdmin);
 
+                // First user input is current user
+                $insert_UID = $_SESSION["user_id"];
+                $color = randomColor();
+                $isAdmin = 1;
+                $stmt->execute();
+                
                 //Swapping user ids to second user
-                $temp_UID = $user2_id;
+                $insert_UID = $user2_id;
+                $color = randomColor();
+                $isAdmin = 0;
                 $stmt->execute();
 
                 // updating message and setting what chat the user is being sent too, then sending the user to the chat
@@ -88,7 +94,7 @@
             <div id="addconv_box">
                 <div id="addconvText">
                     <h2>Lag ny samtale</h2>
-                    <a id="exit" onclick="document.querySelector('#addconv').style.display = ''" href="#">x</a>
+                    <a class="exit" onclick="document.querySelector('#addconv').style.display = ''" href="#">x</a>
                 </div>
                 <!-- Form for making new conversation, goes to this document -->
                 <form action="" method="post">

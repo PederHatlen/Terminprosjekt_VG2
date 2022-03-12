@@ -28,7 +28,7 @@ a{
     color: var(--text-color, #fff);
     text-underline-offset: 1px;
 }
-input, textarea{
+input, textarea, select{
     padding: 4px;
     border: #000 solid 1px;
     font-family: inherit;
@@ -36,10 +36,11 @@ input, textarea{
     background: #fff;
     font-family: 'Inconsolata', monospace;
 }
-input::placeholder, textarea::placeholder{
+
+::placeholder{
     color: #000;
 }
-input:focus-visible, textarea:focus-visible{
+input:focus-visible, textarea:focus-visible, select:focus-visible{
     outline: none;
     background: #ddd;
 }
@@ -50,7 +51,7 @@ input[type=submit]:hover, input[type=button]:hover, button:hover{
 input:disabled, input[disabled]{
     background: gray;
 }
-input:disabled:hover, input[disabled]:hover{
+input:disabled:hover{
     background: gray;
 }
 
@@ -123,7 +124,7 @@ a:hover{opacity: 50%;}
 .horisontalForm{
     display: flex;
     flex-direction: row;
-    align-items: center;
+    /* align-items: center; */
 }
 
 
@@ -138,6 +139,15 @@ a:hover{opacity: 50%;}
 .question a{padding: 0; margin: 0;}
 .question p{padding: 0.2rem 0; margin: 0;}
 
+.exit{
+    color: darkred;
+    font-weight: 900;
+    font-size: 2rem;
+}
+.exit:hover{
+    color: red;
+    opacity: 100%;
+}
 
 /* In case the display device is portrait/a phone */
 @media (orientation: portrait) {

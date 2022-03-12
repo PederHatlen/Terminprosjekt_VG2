@@ -45,12 +45,3 @@ td .chatlink{padding: 0;}
     background: var(--page-main3, #000);
     padding: 1rem;
 }
-#exit{
-    color: darkred;
-    font-weight: 900;
-    font-size: 2rem;
-}
-#exit:hover{
-    color: red;
-    opacity: 100%;
-}

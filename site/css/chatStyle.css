@@ -30,10 +30,6 @@ main{
     display: flex;
     height: 100%;
 }
-#menu{
-    margin: 0;
-    padding: 0;
-}
 #menuIconButton{
     display: block;
     background: none;
@@ -42,9 +38,7 @@ main{
     margin-right: 0.5rem;
     box-sizing: border-box;
 }
-#menuIcon{
-    display: block;
-}
+#menuIcon{display: block;}
 #settingsContent{
     position: absolute;
     padding: 1rem;
@@ -90,6 +84,16 @@ main{
 #sendBTN{
     font-size: 1.25rem;
     font-weight: 200;
+}
+
+.remove{
+    background: #ff0000;
+    outline: 1px white solid;
+    outline-offset: -2px;
+    color: #fff;
+}
+input[type=submit].remove:hover{
+    background: #aa0000
 }
 
 input[type=color]{
