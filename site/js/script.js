@@ -15,16 +15,12 @@ let legalChars = "unicor";
 let keystring = "";
 let mainArea = document.getElementsByTagName("main");
 
-console.log(mainArea);
-
 window.onkeydown = function(e){
     let char = e.key.toLowerCase();
     if(legalChars.indexOf(char) == -1 && char != "backspace") return;
     if(char == "backspace"){keystring = keystring.slice(0, -1)}
     else{keystring += char;}
 
-    console.log(char, keystring);
-    if(keystring == "unicorn"){
-        window.location.replace(window.location.href + '?unicorn')
-    }
+    // console.log(char, keystring);
+    if(keystring == "unicorn"){window.location.replace(location.origin+location.pathname + '?unicorn')}
 }
