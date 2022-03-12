@@ -24,6 +24,7 @@ CREATE TABLE tokens (
 CREATE TABLE conversations (
     conversation_id INT not null PRIMARY KEY AUTO_INCREMENT,
     created_by INT not null,
+    isGroupChat TINYINT not null DEFAULT 0,
     created_at DATETIME not null DEFAULT current_timestamp
 );
 
