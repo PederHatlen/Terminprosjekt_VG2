@@ -7,6 +7,8 @@
 
     if (isset($_GET["chatid"])){
         $_SESSION["chatid"] = $_GET["chatid"];
+        header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
+        exit;
     }
 
     // Stricter security, User has to be logged inn, have the right chat id, and have permits to chat, else they will be ridirected to index
@@ -33,6 +35,34 @@
         header('Location: ../index.php');
         exit;
     }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_POST["form"])){
+            switch ($_POST["form"]) {
+                case 'addPerson':
+                    if (isset($_POST["addPersonName"])) {
+                        $stmt = $con->prepare('SELECT user_id FROM users WHERE username = ?');
+                        $stmt->bind_param('s', $_POST["addPersonName"]);
+                        $stmt->execute();
+                        $res = $stmt->get_result()->fetch_assoc();
+
+                        if ($res != null){
+                            $stmt = $con->prepare('INSERT INTO conversation_users (conversation_id, user_id) VALUES (?, ?)');
+                            $stmt->bind_param('ii', $conversation_id, $res["user_id"]);
+                            $stmt->execute();
+
+                            $msgText = "Brukeren ble lagt til ";
+                        }else{$msgText = "Brukeren finnes ikke";}
+                    }else{$msgText = "Det ble ikke sendt med nokk data";}
+                    break;
+
+                case 'changeColor':
+                    
+                    break;
+            }
+        }
+    }
+
 
     // After security check, all participants are gathered from conversation_users for displaying purposes
     $stmt = $con->prepare('SELECT username FROM conversation_users left join users on conversation_users.user_id = users.user_id where conversation_users.conversation_id = ? and conversation_users.user_id != ?');
@@ -67,16 +97,23 @@
                     </a>
                     <div id="settingsContent" style="display: none;">
                         <h3>Legg til person</h3>
-                        <form action="" method="post">
+                        <form action="" method="post" class="horisontalForm">
                             <input type="hidden" name="form" value="addPerson">
                             <input type="text" id="addPersonName" name="addPersonName" placeholder="Legg til person">
                             <input type="submit" value="legg til">
                         </form>
                         <hr>
                         <h3>Endre egen farge</h3>
-                        <form action="" method="post">
+                        <form action="" method="post" class="horisontalForm">
                             <input type="hidden" name="form" value="changeColor">
                             <input type="color" name="color" id="changeColor">
+                            <input type="submit" value="Endre">
+                        </form>
+                        <hr>
+                        <h3>Fjern person</h3>
+                        <form action="" method="post" class="horisontalForm">
+                            <input type="hidden" name="form" value="changeColor">
+                            <select name="personToRemove" id="personSelect">
                             <input type="submit" value="Endre">
                         </form>
                     </div>
@@ -89,6 +126,7 @@
                 }
                 ?></h3>
             </div>
+            <?php echo $msgText;?>
             <h4 id="connectionInfo"></h4>
         </div>
         <div id="chatWindow"><?php
@@ -119,7 +157,6 @@
             <input type="text" class="input" name="usrmsg" id="usrmsg" placeholder="Skriv inn en melding (Husk at den må være binær og under 255 tegn)" autofocus>
             <input type="submit" id="sendBTN" class="input" value="Send">
         </form>
-        <?php echo $msgText;?>
     </main>
     <?php include 'footer.php';?>
 
@@ -163,12 +200,10 @@
         function togglesettings(){
             if (settingsContentEl.style.display == "none"){
                 settingsContentEl.style.display = "inline-block";
-                menuIconBTN.style.backgroundColor = "#111";
-                menuIconBTN.style.borderColor = "background: var(--text-color);";
+                menuIconBTN.style.background = "var(--page-main2)";
             }else{
                 settingsContentEl.style.display = "none";
-                menuIconBTN.style.backgroundColor = "";
-                menuIconBTN.style.border = "";
+                menuIconBTN.style.background = "";
             }
         }
         chatWindow.scrollTop = chatWindow.scrollHeight;

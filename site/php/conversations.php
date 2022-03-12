@@ -36,11 +36,8 @@
                 $stmt->bind_param('is', $_SESSION["user_id"], $timestamp);
                 $stmt->execute();
 
-                // Finding Conversation id with timestamp and user id because output doesn't work in mysqli
-                $stmt = $con->prepare('SELECT * FROM conversations WHERE created_by = ? and created_at = ?');
-                $stmt->bind_param('is', $_SESSION["user_id"], $timestamp);
-                $stmt->execute();
-                $conversation_id = $stmt->get_result()->fetch_assoc()["conversation_id"];
+                // Retrieving created conversation id
+                $conversation_id = $stmt->insert_id;
 
                 // Preparing a statement for binding users to conversation, se Setup.sql for database structure
                 $stmt = $con->prepare('INSERT INTO conversation_users (conversation_id, user_id) VALUES (?, ?)');
@@ -109,18 +106,42 @@
                     // The second bulk of PHP on this page, this is for retrieving the right information for the table
 
                     // Finding all the conversation the user is inn
-                    $stmt = $con->prepare('SELECT conversation_users.conversation_id, lastMSG, users.username from conversation_users left join (SELECT conversation_id, MAX(sent_at) AS lastMSG FROM messages GROUP BY conversation_id) messages using(conversation_id) left join (SELECT * FROM conversation_users left join users using(user_id)) users on conversation_users.conversation_id = users.conversation_id and conversation_users.user_id != users.user_id where conversation_users.user_id = ? ORDER BY lastMSG desc;');
+                    $stmt = $con->prepare('SELECT conversation_users.conversation_id, lastSent, users.username FROM conversation_users 
+                    left join (
+                        SELECT conversation_id, MAX(sent_at) AS lastSent 
+                        FROM messages 
+                        GROUP BY conversation_id
+                    ) lastMSG on conversation_users.conversation_id = lastMSG.conversation_id 
+                    join conversation_users otherUsers on conversation_users.conversation_id = otherUsers.conversation_id and not conversation_users.user_id = otherUsers.user_id
+                    join users on otherUsers.user_id = users.user_id
+                    WHERE conversation_users.user_id = ?
+                    ORDER BY lastSent desc;');
+                    
                     $stmt->bind_param('i', $_SESSION["user_id"]);
                     $stmt->execute();
-                    $result = $stmt->get_result();
+                    $result = $stmt->get_result()->fetch_all(MYSQLI_NUM);
                     // If there is anny, go throught them, else make table row with info
-                    if (mysqli_num_rows($result) != 0){
-                        echo("<tr id='tableHeader'><th>Person</th><th>Sist aktiv</th></tr>");
+                    if (count($result) != 0){
+                        echo("<tr id='tableHeader'><th>Personer</th><th>Sist aktiv</th></tr>");
 
-                        while ($row = $result->fetch_row()) {
-                            $conversation_id = $row[0];
-                            $sent_at = $row[1];
-                            $username = $row[2];
+                        $conversation_users = [];
+                        $j = 0;
+                        for ($i=0; $i < count($result); $i++) {
+                            if (!isset($conversation_users[$result[$i][0]])){
+                                $conversation_users[$result[$i][0]] = $j;
+                                $conversations[$j][0] = $result[$i][0];
+                                $conversations[$j][1] = $result[$i][1];
+                                $conversations[$j][2] = ($result[$i][2] == "1"? "Torshken":$result[$i][2]);
+                                $j++;
+                            }else{
+                                $conversations[$conversation_users[$result[$i][0]]][2] .= ", ".($result[$i][2] == "1"? "Torshken":$result[$i][2]);
+                            }
+                        }
+
+                        for ($i=0; $i < count($conversations); $i++) { 
+                            $conversation_id = $conversations[$i][0];
+                            $sent_at = $conversations[$i][1];
+                            $usernames = $conversations[$i][2];
 
                             // If there is anny messages format the time properly
                             if ($sent_at != null){
@@ -135,7 +156,7 @@
                                 $fdate = "Ingen aktivitet";
                             }
 
-                            echo("<tr><td><a class='chatlink' href='chat.php?chatid=". $conversation_id ."'>".($username == "1"? "Torshken":$username)."</a></td><td>". $fdate ."</td></tr>");
+                            echo("<tr><td><a class='chatlink' href='chat.php?chatid=". $conversation_id ."'>".$usernames."</a></td><td>". $fdate ."</td></tr>");
                         }
                     }else{echo("<tr id='tableHeader'><th>Du har ingen samtaler.</th><tr>");}
                 ?>
