@@ -80,7 +80,10 @@ h1{
     margin: 0;
     padding: 0 2rem;
 }
-
+hr {
+    border: 0;
+    border-bottom: 1px solid #fff;
+}
 
 /* Footer */
 footer{
@@ -116,6 +119,11 @@ a:hover{opacity: 50%;}
     display: flex;
     flex-direction: column;
     align-items: baseline;
+}
+.horisontalForm{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 
