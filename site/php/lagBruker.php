@@ -26,14 +26,11 @@
             $stmt->bind_param('ss', $username, $pwd); // 's' specifies the variable type => 'string'
             $stmt->execute();
 
-            // Retrieving user so user id can be stored (would use output, but does not exist in mysqli)
-            $stmt = $con->prepare('SELECT * FROM users WHERE username = ?');
-            $stmt->bind_param('s', $username); // 's' specifies the variable type => 'string'
-            $stmt->execute();
-            $userquery_res = $stmt->get_result()->fetch_array(MYSQLI_BOTH);
+            // Retrieving user id from newly created user via return value (mysql built in)
+			$user_id = $stmt->insert_id;
 
             // Login function found in phprepo
-            login($con, $userquery_res["user_id"], $userquery_res["username"]);
+            login($con, $user_id, $username);
 
             $message = '<p>Brukeren er registrert, og inlogget.</p>';
             // If succesfull, redirect to index
