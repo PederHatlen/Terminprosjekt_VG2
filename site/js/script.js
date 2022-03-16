@@ -21,6 +21,6 @@ window.onkeydown = function(e){
     if(char == "backspace"){keystring = keystring.slice(0, -1)}
     else{keystring += char;}
 
-    // console.log(char, keystring);
-    if(keystring == "unicorn"){window.location.replace(location.origin+location.pathname + '?unicorn')}
+    //console.log(char, keystring);
+    if(keystring.slice(-7) == "unicorn"){window.location.replace(location.origin+location.pathname + '?unicorn')}
 }
