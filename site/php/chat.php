@@ -14,6 +14,7 @@
     // Stricter security, User has to be logged inn, have the right chat id, and have permits to chat, else they will be ridirected to index
     if (!isLoggedIn($con)) {
         unset($_SESSION["chatid"]);
+        $_SESSION["redirectpage"] = "chat.php";
         header('Location: login.php');
         exit;
     }

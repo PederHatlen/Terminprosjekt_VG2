@@ -1,6 +1,8 @@
 <?php
     $start = microtime(true);    // PerformanceTracking
-    session_start();    // Start tracking of session
+    session_start();             // Start tracking of session
+
+    if (!isset($isLoginPage)){unset($_SESSION["redirectpage"]);}
 
     // Global Settings
     define("extServer", false); // Using external server (Parameters can be set in dblogin.php (gitignored))
