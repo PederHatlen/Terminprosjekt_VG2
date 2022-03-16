@@ -87,15 +87,12 @@
         <div id="tableoptions">
             <!-- Search option was never implemented, but is intended to be -->
             <!-- <input type="text" name="search" id="search" placeholder="Søk etter samtale"> -->
-            <input type="button" name="shownewsamtale" id="shownewsamtale" value="Ny samtale" onclick="document.querySelector('#addconv').style.display = 'flex'">
+            <button id="shownewconversation" onclick="document.getElementById('addconv').style.display = 'flex'">Ny samtale</button>
         </div>
         <!-- Add new conversation box, hidden by default, but is shown when Show button is pressed (Done in inline JS (I know, not great)) -->
-        <div id="addconv">
-            <div id="addconv_box">
-                <div id="addconvText">
-                    <h2>Lag ny samtale</h2>
-                    <a class="exit" onclick="document.querySelector('#addconv').style.display = ''" href="#">x</a>
-                </div>
+        <div id="addconv" class="fullPopup">
+            <div id="fullPopupBox">
+                <h2>Lag ny samtale <a class="exit" onclick="document.getElementById('addconv').style.display = ''" href="#">x</a></h2>
                 <!-- Form for making new conversation, goes to this document -->
                 <form action="" method="post">
                     <input type="text" class="input" name="person" id="person" onkeyup="" placeholder="Brukernavn">
@@ -153,11 +150,8 @@
                             if ($sent_at != null){
                                 $date = date_create($sent_at);
                                 $fdate = null;
-                                if (strtotime($sent_at) < strtotime('-1 day')) {
-                                    $fdate = date_format($date, 'jS M y');
-                                }else{
-                                    $fdate = date_format($date, 'H:i:s');
-                                }
+                                if (strtotime($sent_at) < strtotime('-1 day')) {$fdate = date_format($date, 'dS M y');}
+                                else{$fdate = date_format($date, 'H:i:s');}
                             }else{
                                 $fdate = "Ingen aktivitet";
                             }
