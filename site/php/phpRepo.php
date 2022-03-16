@@ -22,9 +22,6 @@
         header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
         exit;
     }
-
-    // Code that retrives saved username, and makes the user text in the top right corner on all sites
-    function usernametext(){return ('<span id="username_display">' . (isset($_SESSION["username"])? ($_SESSION["username"]):'Ikke pålogget') . '</span>');}
     
     // Basic connect functions
     function connect(){
