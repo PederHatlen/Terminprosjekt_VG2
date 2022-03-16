@@ -1,5 +1,6 @@
 <?php
     // Main PHP bulk, it is before the document because redirecting does not work otherwise
+    $isLoginPage = true;
     require 'phpRepo.php';
     $con = connect();
     $msgText = '';
@@ -22,7 +23,9 @@
         if (!is_null($userquery_res) && password_verify($pwd, $userquery_res['password'])) {
             login($con, $userquery_res["user_id"], $userquery_res["username"]);
             $msgText = '<p>Innloggingen fungerte!</p>';
-            header('Location: ../index.php');
+            if (isset($_SESSION["redirectpage"])){header('Location: '.$_SESSION["redirectpage"]);}
+            else{header('Location: ../index.php');}
+            unset($_SESSION["redirectpage"]);
             exit;
         }else{
             $msgText = '<p>Feil brukernavn eller passord.</p>';
