@@ -125,4 +125,12 @@
     // Get random color (Used for individual colors in chat)
     // Retrieved from the Booking system i made, most likely from here: https://stackoverflow.com/q/61709592#comment109154735_61709592
     function randomColor(){return sprintf('#%06X', mt_rand(0, 0xFFFFFF));}
+
+    // Code for splitting hex into rgb and calculating luminance
+    // Retrieved from https://stackoverflow.com/a/67325435 and https://en.wikipedia.org/wiki/Relative_luminance (Y=0.2126*R+0.7152*G+0.0722*B)
+    function luminance($color) {
+        if ($color[0] == '#') {$color = substr($color, 1);}
+        list($r, $g, $b) = array_map("hexdec", str_split($color, (strlen( $color ) / 3)));
+        return (0.2126*$r + 0.7152*$g + 0.0722*$b);
+    }
 ?>
