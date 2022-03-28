@@ -11,15 +11,15 @@
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST["request"])) {
-        var_dump($_POST);
         switch ($_POST["request"]) {
             case 'remove':
 				// Preparing a statement for binding users to conversation, se Setup.sql for database structure
                 $stmt = $con->prepare('UPDATE conversation_users SET isAdmin = 1 WHERE conversation_id = ? and user_id = ?');
                 $stmt->bind_param('ii', $conversation_id, $insert_UID);
 
+                $keys = array_keys($_POST);
 				for ($i=0; $i < count($_POST)-1; $i++) { 
-					$tempVars = explode(",", $_POST[$i]);
+					$tempVars = explode(",", $_POST[$keys[$i]]);
 
 					$conversation_id = $tempVars[0];
 					$insert_UID = $tempVars[1];
@@ -29,6 +29,8 @@
                 $stmt = $con->prepare('DELETE FROM users WHERE users.user_id = ?;');
                 $stmt->bind_param('i', $_SESSION["user_id"]);
                 $stmt->execute();
+
+                header('Location: logoff.php');
 
                 break;
             case '':
