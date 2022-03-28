@@ -50,7 +50,7 @@
         if (isset($_POST["form"])){
             if ($_POST["form"] == "changeColor"){
                 if (isset($_POST["color"]) and preg_match('/^#([0-9A-F]{3}){1,2}$/i', $_POST["color"])){
-                    $stmt = $con->prepare('UPDATE conversation_users SET color = ? WHERE conversation_id = ? and user_id = ? ');
+                    $stmt = $con->prepare('UPDATE conversation_users SET color = ? WHERE conversation_id = ? and user_id = ?');
                     $stmt->bind_param('sii', $_POST["color"], $conversation_id, $_SESSION["user_id"]);
                     $stmt->execute();
 

@@ -127,24 +127,25 @@
                     if (count($result) != 0){
                         echo("<tr id='tableHeader'><th>Personer</th><th>Sist aktiv</th></tr>");
 
-                        $conversation_users = [];
+                        $index = [];
+                        $conversations = [];
                         $j = 0;
                         for ($i=0; $i < count($result); $i++) {
-                            if (!isset($conversation_users[$result[$i][0]])){
-                                $conversation_users[$result[$i][0]] = $j;
+                            if (!isset($index[$result[$i][0]])){
+                                $index[$result[$i][0]] = $j;
                                 $conversations[$j][0] = $result[$i][0];
                                 $conversations[$j][1] = $result[$i][1];
-                                $conversations[$j][2] = ($result[$i][2] == "1"? "Torshken":$result[$i][2]);
+                                $conversations[$j][2][] = ($result[$i][2] == "1"? "Torshken":$result[$i][2]);
                                 $j++;
                             }else{
-                                $conversations[$conversation_users[$result[$i][0]]][2] .= ", ".($result[$i][2] == "1"? "Torshken":$result[$i][2]);
+                                $conversations[$index[$result[$i][0]]][2][] = ($result[$i][2] == "1"? "Torshken":$result[$i][2]);
                             }
                         }
 
                         for ($i=0; $i < count($conversations); $i++) { 
                             $conversation_id = $conversations[$i][0];
                             $sent_at = $conversations[$i][1];
-                            $usernames = $conversations[$i][2];
+                            $usernames = implode(', ', $conversations[$i][2]);
 
                             // If there is anny messages format the time properly
                             if ($sent_at != null){
