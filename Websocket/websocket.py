@@ -33,6 +33,7 @@ async def handler(websocket):
             print(userIP, colored("User doesn't have access", "red"))
             await websocket.close()
             return False
+        color = ress[0][2]
         cursor.execute("""SELECT * FROM tokens WHERE token = %s AND user_id = %s AND expires_at > CURRENT_TIMESTAMP order by expires_at DESC LIMIT 1""", [str(token), str(user_id)])
         ress = cursor.fetchone()
         if ress == None:
@@ -56,7 +57,7 @@ async def handler(websocket):
                     time = datetime.datetime.now()
                     sendtTo = []
                     for i in conversations[clientDeets[0]]:
-                        await i.send("<p><p><span class='time'>[" + time.strftime("%H:%M:%S") + "]</span> " + ("Torshken" if str(clientDeets[2]) == "1" else clientDeets[2]) + ": " + str(message) + "</p>")
+                        await i.send("<p><span class=\"info\" style=\"color: "+ color + ";\"><span class='time'>["+ time.strftime("%H:%M:%S") + "]</span> " + ("Torshken" if str(clientDeets[2]) == "1" else clientDeets[2]) + ":</span> " + str(message) + "</p>")
                         sendtTo.append(colored(websocket.remote_address[0], "cyan"))
                     print(colored("Sendt to", "green"), colored(", ", "green").join(sendtTo))
             except websockets.exceptions.ConnectionClosed:
