@@ -62,7 +62,7 @@
 
         <!-- Form for inputting userdate (u.name & pwd), password has too be typed twice, done with JS -->
         <form action="" method="post" class="verticalForm">
-            <input type="text" class="input" name="username" id="username" placeholder="Brukernavn" autocomplete="new-username" required autofocus>
+            <input type="number" class="input" name="username" id="username" placeholder="Brukernavn" autocomplete="new-username" required autofocus>
             <input type="password" class="input" name="password" id="password" placeholder="Passord" autocomplete="new-password" required>
             <input type="password" class="input" name="passwordControll" id="passwordControll" placeholder="Gjenta passord" autocomplete="repeat-password" required>
             <input type="submit" value="Lag bruker" id="submit" class="submitwmargin defaultDisabled" disabled>

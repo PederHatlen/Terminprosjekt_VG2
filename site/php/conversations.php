@@ -76,7 +76,6 @@
         $pageName = "| Conversations";
         require 'head.php';
     ?>
-    <link rel="stylesheet" href="/BinærChat/css/conversationsStyle.css">
 </head>
 <body>
     <?php include 'header.php';?>
@@ -166,13 +165,5 @@
     </main>
     <?php include 'footer.php';?>
     <script src="../js/script.js"></script>
-    <script>
-        Array.from(document.getElementsByClassName("clickeableRow")).forEach(element => {
-            element.onkeydown = function(e){
-                if(e.key == "Enter"){window.location="chat.php?chatid="+ <?php echo $conversation_id;?>
-            }
-        }
-        });
-    </script>
 </body>
 </html>

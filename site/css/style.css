@@ -1,8 +1,8 @@
 /* Custom font from google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata&display=swap');
 
-/* Styling of html and body to make them 100% of the screen height */
-body, html{height: 100%;}
+/* Styling of html to make page 100% of the screen height */
+html{height: 100%;}
 
 /* Genneral styling */
 /* Declaring grid areas for body (Used on all pages) + extra styling for body*/
@@ -10,6 +10,7 @@ body{
     padding: 0;
     margin: 0 auto;
     width: 75%;
+    min-height: 100%;
     background: #222;
     background: var(--page-main1, #222);
     color: #fff;
@@ -225,7 +226,7 @@ td, th{
     background-color: darkred;
 }
 
-/* In case the display device is portrait/a phone */
+/* In case the display device is portrait (fx. a phone) */
 @media (orientation: portrait) {
     body{width: 100%;}
 }

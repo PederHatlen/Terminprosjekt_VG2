@@ -52,8 +52,8 @@
 
         <!-- Form for inputting login details, text removing/formating done in JS (script.js) -->
         <form action="" method="post" class="verticalForm">
-            <input type="text" name="username" id="username" placeholder="Brukernavn" autocomplete="username" required autofocus>
-            <input type="password" name="password" id="password" placeholder="Passord" autocomplete="current-password" required>
+            <input type="number" name="username" id="username" class="input" placeholder="Brukernavn" autocomplete="username" required autofocus>
+            <input type="password" name="password" id="password" class="input" placeholder="Passord" autocomplete="current-password" required>
             <input type="submit" value="log in" id="submit" class="submitwmargin">
         </form>
         <?php

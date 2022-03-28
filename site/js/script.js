@@ -2,9 +2,9 @@
 // For every input tag
 Array.from(document.getElementsByClassName("input")).forEach(element => {
     // If a key other than 1, 0 or some other comfort buttons are pressed, prevent it from being registered
-    element.oninput = function(e) {
+    element.addEventListener("input", function(e) {
         element.value = cleanInput(element.value);
-    };
+    });
 });
 
 function cleanInput(inn){
@@ -15,7 +15,7 @@ let legalChars = "unicor";
 let keystring = "";
 let mainArea = document.getElementsByTagName("main");
 
-window.onkeydown = function(e){
+window.addEventListener("keydown", function(e){
     let char = e.key.toLowerCase();
     if(legalChars.indexOf(char) == -1 && char != "backspace") return;
     if(char == "backspace"){keystring = keystring.slice(0, -1)}
@@ -23,4 +23,4 @@ window.onkeydown = function(e){
 
     //console.log(char, keystring);
     if(keystring.slice(-7) == "unicorn"){window.location.replace(location.origin+location.pathname + '?unicorn')}
-}
+});
