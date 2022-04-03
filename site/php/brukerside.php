@@ -86,26 +86,26 @@
 				<h2>Er du sikker på at du vil slette brukeren din?</h2>
 				<p>Dette er ikke reversibelt, og vil fjerne <u><b>ALT</b></u> du har skrevet og gjort i binærchat.</p>
 				<form action="" method="post" id="delUsrForm">
-						<?php
-							if (count($conversations)!= 0) {
-								echo "<hr><p>Før du sletter brukeren din må du sette en administrator i chattene dine.</p>
-								<table id=\"useradmintable\"><tr id='tableHeader'><th>Personer&nbsp;</th><th>Velg admin</th></tr>";
-								
-								for ($i=0; $i < count($conversations); $i++) {
-									echo "<tr><td><label for='convAdminSelect'>[".implode(', ', $conversations[$i][2])."]</label></td>
-									<td><select name='convAdminSelect".$conversations[$i][0]."' form='delUsrForm'>";
-									for ($j=0; $j < count($conversations[$i][1]); $j++) {echo "<option value='".$conversations[$i][0].",".$conversations[$i][1][$j]."'>".$conversations[$i][2][$j]."</option>";}
-									echo "</select></td></tr>";
-								}
-								echo "</table><br>";
+					<?php
+						if (count($conversations)!= 0) {
+							echo "<hr><p>Før du sletter brukeren din må du sette en administrator i chattene dine.</p>
+							<table id=\"useradmintable\"><tr id='tableHeader'><th>Personer&nbsp;</th><th>Velg admin</th></tr>";
+							
+							for ($i=0; $i < count($conversations); $i++) {
+								echo "<tr><td><label for='convAdminSelect'>[".implode(', ', $conversations[$i][2])."]</label></td>
+								<td><select name='convAdminSelect".$conversations[$i][0]."' form='delUsrForm'>";
+								for ($j=0; $j < count($conversations[$i][1]); $j++) {echo "<option value='".$conversations[$i][0].",".$conversations[$i][1][$j]."'>".$conversations[$i][2][$j]."</option>";}
+								echo "</select></td></tr>";
 							}
-						?>
+							echo "</table><br>";
+						}
+					?>
 					<input type="hidden" name="request" value="remove">
 					<input type="submit" class="deleteBtn" value="Jeg vil slette brukeren min">
-					<button onclick="removeAccountEl.style.display = ''">Nei, ta meg tilbake</button>
+					<button onclick="removeAccountEl.style.display = '';">Nei, ta meg tilbake</button>
 				</form>
 			</div>
-		<div>
+		</div>
 	</main>
 	<!-- Footer for extra info -->
 	<script src="../js/script.js"></script>
