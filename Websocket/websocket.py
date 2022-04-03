@@ -16,6 +16,7 @@ async def handler(websocket):
 		global conversations
 		print(userIP, colored("Connected", "green"))
 		initData = json.loads(await websocket.recv())
+		print(userIP, colored("Login-info received ", "green"))
 
 		# Monstrosity of a sql query, but everything is needed
 		cursor.execute("""SELECT 
@@ -34,7 +35,11 @@ async def handler(websocket):
 
 		ress = cursor.fetchall()
 		if ress == (): raise Exception("Token is not valid.")
-		
+
+		cursor.execute("""DELETE FROM ws_tokens WHERE token = %s or expires_at < NOW();""", [str(initData["wsToken"])])
+		conn.commit()
+		print(userIP, colored(f"Deleted {cursor.rowcount} token" + ("s" if cursor.rowcount != 1 else ""), "blue"))
+
 		try:
 			chatId = ress[0][0]
 			userId = ress[0][1]
@@ -44,8 +49,6 @@ async def handler(websocket):
 			print(userIP, colored("Not enought values", "red"))
 			await websocket.close()
 			return False
-		print(userIP, colored("Login-info received ", "green"))
-
 
 		if chatId not in conversations.keys():
 			conversations[chatId] = []
