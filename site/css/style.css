@@ -7,226 +7,226 @@ html{height: 100%;}
 /* Genneral styling */
 /* Declaring grid areas for body (Used on all pages) + extra styling for body*/
 body{
-    padding: 0;
-    margin: 0 auto;
-    width: 75%;
-    min-height: 100%;
-    background: #222;
-    background: var(--page-main1, #222);
-    color: #fff;
-    color: var(--text-color, #fff);
-    font-family: 'Inconsolata', monospace;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 5rem 1fr 3rem;
-    grid-template-areas:
-        'Header'
-        'Content'
-        'Footer';
+	padding: 0;
+	margin: 0 auto;
+	width: 75%;
+	min-height: 100%;
+	background: #222;
+	background: var(--page-main1, #222);
+	color: #fff;
+	color: var(--text-color, #fff);
+	font-family: 'Inconsolata', monospace;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 5rem 1fr 3rem;
+	grid-template-areas:
+		'Header'
+		'Content'
+		'Footer';
 }
 a{
-    color: #fff;
-    color: var(--text-color, #fff);
-    text-underline-offset: 1px;
+	color: #fff;
+	color: var(--text-color, #fff);
+	text-underline-offset: 1px;
 }
 input, textarea, select, button{
-    padding: 4px;
-    border: #000 solid 1px;
-    font-family: inherit;
-    color: #000;
-    background: #fff;
-    font-family: 'Inconsolata', monospace;
+	padding: 4px;
+	border: #000 solid 1px;
+	font-family: inherit;
+	color: #000;
+	background: #fff;
+	font-family: 'Inconsolata', monospace;
 }
 
 ::placeholder{
-    color: #000;
+	color: #000;
 }
 input:focus-visible, textarea:focus-visible, select:focus-visible{
-    outline: none;
-    background: #aaa;
+	outline: none;
+	background: #aaa;
 }
 .submitwmargin{margin: 5px 0;}
 input[type=submit]:hover, input[type=button]:hover, button:hover{
-    background: #aaa;
+	background: #aaa;
 }
 input:disabled, input[disabled]{
-    background: gray;
+	background: gray;
 }
 input:disabled:hover, input:disabled:focus{
-    background: gray;
+	background: gray;
 }
 
 
 /* Header */
 header{
-    grid-area: Header;
-    display: flex;
-    align-items: center;
-    background: #05456E;
-    background: var(--header-color, #05456E);
-    /* background-image: linear-gradient(135deg, #05456E 3.5rem,  #000 3.5rem); */
-    font-weight: bolder;
-    justify-content: space-between;
+	grid-area: Header;
+	display: flex;
+	align-items: center;
+	background: #05456E;
+	background: var(--header-color, #05456E);
+	/* background-image: linear-gradient(135deg, #05456E 3.5rem,  #000 3.5rem); */
+	font-weight: bolder;
+	justify-content: space-between;
 }
 .rightheader{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 100%;
 }
 #username_display{
-    color: white;
-    color: var(--text-color, #fff);
+	color: white;
+	color: var(--text-color, #fff);
 }
 h1{
-    margin: 0;
-    padding: 0 2rem;
+	margin: 0;
+	padding: 0 2rem;
 }
 hr {
-    border: 0;
-    border-bottom: 1px solid #fff;
+	border: 0;
+	border-bottom: 1px solid #fff;
 }
 
 /* Footer */
 footer{
-    display: flex;
-    align-items: center;
-    background: #05456E;
-    background: var(--footer-color, #05456E);
-    justify-content: space-between;
+	display: flex;
+	align-items: center;
+	background: #05456E;
+	background: var(--footer-color, #05456E);
+	justify-content: space-between;
 }
 footer span, header span{
-    padding: 0 2rem;
+	padding: 0 2rem;
 }
 
 
 /* Main content for all pages */
 main{
-    grid-area: Content;
-    padding: 0 2rem;
-    background: #111;
-    background: var(--page-main2, #111);
+	grid-area: Content;
+	padding: 0 2rem;
+	background: #111;
+	background: var(--page-main2, #111);
 }
 main a{
-    background: #000;
-    background: var(--page-main3, #000);
-    padding: 0.25rem;
+	background: #000;
+	background: var(--page-main3, #000);
+	padding: 0.25rem;
 }
 footer a{
-    padding: 0 2rem;
+	padding: 0 2rem;
 }
 a:hover{opacity: 50%;}
 
 .verticalForm{
-    display: flex;
-    flex-direction: column;
-    align-items: baseline;
+	display: flex;
+	flex-direction: column;
+	align-items: baseline;
 }
 .horisontalForm{
-    display: flex;
-    flex-direction: row;
-    /* align-items: center; */
+	display: flex;
+	flex-direction: row;
+	/* align-items: center; */
 }
 
 
 /* Extra styling for the help page */
 #helpMain{padding-bottom: 2rem;}
 .question{
-    padding: 0.5rem 1rem;
-    background: #000;
-    background: var(--page-main3, #000);
+	padding: 0.5rem 1rem;
+	background: #000;
+	background: var(--page-main3, #000);
 }
 .question h3{margin: 0.5rem 0;}
 .question a{padding: 0; margin: 0;}
 .question p{padding: 0.2rem 0; margin: 0;}
 
 .exit{
-    color:red;
-    font-weight: 900;
-    font-size: 2rem;
+	color:red;
+	font-weight: 900;
+	font-size: 2rem;
 }
 .exit:hover{
-    color: darkred;
-    opacity: 100%;
+	color: darkred;
+	opacity: 100%;
 }
 
 /* The options for the table */
 #tableoptions{
-    display: flex;
-    justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 }
 
 /* Table styling */
 #conversationtable, #useradmintable{
-    list-style-type: none;
-    padding: 0.25rem;
-    margin: 0.5rem 0;
-    background: #000;
-    background: var(--page-main3, #000);
-    font-size: 1rem;
-    width: 100%;
-    border-collapse: collapse;
+	list-style-type: none;
+	padding: 0.25rem;
+	margin: 0.5rem 0;
+	background: #000;
+	background: var(--page-main3, #000);
+	font-size: 1rem;
+	width: 100%;
+	border-collapse: collapse;
 }
 .clickeableRow{
-    cursor: pointer;
-    border-bottom: 0.1px #000 solid;
-    border-color: var(--page-main3, #000);
+	cursor: pointer;
+	border-bottom: 0.1px #000 solid;
+	border-color: var(--page-main3, #000);
 }
 .clickeableRow:hover, .clickeableRow:focus{
-    outline: none;
-    background: #222;
-    background: var(--page-main1, #222);
-    border-color: #fff;
-    border-color: var(--text-color, #fff);
+	outline: none;
+	background: #222;
+	background: var(--page-main1, #222);
+	border-color: #fff;
+	border-color: var(--text-color, #fff);
 }
 td, th{
-    text-align: left;
-    padding: 0.25rem 0.5rem;
-    text-decoration: none;
+	text-align: left;
+	padding: 0.25rem 0.5rem;
+	text-decoration: none;
 }
 #useradmintable td, #useradmintable th{padding: 0;}
 #useradmintable select{
-    width: 100%;
+	width: 100%;
 }
 
 .fullPopup{
-    left: 0;
-    top: 0;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    display: none;
-    flex-direction: column;
-    margin: auto auto auto;
-    align-items: center;
-    justify-content: center;
-    background: #00000055;
+	left: 0;
+	top: 0;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	display: none;
+	flex-direction: column;
+	margin: auto auto auto;
+	align-items: center;
+	justify-content: center;
+	background: #00000055;
 }
 .fullPopup div{
-    background: #000;
-    background: var(--page-main3, #000);
-    padding: 1rem;
-    border: white 2px solid;
+	background: #000;
+	background: var(--page-main3, #000);
+	padding: 1rem;
+	border: white 2px solid;
 }
 .fullPopup h2{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0;
-    margin: 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0;
+	margin: 0;
 }
 
 .deleteBtn{
-    background-color: red;
-    color: white;
-    cursor: pointer;
+	background-color: red;
+	color: white;
+	cursor: pointer;
 }
 .deleteBtn:hover{
-    color: white;
-    background-color: darkred;
+	color: white;
+	background-color: darkred;
 }
 
 /* In case the display device is portrait (fx. a phone) */
 @media (orientation: portrait) {
-    body{width: 100%;}
+	body{width: 100%;}
 }

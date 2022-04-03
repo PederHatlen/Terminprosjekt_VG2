@@ -1,8 +1,8 @@
 <?php
-    if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-        header("location: /BinærChat/index.php");
-        exit;
-    }
+	if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
+		header("location: /BinærChat/index.php");
+		exit;
+	}
 ?>
 
 <!-- General html set-up -->
@@ -15,9 +15,9 @@
 <link rel="icon" type="image/png" href="/BinærChat/img/favicon.png">
 <link rel="stylesheet" href="/BinærChat/css/style.css">
 <?php
-    if (isset($_SESSION["unicorn"]) and constant("allowUnicornMode") == true){
-        echo "<link rel=\"stylesheet\" href=\"/BinærChat/css/themes/unicorn.css\">";
-    }else{
-        echo "<link rel=\"stylesheet\" href=\"/BinærChat/css/themes/normal.css\">";
-    }
+	if (isset($_SESSION["unicorn"]) and constant("allowUnicornMode") == true){
+		echo "<link rel=\"stylesheet\" href=\"/BinærChat/css/themes/unicorn.css\">";
+	}else{
+		echo "<link rel=\"stylesheet\" href=\"/BinærChat/css/themes/normal.css\">";
+	}
 ?>

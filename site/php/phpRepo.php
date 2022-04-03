@@ -1,113 +1,113 @@
 <?php
-    $start = microtime(true);    // PerformanceTracking
-    session_start();             // Start tracking of session
+	$start = microtime(true);    // PerformanceTracking
+	session_start();             // Start tracking of session
 
-    if (!isset($isLoginPage)){unset($_SESSION["redirectpage"]);}
+	if (!isset($isLoginPage)){unset($_SESSION["redirectpage"]);}
 
-    // Global Settings
-    define("extServer", false); // Using external server (Parameters can be set in dblogin.php (gitignored))
+	// Global Settings
+	define("extServer", false); // Using external server (Parameters can be set in dblogin.php (gitignored))
 
-    define("allowDevMode", false);
-    define("allowUnicornMode", true);
+	define("allowDevMode", false);
+	define("allowUnicornMode", true);
 
-    if (isset($_GET["devmode"]) and constant("allowDevMode") == true){
-        if (strtolower($_GET["devmode"]) == "false"){unset($_SESSION["devmode"]);}
-        else {$_SESSION["devmode"] = "true";}
-        header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
-        exit;
-    }
-    if (isset($_GET["unicorn"]) and constant("allowUnicornMode") == true){
-        if (isset($_SESSION["unicorn"])){unset($_SESSION["unicorn"]);}
-        else {$_SESSION["unicorn"] = "true";}
-        header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
-        exit;
-    }
-    
-    // Basic connect functions
-    function connect(){
-        require 'dblogin.php';
-        
-        // login Details is retrieved from dblogin.php, which is gitignored
-        $con = mysqli_connect(constant("DB_HOST"), constant("DB_USERNAME"), constant("DB_PASSWORD"), "binærchatdb");
-        // Check connection
-        if (!$con) {die("Connection failed: " . mysqli_connect_error());}
-    
-        //Angi UTF-8 som tegnsett
-        $con->set_charset("utf8");
-    
-        return $con;
-    }
-    // Getting token from database, used in corelation with validation
-    function gettoken($con, $user_id){
-        $query = $con->prepare("SELECT * FROM tokens WHERE user_id = ? AND expires_at > CURRENT_TIMESTAMP order by expires_at DESC limit 1");
-        $query->bind_param('i', $user_id);
-        $query->execute();
+	if (isset($_GET["devmode"]) and constant("allowDevMode") == true){
+		if (strtolower($_GET["devmode"]) == "false"){unset($_SESSION["devmode"]);}
+		else {$_SESSION["devmode"] = "true";}
+		header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
+		exit;
+	}
+	if (isset($_GET["unicorn"]) and constant("allowUnicornMode") == true){
+		if (isset($_SESSION["unicorn"])){unset($_SESSION["unicorn"]);}
+		else {$_SESSION["unicorn"] = "true";}
+		header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
+		exit;
+	}
+	
+	// Basic connect functions
+	function connect(){
+		require 'dblogin.php';
+		
+		// login Details is retrieved from dblogin.php, which is gitignored
+		$con = mysqli_connect(constant("DB_HOST"), constant("DB_USERNAME"), constant("DB_PASSWORD"), "binærchatdb");
+		// Check connection
+		if (!$con) {die("Connection failed: " . mysqli_connect_error());}
+	
+		//Angi UTF-8 som tegnsett
+		$con->set_charset("utf8");
+	
+		return $con;
+	}
+	// Getting token from database, used in corelation with validation
+	function gettoken($con, $user_id){
+		$query = $con->prepare("SELECT * FROM tokens WHERE user_id = ? AND expires_at > CURRENT_TIMESTAMP order by expires_at DESC limit 1");
+		$query->bind_param('i', $user_id);
+		$query->execute();
 
-        return $query->get_result()->fetch_assoc();
-    }
-    // Making a "token", actually just a uuid, good enough
-    function maketoken($con, $user_id){
-        $expires = new DateTime();
-        $expires->add(new DateInterval('PT20M')); //https://en.wikipedia.org/wiki/ISO_8601#Durations
-        $expires_stamp = $expires->format('Y-m-d H:i');
+		return $query->get_result()->fetch_assoc();
+	}
+	// Making a "token", actually just a uuid, good enough
+	function maketoken($con, $user_id){
+		$expires = new DateTime();
+		$expires->add(new DateInterval('PT20M')); //https://en.wikipedia.org/wiki/ISO_8601#Durations
+		$expires_stamp = $expires->format('Y-m-d H:i');
 
-        $datetime = new DateTime();
-        $datetime_stamp = $datetime->format('Y-m-d H:i');
+		$datetime = new DateTime();
+		$datetime_stamp = $datetime->format('Y-m-d H:i');
 
-        // Using a SQL-injection proof solution. N/A here, but standardised
-        $stmt = $con->prepare('INSERT into tokens (user_id, token, created_at, expires_at) VALUES (?, UUID(), ?, ?)');
-        $stmt->bind_param('iss', $user_id, $datetime_stamp, $expires_stamp); // 's' specifies the variable type => 'string'
-        $stmt->execute();
+		// Using a SQL-injection proof solution. N/A here, but standardised
+		$stmt = $con->prepare('INSERT into tokens (user_id, token, created_at, expires_at) VALUES (?, UUID(), ?, ?)');
+		$stmt->bind_param('iss', $user_id, $datetime_stamp, $expires_stamp); // 's' specifies the variable type => 'string'
+		$stmt->execute();
 
-        return gettoken($con, $user_id);
-    }
-    // Validating the token by finding it in the database
-    function validatetoken($con, $token, $user_id){
-        $stmt = $con->prepare('SELECT * FROM tokens WHERE token = ? AND user_id = ? AND expires_at > CURRENT_TIMESTAMP order by expires_at DESC limit 1');
-        $stmt->bind_param('si', $token, $user_id);
-        $stmt->execute();
-        $result = $stmt->get_result()->fetch_assoc();
+		return gettoken($con, $user_id);
+	}
+	// Validating the token by finding it in the database
+	function validatetoken($con, $token, $user_id){
+		$stmt = $con->prepare('SELECT * FROM tokens WHERE token = ? AND user_id = ? AND expires_at > CURRENT_TIMESTAMP order by expires_at DESC limit 1');
+		$stmt->bind_param('si', $token, $user_id);
+		$stmt->execute();
+		$result = $stmt->get_result()->fetch_assoc();
 
-        // If token is not foun (is null) then return false, else update
-        if ($result == null) return FALSE;
+		// If token is not foun (is null) then return false, else update
+		if ($result == null) return FALSE;
 
-        if (strtotime($result["expires_at"]) < strtotime("now +5 minutes")){
-            $_SESSION["token"] = maketoken($con, $user_id)["token"];
-        }
+		if (strtotime($result["expires_at"]) < strtotime("now +5 minutes")){
+			$_SESSION["token"] = maketoken($con, $user_id)["token"];
+		}
 
-        return TRUE;
-    }
-    // Login function used in login and make account, practical to be standardised
-    function login($con, $user_id, $user_name){
-        // making new token, do not want user to use old token 
-        $token = maketoken($con, $user_id);
+		return TRUE;
+	}
+	// Login function used in login and make account, practical to be standardised
+	function login($con, $user_id, $user_name){
+		// making new token, do not want user to use old token 
+		$token = maketoken($con, $user_id);
 
-        // All logins and proof of logins/extra data is stored in Session variables, because data on user's system, is not trusted
-        $_SESSION["token"] = $token["token"];
-        $_SESSION["username"] = $user_name;
-        $_SESSION["user_id"] = $user_id;
-    }
-    // Verifying that the user is logged in, using validate token, and in event user is invalid, logging user off
-    function isLoggedIn($con){
-        // Validate logintoken
-        if (($_SESSION["token"] ?? null) == null || ($_SESSION["user_id"] ?? null) == null || !validatetoken($con, $_SESSION["token"], $_SESSION["user_id"])){
-            // If unvalid, remove login
-            unset($_SESSION["username"]);
-            unset($_SESSION["token"]);
-            unset($_SESSION["user_id"]);
-            return FALSE;
-        }else return TRUE;
-    }
+		// All logins and proof of logins/extra data is stored in Session variables, because data on user's system, is not trusted
+		$_SESSION["token"] = $token["token"];
+		$_SESSION["username"] = $user_name;
+		$_SESSION["user_id"] = $user_id;
+	}
+	// Verifying that the user is logged in, using validate token, and in event user is invalid, logging user off
+	function isLoggedIn($con){
+		// Validate logintoken
+		if (($_SESSION["token"] ?? null) == null || ($_SESSION["user_id"] ?? null) == null || !validatetoken($con, $_SESSION["token"], $_SESSION["user_id"])){
+			// If unvalid, remove login
+			unset($_SESSION["username"]);
+			unset($_SESSION["token"]);
+			unset($_SESSION["user_id"]);
+			return FALSE;
+		}else return TRUE;
+	}
 
-    // Get random color (Used for individual colors in chat)
-    // Retrieved from the Booking system i made, most likely from here: https://stackoverflow.com/q/61709592#comment109154735_61709592
-    function randomColor(){return sprintf('#%06X', mt_rand(0, 0xFFFFFF));}
+	// Get random color (Used for individual colors in chat)
+	// Retrieved from the Booking system i made, most likely from here: https://stackoverflow.com/q/61709592#comment109154735_61709592
+	function randomColor(){return sprintf('#%06X', mt_rand(0, 0xFFFFFF));}
 
-    // Code for splitting hex into rgb and calculating luminance
-    // Retrieved from https://stackoverflow.com/a/67325435 and https://en.wikipedia.org/wiki/Relative_luminance
-    function luminance($color) {
-        if ($color[0] == '#') $color = substr($color, 1);
-        list($r, $g, $b) = array_map("hexdec", str_split($color, (strlen( $color ) / 3)));
-        return (0.2126*$r + 0.7152*$g + 0.0722*$b);
-    }
+	// Code for splitting hex into rgb and calculating luminance
+	// Retrieved from https://stackoverflow.com/a/67325435 and https://en.wikipedia.org/wiki/Relative_luminance
+	function luminance($color) {
+		if ($color[0] == '#') $color = substr($color, 1);
+		list($r, $g, $b) = array_map("hexdec", str_split($color, (strlen( $color ) / 3)));
+		return (0.2126*$r + 0.7152*$g + 0.0722*$b);
+	}
 ?>
