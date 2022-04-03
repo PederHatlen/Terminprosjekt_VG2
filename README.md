@@ -7,7 +7,7 @@ Det er lett inspirert av [**Tom Scott**](https://www.tomscott.com/) og [**Mat Gr
 
 ## Planer videre
 
-- Farger til forskjellige brukere.
+- ~~Farger til forskjellige brukere~~.
 - De-cluttering.
 - Noen fikser i UI-en.
 - Analyser, testing og bedre dokumentasjon.
