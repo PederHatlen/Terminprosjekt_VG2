@@ -101,17 +101,17 @@
         }
 
         // All logins and proof of logins/extra data is stored in Session variables, because data on user's system, is not trusted
-        $_SESSION["logintoken"] = $token["token"];
+        $_SESSION["token"] = $token["token"];
         $_SESSION["username"] = $user_name;
         $_SESSION["user_id"] = $user_id;
     }
     // Verifying that the user is logged in, using validate token, and in event user is invalid, logging user off
     function isLoggedIn($con){
         // Validate logintoken
-        if (($_SESSION["logintoken"] ?? null) == null || ($_SESSION["user_id"] ?? null) == null || !validatetoken($con, $_SESSION["logintoken"], $_SESSION["user_id"])){
+        if (($_SESSION["token"] ?? null) == null || ($_SESSION["user_id"] ?? null) == null || !validatetoken($con, $_SESSION["logintoken"], $_SESSION["user_id"])){
             // If unvalid, remove login
             unset($_SESSION["username"]);
-            unset($_SESSION["logintoken"]);
+            unset($_SESSION["token"]);
             unset($_SESSION["user_id"]);
             return FALSE;
         }else{
