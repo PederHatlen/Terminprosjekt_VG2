@@ -1,5 +1,4 @@
 import asyncio
-from asyncio.windows_events import NULL
 import time
 import socket
 import websockets
@@ -29,22 +28,22 @@ async def handler(websocket):
 		join conv_users 
 			on conv_users.conversation_id = ws_tokens.conversation_id 
 			and conv_users.user_id = ws_tokens.user_id 
-		WHERE ws_tokens.token = %s and ws_tokens.active = 1 
+		WHERE ws_tokens.token = %s and ws_tokens.expires_at > NOW() 
 		limit 1""", [str(initData["wsToken"])])
-		conn.commit()  # Commiting this, else it would hold it and mess up next time
+		conn.commit()  # Committing this, else it would hold it and mess up next time
 
-		ress = cursor.fetchall()
-		if ress == (): raise Exception("Token is not valid.")
+		ress = cursor.fetchone()
+		if ress == None: raise Exception("Token is not valid.")
 
 		cursor.execute("""DELETE FROM ws_tokens WHERE token = %s or expires_at < NOW();""", [str(initData["wsToken"])])
 		conn.commit()
 		print(userIP, colored(f"Deleted {cursor.rowcount} token" + ("s" if cursor.rowcount != 1 else ""), "blue"))
-
+		
 		try:
-			chatId = ress[0][0]
-			userId = ress[0][1]
-			username = ("Torshken" if ress[0][2] == "1" else ress[0][2])
-			color = ress[0][3]
+			chatId = ress[0]
+			userId = ress[1]
+			username = ("Torshken" if ress[2] == "1" else ress[2])
+			color = ress[3]
 		except:
 			print(userIP, colored("Not enought values", "red"))
 			await websocket.close()
@@ -76,7 +75,6 @@ async def handler(websocket):
 					}
 					for i in conversations[chatId]:
 						await i.send(json.dumps(sendData))
-						# await i.send("<p><span class=\"info\" style=\"color: "+ color + ";\"><span class='time'>["+ time.strftime("%H:%M:%S") + "]</span> " + ("Torshken" if str(clientDeets[2]) == "1" else clientDeets[2]) + ":</span> " + str(message) + "</p>")
 						sendtTo.append(colored(websocket.remote_address[0], "cyan"))
 					print(colored("Sendt to", "green"), colored(", ", "green").join(sendtTo))
 			except websockets.exceptions.ConnectionClosed:
