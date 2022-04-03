@@ -36,7 +36,7 @@
         exit;
     }
 
-    $stmt = $con->prepare('SELECT * FROM conversation_users WHERE conversation_id = ? and user_id = ?');
+    $stmt = $con->prepare('SELECT * FROM conv_users WHERE conversation_id = ? and user_id = ?');
     $stmt->bind_param('ii', $conversation_id, $_SESSION["user_id"]);
     $stmt->execute();
     $conversation_user = $stmt->get_result()->fetch_assoc();
@@ -50,7 +50,7 @@
         if (isset($_POST["form"])){
             if ($_POST["form"] == "changeColor"){
                 if (isset($_POST["color"]) and preg_match('/^#([0-9A-F]{3}){1,2}$/i', $_POST["color"])){
-                    $stmt = $con->prepare('UPDATE conversation_users SET color = ? WHERE conversation_id = ? and user_id = ?');
+                    $stmt = $con->prepare('UPDATE conv_users SET color = ? WHERE conversation_id = ? and user_id = ?');
                     $stmt->bind_param('sii', $_POST["color"], $conversation_id, $_SESSION["user_id"]);
                     $stmt->execute();
 
@@ -67,13 +67,13 @@
                             $user_id = $stmt->get_result()->fetch_assoc();
                             
                             if ($user_id != null){
-                                $stmt = $con->prepare('SELECT * FROM conversation_users WHERE conversation_id = ? and user_id = ?');
+                                $stmt = $con->prepare('SELECT * FROM conv_users WHERE conversation_id = ? and user_id = ?');
                                 $stmt->bind_param('ii', $conversation_id, $user_id["user_id"]);
                                 $stmt->execute();
                                 $res = $stmt->get_result()->fetch_assoc();
 
                                 if ($res == null){
-                                    $stmt = $con->prepare('INSERT INTO conversation_users (conversation_id, user_id) VALUES (?, ?)');
+                                    $stmt = $con->prepare('INSERT INTO conv_users (conversation_id, user_id) VALUES (?, ?)');
                                     $stmt->bind_param('ii', $conversation_id, $user_id["user_id"]);
                                     $stmt->execute();
 
@@ -89,13 +89,13 @@
                         break;
                     case 'removePerson':
                         if (isset($_POST["removePersonID"])){
-                            $stmt = $con->prepare('SELECT * FROM conversation_users WHERE conversation_id = ? and user_id = ?');
+                            $stmt = $con->prepare('SELECT * FROM conv_users WHERE conversation_id = ? and user_id = ?');
                             $stmt->bind_param('ii', $conversation_id, $_POST["removePersonID"]);
                             $stmt->execute();
                             $res = $stmt->get_result()->fetch_assoc();
                             
                             if ($res != null){
-                                $stmt = $con->prepare('DELETE FROM conversation_users WHERE conversation_id = ? and user_id = ?');
+                                $stmt = $con->prepare('DELETE FROM conv_users WHERE conversation_id = ? and user_id = ?');
                                 $stmt->bind_param('ii', $conversation_id, $_POST["removePersonID"]);
                                 $stmt->execute();
 
@@ -108,11 +108,17 @@
         }
     }
 
-    // After security check, all participants are gathered from conversation_users for displaying purposes
-    $stmt = $con->prepare('SELECT username, conversation_users.user_id FROM conversation_users join users on conversation_users.user_id = users.user_id where conversation_users.conversation_id = ? and conversation_users.user_id != ?');
+    // After security check, all participants are gathered from conv_users for displaying purposes
+    $stmt = $con->prepare('SELECT username, conv_users.user_id FROM conv_users join users on conv_users.user_id = users.user_id where conv_users.conversation_id = ? and conv_users.user_id != ?');
     $stmt->bind_param('ii', $conversation_id, $_SESSION["user_id"]);
     $stmt->execute();
     $participants = $stmt->get_result()->fetch_all();
+
+	$wsToken = bin2hex(random_bytes(16));
+
+	$stmt = $con->prepare('INSERT INTO ws_tokens (conversation_id, user_id, token) VALUES (?, ?, ?)');
+	$stmt->bind_param('iis', $_SESSION["chatid"], $_SESSION["user_id"], $wsToken);
+	$stmt->execute();
 ?>
 
 <!DOCTYPE html>
@@ -188,7 +194,7 @@
         </div>
         <div id="chatWindow"><?php
             // Displaying all chat-messages with usernames, on later expansions colors might also be added
-            $stmt = $con->prepare('SELECT users.username, conversation_users.color, messages.messagetext, messages.sent_at FROM messages join users on users.user_id = messages.sender_id join conversation_users on conversation_users.user_id = messages.sender_id and conversation_users.conversation_id = messages.conversation_id where messages.conversation_id = ? order by messages.sent_at asc');
+            $stmt = $con->prepare('SELECT users.username, conv_users.color, messages.messagetext, messages.sent_at FROM messages join users on users.user_id = messages.sender_id join conv_users on conv_users.user_id = messages.sender_id and conv_users.conversation_id = messages.conversation_id where messages.conversation_id = ? order by messages.sent_at asc');
             $stmt->bind_param('i', $conversation_id);
             $stmt->execute();
             $messages = $stmt->get_result()->fetch_all();
@@ -216,53 +222,8 @@
     <?php include 'footer.php';?>
 
     <!-- Script is integrated because of data from php that needs to be integrated. -->
-    <script>
-        let chatWindow = document.getElementById("chatWindow");
-        let messageFormEL = document.getElementById("messageForm");
-        let messageEL = document.getElementById("usrmsg");
-        let connectionInfoEL = document.getElementById("connectionInfo");
-        let socket = new WebSocket("ws://" + window.location.host + ":5678?");
-
-        let settingsContentEl = document.getElementById("settingsContent");
-        let menuIconBTN = document.getElementById("menuIconButton");
-
-        socket.onopen = function () {
-            connectionInfoEL.innerHTML += "Connected!";
-            connectionInfoEL.style.backgroundColor = "green";
-            
-            socket.send(<?php echo('"'.$_SESSION["chatid"].', '.$_SESSION["user_id"].', '.$_SESSION["username"].', '.$_SESSION["logintoken"].'"');?>)
-            
-            socket.onmessage = function (e) {
-                chatWindow.innerHTML += e.data;
-                chatWindow.scrollTop = chatWindow.scrollHeight;
-            };
-            
-            messageFormEL.onsubmit = function (e) {
-                e.preventDefault();
-                send();
-            }
-        };
-        socket.onerror = function (e) {connectionInfo.innerHTML = "Someone forgot to start the websocket server.";}
-        socket.onclose = function (e) {
-            connectionInfo.innerHTML = "Disconnected :(";
-            connectionInfoEL.style.backgroundColor = "red";
-        }
-
-        function send(message = messageEL.value) {
-            socket.send(message);
-            messageEL.value = "";
-        }
-        function togglesettings(){
-            if (settingsContentEl.style.display == "none"){
-                settingsContentEl.style.display = "inline-block";
-                menuIconBTN.style.background = "var(--page-main2)";
-            }else{
-                settingsContentEl.style.display = "none";
-                menuIconBTN.style.background = "";
-            }
-        }
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-    </script>
+    <script>const initData = {wsToken:"<?php echo $wsToken;?>"};</script>
+    <script src="../js/chatScript.js"></script>
     <script src="../js/script.js"></script>
 </body>
 </html>

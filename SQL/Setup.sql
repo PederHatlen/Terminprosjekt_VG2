@@ -19,6 +19,18 @@ CREATE TABLE tokens (
     expires_at DATETIME NOT NULL DEFAULT DATE_ADD(NOW(), INTERVAL 5 MINUTE),
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
+
+-- Websocket tokens, used instead of having user data in client
+CREATE TABLE ws_tokens (
+    ws_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    conversation_id INT NOT NULL,
+    user_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    active TINYINT NOT NULL DEFAULT 1,
+    expires_at DATETIME NOT NULL DEFAULT DATE_ADD(NOW(), INTERVAL 5 MINUTE),
+    FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    UNIQUE(token, active)
 );
 
 -- Is acctually just id and flags, but created by is good for testing/helping + created_at is usefull
@@ -31,7 +43,7 @@ CREATE TABLE conversations (
 );
 
 -- Where all the users are stared, and bound to a conversation, is theoretically ready for group chats
-CREATE TABLE conversation_users (
+CREATE TABLE conv_users (
     conversation_id INT NOT NULL,
     user_id INT NOT NULL,
     color CHAR(7) NOT NULL,

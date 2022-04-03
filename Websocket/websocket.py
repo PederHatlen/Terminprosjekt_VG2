@@ -1,7 +1,9 @@
 import asyncio
-import datetime
+from asyncio.windows_events import NULL
+import time
 import socket
 import websockets
+import json
 import re
 import MySQLdb
 from termcolor import colored
@@ -13,51 +15,65 @@ async def handler(websocket):
     try:
         global conversations
         print(userIP, colored("Connected", "green"))
-        clientDeets = await websocket.recv()
-        clientDeets = clientDeets.split(", ")
+        initData = json.loads(await websocket.recv())
+
+        # Monstrosity of a sql query, but everything is needed
+        cursor.execute("""SELECT 
+            ws_tokens.conversation_id, 
+            ws_tokens.user_id, 
+            users.username,
+            conv_users.color
+        FROM ws_tokens 
+        join users on users.user_id = ws_tokens.user_id 
+        join conv_users 
+            on conv_users.conversation_id = ws_tokens.conversation_id 
+            and conv_users.user_id = ws_tokens.user_id 
+        WHERE ws_tokens.token = %s and ws_tokens.active = 1 
+        limit 1""", [str(initData["wsToken"])])
+        conn.commit()  # Commiting this, else it would hold it and mess up next time
+
+        ress = cursor.fetchall()
+        if ress == (): raise Exception("Token is not valid.")
+        
         try:
-            chatid = clientDeets[0]
-            user_id = clientDeets[1]
-            username = clientDeets[2]
-            token = clientDeets[3]
+            chatId = ress[0][0]
+            userId = ress[0][1]
+            username = ("Torshken" if ress[0][2] == "1" else ress[0][2])
+            color = ress[0][3]
         except:
-            print(userIP, colored("Correct data wasn't received", "red"))
-            print(clientDeets)
+            print(userIP, colored("Not enought values", "red"))
             await websocket.close()
             return False
         print(userIP, colored("Login-info received ", "green"))
 
-        cursor.execute("""SELECT * FROM conversation_users WHERE conversation_id = %s and user_id = %s limit 1""", [str(chatid), str(user_id)])
-        ress = cursor.fetchall()
-        if ress == None:
-            print(userIP, colored("User doesn't have access", "red"))
-            await websocket.close()
-            return False
-        color = ress[0][2]
-        cursor.execute("""SELECT * FROM tokens WHERE token = %s AND user_id = %s AND expires_at > CURRENT_TIMESTAMP order by expires_at DESC LIMIT 1""", [str(token), str(user_id)])
-        ress = cursor.fetchone()
-        if ress == None:
-            print(userIP, colored("Token is expired or doesn't exist", "red"))
-            await websocket.close()
-            return False
 
-
-        if clientDeets[0] not in conversations.keys():
-            conversations[clientDeets[0]] = []
-        conversations[clientDeets[0]].append(websocket)
-        
+        if chatId not in conversations.keys():
+            conversations[chatId] = []
+        conversations[chatId].append(websocket)
+    except Exception as err:
+        await websocket.close()
+        print(userIP, colored("Something went wrong:", "red"), err)
+        return False
+    try:
         while websocket.open:
             try:
-                message = await websocket.recv()
+                message = json.loads(await websocket.recv())["msg"]
                 message = re.sub(r"[^10 ]+", "", str(message[:255])).strip()
                 # message = REpattern.sub(str(message[:255]), "")
                 if len(message) != 0:
-                    cursor.execute("""INSERT INTO messages (conversation_id, sender_id, messagetext) VALUES (%s, %s, %s)""", [str(clientDeets[0]), str(clientDeets[1]), str(message)])
+                    cursor.execute("""INSERT INTO messages (conversation_id, sender_id, messagetext) VALUES (%s, %s, %s)""", [str(chatId), str(userId), str(message)])
                     conn.commit()
-                    time = datetime.datetime.now()
+                    unixtime = round(time.time() * 1000)
                     sendtTo = []
-                    for i in conversations[clientDeets[0]]:
-                        await i.send("<p><span class=\"info\" style=\"color: "+ color + ";\"><span class='time'>["+ time.strftime("%H:%M:%S") + "]</span> " + ("Torshken" if str(clientDeets[2]) == "1" else clientDeets[2]) + ":</span> " + str(message) + "</p>")
+                    sendData = {
+                        "color": color,
+                        "time": unixtime,
+                        "user": username,
+                        "msg": message
+                    }
+                    for i in conversations[chatId]:
+                        await i.send(json.dumps(sendData))
+                        # await i.send("<p><span class=\"info\" style=\"color: "+ color + ";\"><span class='time'>["+ time.strftime("%H:%M:%S") + "]</span> " + ("Torshken" if str(clientDeets[2]) == "1" else clientDeets[2]) + ":</span> " + str(message) + "</p>")
                         sendtTo.append(colored(websocket.remote_address[0], "cyan"))
                     print(colored("Sendt to", "green"), colored(", ", "green").join(sendtTo))
             except websockets.exceptions.ConnectionClosed:
@@ -66,12 +82,13 @@ async def handler(websocket):
                 print(userIP, colored("Something went wrong:", "red"), err)
                 break
             await asyncio.sleep(1)
-        conversations[clientDeets[0]].remove(websocket)
+        conversations[chatId].remove(websocket)
         print(userIP, colored("Disconnected", "red"))
     except Exception as err:
         await websocket.close()
         print(userIP, colored("Something went wrong:", "red"), err)
-        conversations[clientDeets[0]].remove(websocket)
+        conversations[chatId].remove(websocket)
+        return False
     
 
 async def main():

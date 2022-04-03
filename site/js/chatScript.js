@@ -11,10 +11,16 @@ socket.onopen = function () {
     connectionInfoEL.innerHTML += "Connected!";
     connectionInfoEL.style.backgroundColor = "green";
     
-    socket.send(initData);
+    socket.send(JSON.stringify(initData));
     
     socket.onmessage = function (e) {
-        chatWindow.innerHTML += e.data;
+        console.log(e.data);
+        let data = JSON.parse(e.data);
+        
+        let time = new Date(data["time"]);
+        let ftime = ('00'+time.getHours()).slice(-2)+":"+('00'+time.getMinutes()).slice(-2)+":"+('00'+time.getSeconds()).slice(-2)
+
+        chatWindow.innerHTML += `<p><span class="info" style="color: ${data["color"]};"><span class='time'>[${ftime}]</span> ${data["user"]}:</span> ${data["msg"]}</p>`;
         chatWindow.scrollTop = chatWindow.scrollHeight;
     };
     
@@ -23,15 +29,14 @@ socket.onopen = function () {
         send();
     }
 };
-socket.onerror = function (e) {connectionInfo.innerHTML = "Someone forgot to start the websocket server.";}
 socket.onclose = function (e) {
-    connectionInfo.innerHTML = "Disconnected :(";
+    connectionInfoEL.innerHTML = "Disconnected :(";
     connectionInfoEL.style.backgroundColor = "red";
     messageFormEL.onsubmit = null;
 }
 
 function send(message = messageEL.value) {
-    socket.send(message);
+    socket.send(JSON.stringify({msg:message}));
     messageEL.value = "";
 }
 function togglesettings(){
