@@ -115,9 +115,10 @@
 	$participants = $stmt->get_result()->fetch_all();
 
 	$wsToken = bin2hex(random_bytes(16));
+	$time = date('Y-m-d H:i:s', strtotime("now +15 seconds"));
 
-	$stmt = $con->prepare('INSERT INTO ws_tokens (conversation_id, user_id, token) VALUES (?, ?, ?)');
-	$stmt->bind_param('iis', $_SESSION["chatid"], $_SESSION["user_id"], $wsToken);
+	$stmt = $con->prepare('INSERT INTO ws_tokens (conversation_id, user_id, token, expires_at) VALUES (?, ?, ?, ?)');
+	$stmt->bind_param('iiss', $_SESSION["chatid"], $_SESSION["user_id"], $wsToken, $time);
 	$stmt->execute();
 ?>
 
