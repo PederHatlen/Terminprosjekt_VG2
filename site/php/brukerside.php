@@ -61,7 +61,6 @@
 			$conversations[$index[$result[$i][0]]][2][] = ($result[$i][2] == "1"? "Torshken":$result[$i][2]);
 		}
 	}
-
 	$con->close();
 ?>
 
@@ -92,6 +91,7 @@
 							<table id=\"useradmintable\"><tr id='tableHeader'><th>Personer&nbsp;</th><th>Velg admin</th></tr>";
 							
 							for ($i=0; $i < count($conversations); $i++) {
+								var_dump($conversations[$i]);
 								echo "<tr><td><label for='convAdminSelect'>[".implode(', ', $conversations[$i][2])."]</label></td>
 								<td><select name='convAdminSelect".$conversations[$i][0]."' form='delUsrForm'>";
 								for ($j=0; $j < count($conversations[$i][1]); $j++) {echo "<option value='".$conversations[$i][0].",".$conversations[$i][1][$j]."'>".$conversations[$i][2][$j]."</option>";}
@@ -102,16 +102,14 @@
 					?>
 					<input type="hidden" name="request" value="remove">
 					<input type="submit" class="deleteBtn" value="Jeg vil slette brukeren min">
-					<button onclick="removeAccountEl.style.display = '';">Nei, ta meg tilbake</button>
 				</form>
+				<button onclick="removeAccountEl.style.display = '';">Nei, ta meg tilbake</button>
 			</div>
 		</div>
 	</main>
 	<!-- Footer for extra info -->
 	<script src="../js/script.js"></script>
 	<?php include 'footer.php';?>
-	<script>
-		let removeAccountEl = document.getElementById("removeAccount");
-	</script>
+	<script>let removeAccountEl = document.getElementById("removeAccount");</script>
 </body>
 </html>
