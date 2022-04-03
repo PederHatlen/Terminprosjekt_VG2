@@ -22,7 +22,7 @@
         if (mysqli_num_rows($user2_id) != null){
             $user2_id = $user2_id->fetch_assoc()["user_id"];
 
-            $stmt = $con->prepare('SELECT * FROM conversations left join conversation_users as conv_users1 on conversations.conversation_id = conv_users1.conversation_id left join conversation_users as conv_users2 on conversations.conversation_id = conv_users2.conversation_id where conv_users1.user_id = ? and conv_users2.user_id = ? and conversations.isGroupChat = 0');
+            $stmt = $con->prepare('SELECT * FROM conversations left join conv_users as conv_users1 on conversations.conversation_id = conv_users1.conversation_id left join conv_users as conv_users2 on conversations.conversation_id = conv_users2.conversation_id where conv_users1.user_id = ? and conv_users2.user_id = ? and conversations.isGroupChat = 0');
             $stmt->bind_param('ii', $_SESSION["user_id"], $user2_id);
             $stmt->execute();
             $userConversations = $stmt->get_result()->fetch_all();
@@ -40,7 +40,7 @@
                 $conversation_id = $stmt->insert_id;
 
                 // Preparing a statement for binding users to conversation, se Setup.sql for database structure
-                $stmt = $con->prepare('INSERT INTO conversation_users (conversation_id, user_id, color, isAdmin) VALUES (?, ?, ?, ?)');
+                $stmt = $con->prepare('INSERT INTO conv_users (conversation_id, user_id, color, isAdmin) VALUES (?, ?, ?, ?)');
                 $stmt->bind_param('iisi', $conversation_id, $insert_UID, $color, $isAdmin);
 
                 // First user input is current user
@@ -108,15 +108,15 @@
                     // The second bulk of PHP on this page, this is for retrieving the right information for the table
 
                     // Finding all the conversation the user is inn
-                    $stmt = $con->prepare('SELECT conversation_users.conversation_id, lastSent, users.username FROM conversation_users 
+                    $stmt = $con->prepare('SELECT conv_users.conversation_id, lastSent, users.username FROM conv_users 
                     left join (
                         SELECT conversation_id, MAX(sent_at) AS lastSent 
                         FROM messages 
                         GROUP BY conversation_id
-                    ) lastMSG on conversation_users.conversation_id = lastMSG.conversation_id 
-                    join conversation_users otherUsers on conversation_users.conversation_id = otherUsers.conversation_id and not conversation_users.user_id = otherUsers.user_id
+                    ) lastMSG on conv_users.conversation_id = lastMSG.conversation_id 
+                    join conv_users otherUsers on conv_users.conversation_id = otherUsers.conversation_id and not conv_users.user_id = otherUsers.user_id
                     join users on otherUsers.user_id = users.user_id
-                    WHERE conversation_users.user_id = ?
+                    WHERE conv_users.user_id = ?
                     ORDER BY lastSent desc;');
                     
                     $stmt->bind_param('i', $_SESSION["user_id"]);

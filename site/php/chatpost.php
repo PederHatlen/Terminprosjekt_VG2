@@ -14,7 +14,7 @@
 
             if (strlen($msgtext) != 0) {
                 // User has permits to use the chat
-                $stmt = $con->prepare('SELECT * FROM conversation_users WHERE conversation_id = ? and user_id = ?');
+                $stmt = $con->prepare('SELECT * FROM conv_users WHERE conversation_id = ? and user_id = ?');
                 $stmt->bind_param('ii', $conversation_id, $_SESSION["user_id"]);
                 $stmt->execute();
                 if ($stmt->get_result()->fetch_assoc() != null) {

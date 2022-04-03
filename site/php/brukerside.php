@@ -14,7 +14,7 @@
         switch ($_POST["request"]) {
             case 'remove':
 				// Preparing a statement for binding users to conversation, se Setup.sql for database structure
-                $stmt = $con->prepare('UPDATE conversation_users SET isAdmin = 1 WHERE conversation_id = ? and user_id = ?');
+                $stmt = $con->prepare('UPDATE conv_users SET isAdmin = 1 WHERE conversation_id = ? and user_id = ?');
                 $stmt->bind_param('ii', $conversation_id, $insert_UID);
 
                 $keys = array_keys($_POST);
@@ -38,11 +38,11 @@
         }
     }
 
-    // $stmt = $con->prepare('SELECT * FROM conversation_users where user_id = ? and isAdmin = 1');
-	$stmt = $con->prepare('SELECT conversation_users.conversation_id, users.user_id,users.username FROM conversation_users 
-	join conversation_users otherUsers on conversation_users.conversation_id = otherUsers.conversation_id and not conversation_users.user_id = otherUsers.user_id
+    // $stmt = $con->prepare('SELECT * FROM conv_users where user_id = ? and isAdmin = 1');
+	$stmt = $con->prepare('SELECT conv_users.conversation_id, users.user_id,users.username FROM conv_users 
+	join conv_users otherUsers on conv_users.conversation_id = otherUsers.conversation_id and not conv_users.user_id = otherUsers.user_id
 	join users on otherUsers.user_id = users.user_id
-	WHERE conversation_users.user_id = ? and conversation_users.isAdmin = 1;');
+	WHERE conv_users.user_id = ? and conv_users.isAdmin = 1;');
 	$stmt->bind_param('i', $_SESSION["user_id"]);
 	$stmt->execute();
 	$result = $stmt->get_result()->fetch_all();
