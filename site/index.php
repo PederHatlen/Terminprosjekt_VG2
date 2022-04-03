@@ -31,11 +31,11 @@
                 <a href="php/login.php">Logg in</a>');
             }
         ?>
-        <!-- Help-page (always here) -->
+        <!-- Help-page (Also in footer) -->
         <p>Hvis du trenger hjelp eller har spørsmål kan du gå på <a href="php/help.php">Hjelp</a> siden.</p>
     </main>
     <!-- Footer for extra info -->
-    <script src="js/script.js"></script>
     <?php include 'php/footer.php';?>
+    <script src="js/script.js"></script>
 </body>
 </html>
