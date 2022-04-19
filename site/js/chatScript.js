@@ -20,7 +20,7 @@ socket.onopen = function () {
 		let time = new Date(data["time"]);
 		let ftime = ('00'+time.getHours()).slice(-2)+":"+('00'+time.getMinutes()).slice(-2)+":"+('00'+time.getSeconds()).slice(-2)
 
-		chatWindow.innerHTML += `<p><span class="info" style="color: ${data["color"]};"><span class='time'>[${ftime}]</span> ${data["user"]}:</span> ${data["msg"]}</p>`;
+		chatWindow.innerHTML += `<p><span ${luminance(data["color"]) <= 64? "class=\"dark\"":""}style="color: ${data["color"]};"><span class='time'>[${ftime}]</span> ${data["user"]}:</span> ${data["msg"]}</p>`;
 		chatWindow.scrollTop = chatWindow.scrollHeight;
 	};
 	

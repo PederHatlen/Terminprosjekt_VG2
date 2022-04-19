@@ -4,7 +4,7 @@ let mainArea = document.getElementsByTagName("main");
 
 window.addEventListener("keydown", function(e){
 	let char = e.key.toLowerCase();
-	console.log(legalChars.indexOf(char));
+	// console.log(legalChars.indexOf(char));
 	if(legalChars.indexOf(char) == -1 && char != "backspace") return;
 	if(char == "backspace"){keystring = keystring.slice(0, -1)}
 	else{keystring += char;}
@@ -25,3 +25,11 @@ function inputFunc(e){
 Array.from(document.getElementsByClassName("input")).forEach(element => {
 	element.addEventListener("input", inputFunc);
 });
+
+function luminance(color) {
+	if (color[0] == '#') color = substring(color, 1);
+	if (color.length == 3) color = color.replace(/./g, '$&$&'); // https://stackoverflow.com/a/40358066
+	c = color.split(/(..)/g).filter(s => s); // https://stackoverflow.com/a/63887162
+	c = c.map((x)=>{return parseInt(x, 16)});
+	return Math.round(0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2]);
+}

@@ -62,9 +62,7 @@ main{
 	overflow-y: auto;
 	line-break: anywhere;
 }
-#chatWindow p{
-	text-shadow: 0px 0px 1px black;
-}
+#chatWindow p{text-shadow: 0px 0px 1px black;}
 #connectionInfo{
 	font-weight: bolder;
 	color: lightgray;
@@ -77,8 +75,10 @@ main{
 	font-weight: 500;
 }
 
-.info{
-	text-shadow:0 0 1px white;
+.dark{
+	text-shadow: 0 0 1px white;
+	/* -webkit-text-stroke: 1px white; */
+	/* filter: drop-shadow(0 0 1px #fff); */
 }
 
 /* New message form */

@@ -50,8 +50,12 @@
 		if (isset($_POST["form"])){
 			if ($_POST["form"] == "changeColor"){
 				if (isset($_POST["color"]) and preg_match('/^#([0-9A-F]{3}){1,2}$/i', $_POST["color"])){
+					$color = $_POST["color"];
+					if ($color[0] == '#') $color = substr($color, 1);
+					if(strlen($color) == 3) $color = "#".$color[0].$color[0].$color[1].$color[1].$color[2].$color[2];
+
 					$stmt = $con->prepare('UPDATE conv_users SET color = ? WHERE conversation_id = ? and user_id = ?');
-					$stmt->bind_param('sii', $_POST["color"], $conversation_id, $_SESSION["user_id"]);
+					$stmt->bind_param('sii', $color, $conversation_id, $_SESSION["user_id"]);
 					$stmt->execute();
 
 					$msgText = "Fargen din ble oppdatert.";
@@ -207,7 +211,7 @@
 					if (strtotime($messages[$i][3]) < strtotime('-1 day')) {$fdate = date_format($date, 'jS M y');}
 					else{$fdate = date_format($date, 'H:i:s');}
 
-					echo("<p><span class=\"info\" style=\"color: ". $messages[$i][1] .";\"><span class='time'>[" . $fdate . "]</span> " . ($messages[$i][0]==1? "Torshken":$messages[$i][0]) . ":</span> " . $messages[$i][2] . "");
+					echo("<p><span ".(luminance($messages[$i][1]) <= 100? "class=\"dark\"":"")." style=\"color: ". $messages[$i][1] ."; \"><span class='time'>[" . $fdate . "]</span> " . ($messages[$i][0]==1? "Torshken":$messages[$i][0]) . ":</span> " . $messages[$i][2] . "");
 				}
 			}else{
 				// In case of no messages

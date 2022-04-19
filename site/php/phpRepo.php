@@ -109,7 +109,9 @@
 	// Retrieved from https://stackoverflow.com/a/67325435 and https://en.wikipedia.org/wiki/Relative_luminance
 	function luminance($color) {
 		if ($color[0] == '#') $color = substr($color, 1);
-		list($r, $g, $b) = array_map("hexdec", str_split($color, (strlen( $color ) / 3)));
+		if(strlen($color) == 3) $color = $color[0].$color[0].$color[1].$color[1].$color[2].$color[2];
+		list($r, $g, $b) = array_map("hexdec", str_split($color, (strlen($color) / 3)));
+		// echo("[$r | $g | $b] ".(0.2126*$r + 0.7152*$g + 0.0722*$b));
 		return (0.2126*$r + 0.7152*$g + 0.0722*$b);
 	}
 ?>
