@@ -74,6 +74,7 @@
 	</main>
 	<?php include 'footer.php';?>
 	<!-- Extra script, becouse page needs extra functionality -->
+	<script src="../js/script.js"></script>
 	<script src="../js/lagbrukerscript.js"></script>
 </body>
 </html>
