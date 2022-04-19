@@ -21,21 +21,23 @@
 		if (mysqli_num_rows($result) != null) {
 			$message = "Brukernavnet er allerede tatt :(";
 		}else{
-			// Making a new user, W. username and hashed password, server SQL code does rest
-			$stmt = $con->prepare('INSERT into users (username, password) VALUES (?, ?)');
-			$stmt->bind_param('ss', $username, $pwd); // 's' specifies the variable type => 'string'
-			$stmt->execute();
+			if (checkBinary($username)){
+				// Making a new user, W. username and hashed password, server SQL code does rest
+				$stmt = $con->prepare('INSERT into users (username, password) VALUES (?, ?)');
+				$stmt->bind_param('ss', $username, $pwd); // 's' specifies the variable type => 'string'
+				$stmt->execute();
 
-			// Retrieving user id from newly created user via return value (mysql built in)
-			$user_id = $stmt->insert_id;
+				// Retrieving user id from newly created user via return value (mysql built in)
+				$user_id = $stmt->insert_id;
 
-			// Login function found in phprepo
-			login($con, $user_id, $username);
+				// Login function found in phprepo
+				login($con, $user_id, $username);
 
-			$message = '<p>Brukeren er registrert, og inlogget.</p>';
-			// If succesfull, redirect to index
-			header('Location: ../index.php');
-			exit;
+				$message = 'Brukeren er registrert, og inlogget.';
+				// If succesfull, redirect to index
+				header('Location: ../index.php');
+				exit;
+			}else{$message = "Navnet er ikke binært.";}
 		}
 
 		$con->close();
@@ -69,7 +71,7 @@
 		</form>
 
 		<!-- Output info message -->
-		<?php echo($message);?>
+		<?php echo("<span>$message</span>");?>
 
 	</main>
 	<?php include 'footer.php';?>

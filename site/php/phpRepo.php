@@ -99,6 +99,8 @@
 		}else return TRUE;
 	}
 
+	function checkBinary($str){return (preg_match("/[^10]+/", $str)? false:true);}
+
 	// Get random color (Used for individual colors in chat)
 	// Retrieved from the Booking system i made, most likely from here: https://stackoverflow.com/q/61709592#comment109154735_61709592
 	function randomColor(){return sprintf('#%06X', mt_rand(0, 0xFFFFFF));}
