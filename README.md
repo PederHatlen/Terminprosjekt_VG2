@@ -5,16 +5,6 @@
 Dette er et prosjekt som jeg (Peder) hadde som terminprosjekt i 2021/2022 (VG2).
 Det er lett inspirert av [**Tom Scott**](https://www.tomscott.com/) og [**Mat Gray**](https://mattg.co.uk/) sin [**Emojli**](https://emoj.li/), der man kan chatte med folk ved bare å bruke emojier.
 
-## Planer videre
-
-- ~~Farger til forskjellige brukere~~.
-- De-cluttering.
-- Noen fikser i UI-en.
-- Analyser, testing og bedre dokumentasjon.
-- Kommer mer ettervert.
-
----
-
 ## Lisenser
 
 - **Inconsolata Font**: [**Lisens (OFL)**](https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL), [**Kilde**](https://fonts.google.com/specimen/Inconsolata?query=inconsolata#about), *Laget av Raph Levien*
