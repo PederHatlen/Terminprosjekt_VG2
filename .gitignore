@@ -1,6 +1,6 @@
 /site/php/dblogin.php
 __pycache__/
-.vscode/
+.vscode
 
 *.go
 go.*
