@@ -13,6 +13,7 @@ body{
 	min-height: 100%;
 	background: #222;
 	background: var(--page-main1, #222);
+	filter: drop-shadow(0 0 0.75rem #000);
 	color: #fff;
 	color: var(--text-color, #fff);
 	font-family: 'Inconsolata', monospace;
@@ -38,12 +39,10 @@ input, textarea, select, button{
 	font-family: 'Inconsolata', monospace;
 }
 
-::placeholder{
-	color: #000;
-}
+::placeholder{color: #000;}
+:focus-visible::placeholder{color: #555;}
 input:focus-visible, textarea:focus-visible, select:focus-visible{
 	outline: none;
-	background: #aaa;
 }
 .submitwmargin{margin: 5px 0;}
 input[type=submit]:hover, input[type=button]:hover, button:hover{
