@@ -27,7 +27,7 @@ Array.from(document.getElementsByClassName("input")).forEach(element => {
 });
 
 function luminance(color) {
-	if (color[0] == '#') color = substring(color, 1);
+	if (color[0] == '#') color.slice(1);
 	if (color.length == 3) color = color.replace(/./g, '$&$&'); // https://stackoverflow.com/a/40358066
 	c = color.split(/(..)/g).filter(s => s); // https://stackoverflow.com/a/63887162
 	c = c.map((x)=>{return parseInt(x, 16)});
