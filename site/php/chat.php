@@ -51,15 +51,16 @@
 			if ($_POST["form"] == "changeColor"){
 				if (isset($_POST["color"]) and preg_match('/^#([0-9A-F]{3}){1,2}$/i', $_POST["color"])){
 					$color = $_POST["color"];
-					if ($color[0] == '#') $color = substr($color, 1);
-					if(strlen($color) == 3) $color = "#".$color[0].$color[0].$color[1].$color[1].$color[2].$color[2];
-
-					$stmt = $con->prepare('UPDATE conv_users SET color = ? WHERE conversation_id = ? and user_id = ?');
-					$stmt->bind_param('sii', $color, $conversation_id, $_SESSION["user_id"]);
-					$stmt->execute();
-
-					$msgText = "Fargen din ble oppdatert.";
-				}else{$msgText = "Den fargen er ikke støttet.";}
+					if (luminance($color) > 50){
+						$Fcolor = "";
+						if(strlen($color) == 3) $Fcolor = "#".$color[0].$color[0].$color[1].$color[1].$color[2].$color[2];
+						$stmt = $con->prepare('UPDATE conv_users SET color = ? WHERE conversation_id = ? and user_id = ?');
+						$stmt->bind_param('sii', $color, $conversation_id, $_SESSION["user_id"]);
+						$stmt->execute();
+	
+						$msgText = "Fargen din ble oppdatert!";
+					}else{$msgText = "Den fargen er for mørk.";}
+				}else{$msgText = "Det er ikke et støttet format.";}
 			}else if ($conversation_user["isAdmin"]){
 				switch ($_POST["form"]){
 					case 'addPerson':
@@ -112,7 +113,7 @@
 		}
 	}
 
-	// After security check, all participants are gathered from conv_users for displaying purposes
+	// After security check, all participants are gathered from conv_users for displaying
 	$stmt = $con->prepare('SELECT username, conv_users.user_id FROM conv_users join users on conv_users.user_id = users.user_id where conv_users.conversation_id = ? and conv_users.user_id != ?');
 	$stmt->bind_param('ii', $conversation_id, $_SESSION["user_id"]);
 	$stmt->execute();
@@ -195,7 +196,7 @@
 				?></h3>
 			</div>
 			<?php echo $msgText;?>
-			<h4 id="connectionInfo"></h4>
+			<h4 id="connectionInfo" style="display: none;"></h4>
 		</div>
 		<div id="chatWindow"><?php
 			// Displaying all chat-messages with usernames, on later expansions colors might also be added
@@ -210,18 +211,24 @@
 					$date = date_create($messages[$i][3]);
 					if (strtotime($messages[$i][3]) < strtotime('-1 day')) {$fdate = date_format($date, 'jS M y');}
 					else{$fdate = date_format($date, 'H:i:s');}
+					
+					$class = "";
+					// $class = (luminance($messages[$i][1]) <= 100? "class=\"dark\"":"");
 
-					echo("<p><span ".(luminance($messages[$i][1]) <= 100? "class=\"dark\"":"")." style=\"color: ". $messages[$i][1] ."; \"><span class='time'>[" . $fdate . "]</span> " . ($messages[$i][0]==1? "Torshken":$messages[$i][0]) . ":</span> " . $messages[$i][2] . "");
+					$msgColor = "";
+					$msgColor = ($unicorn? "":"style=\"color: ". $messages[$i][1] .";\"");
+
+					echo("<p><span $class $msgColor><span class='time'>[" . $fdate . "]</span> " . ($messages[$i][0]==1? "Torshken":$messages[$i][0]) . ":</span> " . $messages[$i][2] . "</p>");
 				}
 			}else{
-				// In case of no messages
+				// In case no messages
 				echo("<p>Her var det ikke noen meldinger, kanskje du kan sende noen?</p>");
 			}
 		?></div>
-		<!-- Form for making messages, goes to chatpost.php -->
+		<!-- Form for making messages, goes to chatpost.php if not overriden by JS -->
 		<form name="message" action="chatpost.php" id="messageForm" method="post">
-			<input type="text" class="input" name="usrmsg" id="usrmsg" placeholder="Skriv inn en melding (Husk at den må være binær og under 255 tegn)" autofocus>
 			<input type="submit" id="sendBTN" class="input" value="Send">
+			<input type="text" class="input" name="usrmsg" id="usrmsg" placeholder="Binær melding (255 tegn)" autofocus>
 		</form>
 	</main>
 	<?php include 'footer.php';?>

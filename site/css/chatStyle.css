@@ -8,7 +8,7 @@ main{
 	padding: 0 0 0 0;
 	display: grid;
 	grid-template-columns: 1fr;
-	grid-template-rows: 3rem calc(100% - (3rem + 2.5rem)) 2.5rem;
+	grid-template-rows: auto 1fr auto;
 	grid-template-areas:
 		'infoText'
 		'chatWindow'
@@ -47,6 +47,7 @@ main{
 	background: #111;
 	background: var(--page-main2, #111);
 	border: 2px white solid;
+	z-index: 1;
 }
 #settingsContent h3{
 	padding-bottom: 0.5rem;
@@ -62,7 +63,7 @@ main{
 	overflow-y: auto;
 	line-break: anywhere;
 }
-#chatWindow p{text-shadow: 0px 0px 1px black;}
+#chatWindow p{text-shadow: 0 0 1px white;}
 #connectionInfo{
 	font-weight: bolder;
 	color: lightgray;
@@ -75,23 +76,33 @@ main{
 	font-weight: 500;
 }
 
-.dark{
-	text-shadow: 0 0 1px white;
-	/* -webkit-text-stroke: 1px white; */
-	/* filter: drop-shadow(0 0 1px #fff); */
-}
-
 /* New message form */
 #messageForm{
 	display: flex;
+	background: var(--page-main3, #000);
 }
 #usrmsg{
 	flex-grow: 1;
 	font-size: 1.2rem;
+	padding: 4px 8px;
+	background: #fff;
+	color: #000;
+	border: 0;
 }
+#usrmsg:focus-visible{border: 0;}
+
 #sendBTN{
+	padding: 4px 8px;
 	font-size: 1.25rem;
-	font-weight: 200;
+	background: #fff;
+	color: #000;
+	border: 0;
+	margin-right: 1px;
+}
+#sendBTN:hover{
+	background: #aaa;
+	color: #333;
+	cursor: pointer;
 }
 
 .remove{
