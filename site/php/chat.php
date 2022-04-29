@@ -234,7 +234,10 @@
 	<?php include 'footer.php';?>
 
 	<!-- Script is integrated because of data from php that needs to be integrated. -->
-	<script>const initData = {wsToken:"<?php echo $wsToken;?>"};</script>
+	<script>
+		const initData = {wsToken:"<?php echo $wsToken;?>"};
+		const unicorn = <?php echo $unicorn;?>;
+	</script>
 	<script src="../js/chatScript.js"></script>
 	<script src="../js/script.js"></script>
 </body>
