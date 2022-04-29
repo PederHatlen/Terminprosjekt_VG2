@@ -73,7 +73,7 @@
 <html lang="no">
 <head>
 	<?php 
-		$pageName = "| Conversations";
+		$pageName = "| Samtaler";
 		require 'head.php';
 	?>
 </head>
