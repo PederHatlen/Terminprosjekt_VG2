@@ -10,17 +10,25 @@ let menuIconBTN = document.getElementById("menuIconButton");
 socket.onopen = function () {
 	connectionInfoEL.innerHTML += "Connected!";
 	connectionInfoEL.style.backgroundColor = "green";
+	connectionInfoEL.style.display = "";
 	
 	socket.send(JSON.stringify(initData));
+
+	socket.onclose = function (e) {
+		connectionInfoEL.innerHTML = "Disconnected :(";
+		connectionInfoEL.style.backgroundColor = "red";
+		messageFormEL.onsubmit = null;
+	}
 	
 	socket.onmessage = function (e) {
-		console.log(e.data);
 		let data = JSON.parse(e.data);
 		
 		let time = new Date(data["time"]);
 		let ftime = ('00'+time.getHours()).slice(-2)+":"+('00'+time.getMinutes()).slice(-2)+":"+('00'+time.getSeconds()).slice(-2)
 
-		chatWindow.innerHTML += `<p><span ${luminance(data["color"]) <= 64? "class=\"dark\"":""}style="color: ${data["color"]};"><span class='time'>[${ftime}]</span> ${data["user"]}:</span> ${data["msg"]}</p>`;
+		console.log(`[${ftime}] MSG from ${data["user"]}`);
+
+		chatWindow.innerHTML += `<p><span ${(unicorn? '':'style="color: '+data["color"]+'"')};><span class='time'>[${ftime}]</span> ${data["user"]}:</span> ${data["msg"]}</p>`;
 		chatWindow.scrollTop = chatWindow.scrollHeight;
 	};
 	
@@ -29,11 +37,6 @@ socket.onopen = function () {
 		send();
 	}
 };
-socket.onclose = function (e) {
-	connectionInfoEL.innerHTML = "Disconnected :(";
-	connectionInfoEL.style.backgroundColor = "red";
-	messageFormEL.onsubmit = null;
-}
 
 function send(message = messageEL.value) {
 	socket.send(JSON.stringify({msg:message}));
