@@ -19,8 +19,7 @@
 		<?php
 			// If user is logged in, greet them and give links, else link to sign-in/make account
 			if (isset($_SESSION["username"])) {
-				echo('<span>Du er pålogget som ' . $_SESSION["username"] . '</span>
-				<a href="php/logoff.php">Logg av</a>
+				echo('<p><span>Du er pålogget som ' . $_SESSION["username"] . '</span><a href="php/logoff.php">Logg av</a></p>
 				<p>For å finne samtalene dine kan du gå her: <a href="php/conversations.php">Samtaler</a></p>');
 			}
 			else {
