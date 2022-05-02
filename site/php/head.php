@@ -23,3 +23,4 @@
 		echo "<link rel=\"stylesheet\" href=\"/BinærChat/css/themes/normal.css\">";
 	}
 ?>
+<?php if(isset($_SESSION["hexclock"])){echo "<script>window.onload = ()=>{toggleHexClock();}</script>";}?>

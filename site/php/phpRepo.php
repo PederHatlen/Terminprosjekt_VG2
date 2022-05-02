@@ -9,18 +9,27 @@
 
 	define("allowDevMode", false);
 	define("allowUnicornMode", true);
+	define("allowHexClock", true);
+
+	function refreshNoGET(){
+		header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
+		exit;
+	}
 
 	if (isset($_GET["devmode"]) and constant("allowDevMode") == true){
 		if (strtolower($_GET["devmode"]) == "false"){unset($_SESSION["devmode"]);}
 		else {$_SESSION["devmode"] = "true";}
-		header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
-		exit;
+		refreshNoGET();
 	}
 	if (isset($_GET["unicorn"]) and constant("allowUnicornMode") == true){
 		if (isset($_SESSION["unicorn"])){unset($_SESSION["unicorn"]);}
 		else {$_SESSION["unicorn"] = "true";}
-		header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
-		exit;
+		refreshNoGET();
+	}
+	if (isset($_GET["hexclock"]) and constant("allowHexClock") == true){
+		if (isset($_SESSION["hexclock"])){unset($_SESSION["hexclock"]);}
+		else {$_SESSION["hexclock"] = "true";}
+		refreshNoGET();
 	}
 	
 	// Basic connect functions
