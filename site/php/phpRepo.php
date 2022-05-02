@@ -2,6 +2,11 @@
 	$start = microtime(true);    // PerformanceTracking
 	session_start();             // Start tracking of session
 
+	if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
+		echo "<pre>Ingenting å se her.</pre>\n<pre>Se på dette istede: <a href=\"https://youtu.be/dQw4w9WgXcQ\">PHP hacking for n00bs</a>";
+		exit;
+	}
+
 	if (!isset($isLoginPage)){unset($_SESSION["redirectpage"]);}
 
 	// Global Settings

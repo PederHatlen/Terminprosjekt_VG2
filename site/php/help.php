@@ -64,7 +64,7 @@
 		<div class="question">
 			<h3>Jeg har andre spørsmål</h3>
 			<p class="answer">Da kan du ta kontakt ved enten å sende mail til <a href="mailto:pehaa002@osloskolen.no" target="_blank">pehaa002@osloskolen.no</a>.</p>
-			<p class="answer">Eller send inn et spørsmål her.</p>
+			<p class="answer">Eller send inn et spørsmål her. (Ikke binært)</p>
 			<form action="" id="ticketForm" method="post" class="verticalForm">
 				<input type="email" name="email" id="ticketEmail" class="input" placeholder="epost*" required>
 				<textarea name="ticketQuestion" id="ticketQuestion" class="input" placeholder="Spørsmål* (255 tegn)" form="ticketForm" maxlength="255" required></textarea>
