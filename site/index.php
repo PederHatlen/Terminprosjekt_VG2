@@ -19,15 +19,15 @@
 		<?php
 			// If user is logged in, greet them and give links, else link to sign-in/make account
 			if (isset($_SESSION["username"])) {
-				echo('<p><span>Du er pålogget som ' . $_SESSION["username"] . '</span><a href="php/logoff.php">Logg av</a></p>
-				<p>For å finne samtalene dine kan du gå her: <a href="php/conversations.php">Samtaler</a></p>');
+				echo("<p>Du er pålogget som $_SESSION[username] <a href=\"php/logoff.php\">Logg av</a></p>
+				<p>For å finne samtalene dine kan du gå her: <a href=\"php/conversations.php\">Samtaler</a></p>");
 			}
 			else {
-				echo('<span>Du er ikke pålogget.</span>
+				echo("<span>Du er ikke pålogget.</span>
 				<p>Hvis du ikke har laget en bruker før kan du gjøre det her: </p>
-				<a href="php/lagBruker.php">Lag bruker</a>
+				<a href=\"php/lagBruker.php\">Lag bruker</a>
 				<span>Eller</span>
-				<a href="php/login.php">Logg in</a>');
+				<a href=\"php/login.php\">Logg in</a>");
 			}
 		?>
 		<!-- Help-page (Also in footer) -->
