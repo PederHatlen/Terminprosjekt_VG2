@@ -1,3 +1,4 @@
+let clockEl = document.getElementById("clock");
 let keystring = "";
 
 window.addEventListener("keydown", function(e){
@@ -46,7 +47,8 @@ function hexClock() {
 	let t = new Date;
 	if(t.getSeconds != oldSeconds){
 		oldSeconds = t.getSeconds();
-		let hex = (('00'+t.getHours().toString(16)).slice(-2) + ('00'+t.getMinutes().toString(16)).slice(-2) + ('00'+t.getSeconds().toString(16)).slice(-2)).toUpperCase();
-		document.documentElement.style.setProperty('--header-color', `#${hex}`);
+		let hex = "#"+(('00'+t.getHours().toString(16)).slice(-2) + ('00'+t.getMinutes().toString(16)).slice(-2) + ('00'+t.getSeconds().toString(16)).slice(-2)).toUpperCase();
+		document.documentElement.style.setProperty('--header-color', hex);
+		clockEl.innerHTML = hex;
 	}
 }

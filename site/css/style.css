@@ -67,6 +67,7 @@ header{
 	font-weight: bolder;
 	justify-content: space-between;
 }
+#clock{padding: 0;}
 .rightheader{
 	display: flex;
 	justify-content: space-between;
@@ -79,7 +80,7 @@ header{
 }
 h1{
 	margin: 0;
-	padding: 0 2rem;
+	padding: 0;
 }
 hr {
 	border: 0;
@@ -94,7 +95,7 @@ footer{
 	background: var(--footer-color, #05456E);
 	justify-content: space-between;
 }
-footer span, header span{
+footer, header{
 	padding: 0 2rem;
 }
 
