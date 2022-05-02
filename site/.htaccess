@@ -1,1 +1,8 @@
 Options -Indexes
+DirectoryIndex index.php
+
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . /BinærChat/index.php [L,R=301]
+
+ErrorDocument 404 /BinærChat/index.php
