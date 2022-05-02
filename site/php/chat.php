@@ -212,9 +212,10 @@
 					if (strtotime($messages[$i][3]) < strtotime('-1 day')) {$fdate = date_format($date, 'jS M y');}
 					else{$fdate = date_format($date, 'H:i:s');}
 					
-					$class = "";
-					// $class = (luminance($messages[$i][1]) <= 100? "class=\"dark\"":"");
-
+					$class = "class=\"info";
+					// $class .= (luminance($messages[$i][1]) <= 100? " dark":"");
+					
+					$class .= "\"";
 					$msgColor = "";
 					$msgColor = ($unicorn? "":"style=\"color: ". $messages[$i][1] .";\"");
 

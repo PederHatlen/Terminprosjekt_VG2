@@ -70,7 +70,8 @@ main{
 	padding: 0.25rem;
 	margin: 0;
 }
-/* Message styling (Will most likely expand in the future) */
+/* Message styling */
+.info, .time{filter: none;}
 .time{
 	font-stretch: 80%;
 	font-weight: 500;
