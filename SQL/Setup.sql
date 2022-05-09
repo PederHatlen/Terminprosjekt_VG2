@@ -16,7 +16,7 @@ CREATE TABLE tokens (
 	user_id INT NOT NULL,
 	token VARCHAR(255) NOT NULL UNIQUE,
 	created_at DATETIME NOT NULL DEFAULT NOW(),
-	expires_at DATETIME NOT NULL DEFAULT DATE_ADD(NOW(), INTERVAL 5 MINUTE),
+	expires_at DATETIME NOT NULL,
 	FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
@@ -47,7 +47,7 @@ CREATE TABLE ws_tokens (
 	user_id INT NOT NULL,
 	token VARCHAR(255) NOT NULL,
 	active TINYINT NOT NULL DEFAULT 1,
-	expires_at DATETIME NOT NULL DEFAULT DATE_ADD(NOW(), INTERVAL 15 SECOND),
+	expires_at DATETIME NOT NULL,
 	FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id) ON DELETE CASCADE,
 	FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
 	UNIQUE(token, active)
