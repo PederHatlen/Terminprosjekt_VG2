@@ -1,0 +1,20 @@
+:root{
+	--header-color: #005BBB;
+	--footer-color: var(--header-color);
+
+	--page-main1: #000000;
+	--page-main2: #FFD500;
+	--page-main3: #005BBB;
+
+	--text-color: white;
+}
+span, p, h1, h2, h3, h4{
+	filter: drop-shadow(0 0 0.75rem #000);
+}
+#chatInfo, #chatWindow, #menuIcon rect{
+    background: #FFD500 !important;
+    color: black;
+    fill: black;
+}
+body{color: #000;}
+footer, table{color: #fff;}

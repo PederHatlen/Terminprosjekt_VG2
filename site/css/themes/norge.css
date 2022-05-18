@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Tangerine&display=swap');
+:root{
+	--header-color: #bb042b;
+	--footer-color: var(--header-color);
+
+	--page-main1: url("/BinærChat/img/norge.svg");
+	--page-main2: #00205b;
+	--page-main3: var(--header-color);
+
+	--text-color: white;
+}
+#chatInfo, #chatWindow, #menuIcon rect{
+    background: #00205b !important;
+}
+.clickeableRow:hover{border: none;}
+
+body, input, textarea, select, button{
+    font-family: 'Tangerine', cursive;
+}
+
+body{
+    font-size: 1.65rem;
+}

@@ -7,14 +7,17 @@
 		exit;
 	}
 
+	$themes = ["normal", "unicorn", "norge", "ukraina"];
+
 	if (!isset($isLoginPage)){unset($_SESSION["redirectpage"]);}
 
 	// Global Settings
 	define("extServer", false); // Using external server (Parameters can be set in dblogin.php (gitignored))
 
 	define("allowDevMode", false);
-	define("allowUnicornMode", true);
 	define("allowHexClock", true);
+
+	define("allowTheme", true);
 
 	function refreshNoGET(){
 		header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
@@ -22,19 +25,24 @@
 	}
 
 	if (isset($_GET["devmode"]) and constant("allowDevMode") == true){
-		if (strtolower($_GET["devmode"]) == "false"){unset($_SESSION["devmode"]);}
+		if (isset($_SESSION["devmode"])){unset($_SESSION["devmode"]);}
 		else {$_SESSION["devmode"] = "true";}
-		refreshNoGET();
-	}
-	if (isset($_GET["unicorn"]) and constant("allowUnicornMode") == true){
-		if (isset($_SESSION["unicorn"])){unset($_SESSION["unicorn"]);}
-		else {$_SESSION["unicorn"] = "true";}
 		refreshNoGET();
 	}
 	if (isset($_GET["hexclock"]) and constant("allowHexClock") == true){
 		if (isset($_SESSION["hexclock"])){unset($_SESSION["hexclock"]);}
 		else {$_SESSION["hexclock"] = "true";}
 		refreshNoGET();
+	}
+
+	if (isset($_GET["theme"]) and constant("allowTheme") == true and in_array($_GET["theme"], $themes)){
+		if(isset($_SESSION["theme"]) and $_SESSION["theme"] == $_GET["theme"]){
+			unset($_SESSION["theme"]);
+			refreshNoGET();
+		}else{
+			$_SESSION["theme"] = $_GET["theme"];
+			refreshNoGET();
+		}
 	}
 	
 	// Basic connect functions

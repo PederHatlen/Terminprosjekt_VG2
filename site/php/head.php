@@ -16,11 +16,11 @@
 <link rel="stylesheet" href="/BinærChat/css/style.css">
 <?php
 	$unicorn = false;
-	if (isset($_SESSION["unicorn"]) and constant("allowUnicornMode") == true){
+	if (isset($_SESSION["theme"]) and constant("allowTheme") == true){
 		$unicorn = true;
-		echo "<link rel=\"stylesheet\" href=\"/BinærChat/css/themes/unicorn.css\">";
+		echo "<link rel=\"stylesheet\" href=\"/BinærChat/css/themes/".$_SESSION["theme"].".css\">";
 	}else{
 		echo "<link rel=\"stylesheet\" href=\"/BinærChat/css/themes/normal.css\">";
 	}
+	if(isset($_SESSION["hexclock"])){echo "<script>window.onload = ()=>{toggleHexClock();}</script>";}
 ?>
-<?php if(isset($_SESSION["hexclock"])){echo "<script>window.onload = ()=>{toggleHexClock();}</script>";}?>
