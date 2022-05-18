@@ -33,7 +33,6 @@ a{
 input, textarea, select, button{
 	padding: 4px;
 	border: #000 solid 1px;
-	font-family: inherit;
 	color: #000;
 	background: #fff;
 	font-family: 'Inconsolata', monospace;
@@ -81,10 +80,24 @@ header{
 h1{
 	margin: 0;
 	padding: 0;
+	filter: drop-shadow(0 0 0.75rem #000);
 }
 hr {
 	border: 0;
 	border-bottom: 1px solid #fff;
+}
+
+/* Main content for all pages */
+main{
+	grid-area: Content;
+	padding: 0 2rem;
+	background: #111;
+	background: var(--page-main2, #111);
+}
+main a, .linkButton{
+	background: #000;
+	background: var(--page-main3, #000);
+	padding: 0.25rem 0.5rem;
 }
 
 /* Footer */
@@ -95,26 +108,22 @@ footer{
 	background: var(--footer-color, #05456E);
 	justify-content: space-between;
 }
-footer, header{
-	padding: 0 2rem;
+footer, header{padding: 0 2rem;}
+#themeDropdown{
+	display: none;
+	flex-direction: column;
+	position: fixed;
+	bottom: 3rem;
+	left: 0;
+	padding: 1rem 2rem;
+	background: #05456E;
+	background: var(--footer-color, #05456E);
+	border: white solid 2px;
+}
+#themeDropdown h2{
+	margin: 0 0 5px 0;
 }
 
-
-/* Main content for all pages */
-main{
-	grid-area: Content;
-	padding: 0 2rem;
-	background: #111;
-	background: var(--page-main2, #111);
-}
-main a{
-	background: #000;
-	background: var(--page-main3, #000);
-	padding: 0.25rem;
-}
-footer a{
-	padding: 0 2rem;
-}
 a:hover{opacity: 50%;}
 
 .verticalForm{

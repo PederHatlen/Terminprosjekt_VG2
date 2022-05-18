@@ -10,8 +10,11 @@ window.addEventListener("keydown", function(e){
 	else keystring += char;
 
 	//console.log(char, keystring);
-	if(keystring.slice(-7) == "unicorn"){window.location.replace(location.origin+location.pathname + '?unicorn')}
 	if(keystring.slice(-8) == "hexclock"){window.location.replace(location.origin+location.pathname + '?hexclock')}
+
+	// if(keystring.slice(-7) == "unicorn"){window.location.replace(location.origin+location.pathname + '?theme=unicorn')}
+	// if(keystring.slice(-7) == "ukraina"){window.location.replace(location.origin+location.pathname + '?theme=ukraina')}
+	// if(keystring.slice(-5) == "norge"){window.location.replace(location.origin+location.pathname + '?theme=norge')}
 });
 
 function checkinput() {return true;}

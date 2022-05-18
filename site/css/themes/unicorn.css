@@ -1,3 +1,4 @@
+body, input, textarea, select, button{font-family: 'MS Comic Sans', cursive;}
 :root{
 	--header-color: linear-gradient(145deg, rgba(137,0,175,1) 0%, rgba(255,0,219,1) 44%, rgba(0,212,255,1) 100%);;
 	--footer-color: var(--header-color);
@@ -7,7 +8,4 @@
 	--page-main3: linear-gradient(180deg, rgba(88,198,154,1) 0%, rgba(133,198,88,1) 50%, rgba(88,198,154,1) 100%);
 
 	--text-color: white;
-}
-span, p, h1, h2, h3, h4{
-	filter: drop-shadow(0 0 0.75rem #000);
 }

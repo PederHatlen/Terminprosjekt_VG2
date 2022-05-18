@@ -42,9 +42,8 @@
 			<p class="answer">Dette er en chattetjeneste som jeg har laget. Den går ut på at du bare kan skrive binært til verandre.</p>
 			<p class="answer">Det er ikke ment som en veldig seriøs tjeneste.</p>
 		</div>
-		<!-- Not much to say here really, links are standard from style.css -->
 		<div class="question">
-			<h3>Hvordan kan jeg bruke det?</h3>
+			<h3>Hvordan kan jeg bruke det? / Hvordan lage bruker?</h3>
 			<p class="answer">Du må først <a href="lagBruker.php">lage bruker</a> (Husk binært navn/passord, det vil ikke fungere ellers).</p>
 			<p class="answer">Derreter kan du gå inn på hjemmesiden og navigere deg til <a href="conversations.php">samtaler</a>. Hvis du ikke har laget noen tidligere kan da lage ny ved å trykke på Ny samtale.</p>
 		</div>
@@ -57,8 +56,13 @@
 		<div class="question">
 			<h3>Hvordan skriver jeg binært?</h3>
 			<!-- YouTube is much better at explaining than i am. -->
-			<p class="answer"><a href="https://youtu.be/wCQSIub_g7M">How to read text in binary</a></wbr><b> (Tom Scott, YouTube)</b></p>
-			<p class="answer"><a href="https://youtu.be/LpuPe81bc2w">Binary Numbers and Base Systems as Fast as Possible</a></wbr><b> (Techquickie, YouTube)</b></p>
+			<p class="answer"><a class="linkButton" href="https://youtu.be/wCQSIub_g7M">How to read text in binary</a></wbr><b> (Tom Scott, YouTube)</b></p>
+			<p class="answer"><a class="linkButton" href="https://youtu.be/LpuPe81bc2w">Binary Numbers and Base Systems as Fast as Possible</a></wbr><b> (Techquickie, YouTube)</b></p>
+		</div>
+		<div class="question">
+			<h3>Hvordan slette brukeren?</h3>
+			<p class="answer">Hvis du av en eller annen grunn har lyst til å slette brukeren din/alle meldinger du har sendt, kan dette gjøres enkelt via brukersiden din (trykk på navnet dit oppe i høyre hjørnet)</p>
+			<p class="answer">Her inne trykker du på slett bruker</p>
 		</div>
 		<hr>
 		<div class="question">

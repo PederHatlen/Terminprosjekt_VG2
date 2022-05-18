@@ -217,7 +217,7 @@
 					
 					$class .= "\"";
 					$msgColor = "";
-					$msgColor = ($unicorn? "":"style=\"color: ". $messages[$i][1] .";\"");
+					$msgColor = (isset($_SESSION["theme"])? "":"style=\"color: ". $messages[$i][1] .";\"");
 
 					echo("<p><span $class $msgColor><span class='time'>[" . $fdate . "]</span> " . ($messages[$i][0]==1? "Torshken":$messages[$i][0]) . ":</span> " . $messages[$i][2] . "</p>");
 				}
@@ -237,7 +237,7 @@
 	<!-- Script is integrated because of data from php that needs to be integrated. -->
 	<script>
 		const initData = {wsToken:"<?php echo $wsToken;?>"};
-		const unicorn = <?php echo $unicorn;?>;
+		const theme = <?php echo isset($_SESSION["theme"]);?>;
 	</script>
 	<script src="../js/chatScript.js"></script>
 	<script src="../js/script.js"></script>
