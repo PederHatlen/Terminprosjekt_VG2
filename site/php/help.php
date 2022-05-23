@@ -61,8 +61,9 @@
 		</div>
 		<div class="question">
 			<h3>Hvordan slette brukeren?</h3>
-			<p class="answer">Hvis du av en eller annen grunn har lyst til å slette brukeren din/alle meldinger du har sendt, kan dette gjøres enkelt via brukersiden din (trykk på navnet dit oppe i høyre hjørnet)</p>
-			<p class="answer">Her inne trykker du på slett bruker</p>
+			<p class="answer">Hvis du av en eller annen grunn har lyst til å slette brukeren din/alle meldinger du har sendt, kan dette gjøres enkelt via <a href="brukerside.php">brukersiden</a> din (trykk på navnet dit oppe i høyre hjørnet)</p>
+			<p class="answer">Her inne trykker du på slett bruker. Hvis du er administrator i en chat må du også velge en ny admin for chatten.</p>
+			<p class="answer danger">DETTE VIL SLETTE ALL DATAEN DIN I BINÆRCHAT, DETTE KAN IKKE REVERSERES.</p>
 		</div>
 		<hr>
 		<div class="question">
