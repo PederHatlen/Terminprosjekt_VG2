@@ -6,10 +6,19 @@ Dette er et prosjekt som jeg (Peder) hadde som terminprosjekt i 2021/2022 (VG2).
 Prosjektet baserer seg rundt en chattetjeneste der man kan kan skrive til verandre binært.  
 Det er lett inspirert av [**Tom Scott**](https://www.tomscott.com/) og [**Mat Gray**](https://mattg.co.uk/) sin [**Emojli**](https://emoj.li/), der man kan chatte med folk ved bare å bruke emojier.
 
-## Risikoanalyse
+## Dokumentasjon
+
+### Risikoanalyse
 
 Risikoanalysen er laget i google sheets, og er dynamisk.  
-Her er linken [Risikoanalyse](https://docs.google.com/spreadsheets/d/1IDiW37kQBKsodXJcPBkzMjU0js0VPPgknhiSeVK2tZc/edit?usp=sharing)
+Her er linken [Risikoanalyse](https://docs.google.com/spreadsheets/d/1IDiW37kQBKsodXJcPBkzMjU0js0VPPgknhiSeVK2tZc/edit?usp=sharing)  
+
+Eller en bildekopi her:  
+![Risikoanalyse](Dokumentasjon/risikoanalyse/Risikoanalyse_Terminprosjekt_transparrent.png)
+
+### Netverks diagramm
+
+![Nettverksdiagramm](Dokumentasjon/nettverksdiagramm/NetverksdiagrammBin%C3%A6rchat.svg)
 
 ## Lisenser
 
@@ -28,7 +37,7 @@ Her er linken [Risikoanalyse](https://docs.google.com/spreadsheets/d/1IDiW37kQBK
 Jeg har brukt python versjon **3.10.4** for dette prosjektet.  
 Bibliotek blir brukt for websockets, mysql tilkonling og farger i terminal.  
 
-#### Oppsett kode:  
+#### Oppsett kode:
 ```ps1
 pip install websockets mysqlclient termcolor
 ```
