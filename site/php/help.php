@@ -72,7 +72,7 @@
 			<p class="answer">Eller send inn et spørsmål her. (Ikke binært)</p>
 			<form action="" id="ticketForm" method="post" class="verticalForm">
 				<input type="email" name="email" id="ticketEmail" class="input" placeholder="epost*" required>
-				<textarea name="ticketQuestion" id="ticketQuestion" class="input" placeholder="Spørsmål* (255 tegn)" form="ticketForm" maxlength="255" required></textarea>
+				<textarea name="ticketQuestion" id="ticketQuestion" class="input" placeholder="Spørsmål*" form="ticketForm" required></textarea>
 				<input type="submit" value="Send" id="submitBTN" class="submitwmargin defaultDisabled" disabled>
 			</form>
 			<?php echo "<p>".$message."</p>"; ?>

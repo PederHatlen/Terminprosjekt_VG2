@@ -5,8 +5,8 @@ USE binærchatdb;
 -- Users, the password is hashed and salted in php, created_at is just there for context/debuging
 CREATE TABLE users (
 	user_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	username VARCHAR(255) NOT NULL UNIQUE,
-	password VARCHAR(255) NOT NULL,
+	username TEXT NOT NULL UNIQUE,
+	password TEXT NOT NULL,
 	created_at DATETIME DEFAULT NOW()
 );
 
@@ -58,7 +58,7 @@ CREATE TABLE messages (
 	message_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	conversation_id INT NOT NULL,
 	sender_id INT NOT NULL,
-	messagetext VARCHAR(255) NOT NULL,
+	messagetext TEXT NOT NULL,
 	sent_at DATETIME NOT NULL DEFAULT NOW(),
 	FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id) ON DELETE CASCADE,
 	FOREIGN KEY (sender_id) REFERENCES users(user_id) ON DELETE CASCADE
@@ -67,7 +67,7 @@ CREATE TABLE messages (
 -- Basic help-ticket system
 CREATE TABLE help_tickets (
 	ticket_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	messagetext VARCHAR(255) NOT NULL,
+	messagetext TEXT NOT NULL,
 	email VARCHAR(255) NOT NULL,
 	user_id INT, -- Can be non existent if user fx. has problems logging in
 	sent_at DATETIME NOT NULL DEFAULT NOW()

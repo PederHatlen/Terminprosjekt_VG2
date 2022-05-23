@@ -229,7 +229,7 @@
 		<!-- Form for making messages, goes to chatpost.php if not overriden by JS -->
 		<form name="message" action="chatpost.php" id="messageForm" method="post">
 			<input type="submit" id="sendBTN" class="input" value="Send">
-			<input type="text" class="input" name="usrmsg" id="usrmsg" placeholder="Binær melding (255 tegn)" autofocus>
+			<input type="text" class="input" name="usrmsg" id="usrmsg" placeholder="Binær melding" autofocus>
 		</form>
 	</main>
 	<?php include 'footer.php';?>
