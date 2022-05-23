@@ -18,54 +18,52 @@
 		$stmt->execute();
 		$user2_id = $stmt->get_result();
 
-		// If user exists, check if conversation already exists, else update output message with error info
-		if (mysqli_num_rows($user2_id) != null){
-			$user2_id = $user2_id->fetch_assoc()["user_id"];
+		if ($_SESSION["username"] != $_POST["person"]){
+			// If user exists, check if conversation already exists, else update output message with error info
+			if (mysqli_num_rows($user2_id) != null){
+				$user2_id = $user2_id->fetch_assoc()["user_id"];
 
-			$stmt = $con->prepare('SELECT * FROM conversations left join conv_users as conv_users1 on conversations.conversation_id = conv_users1.conversation_id left join conv_users as conv_users2 on conversations.conversation_id = conv_users2.conversation_id where conv_users1.user_id = ? and conv_users2.user_id = ? and conversations.isGroupChat = 0');
-			$stmt->bind_param('ii', $_SESSION["user_id"], $user2_id);
-			$stmt->execute();
-			$userConversations = $stmt->get_result()->fetch_all();
-
-			// If conversation doesn't exist, make new convo
-			if ($userConversations == null){
-				// Datetime, made in php because then the timestamp can be saved, and used to find the conversation after creation (temporarily)
-				$timestamp = new DateTime();
-				$timestamp = $timestamp->format('Y-m-d H:i');
-				$stmt = $con->prepare('INSERT INTO conversations (created_by, created_at) VALUES (?, ?)');
-				$stmt->bind_param('is', $_SESSION["user_id"], $timestamp);
+				$stmt = $con->prepare('SELECT * FROM conversations left join conv_users as conv_users1 on conversations.conversation_id = conv_users1.conversation_id left join conv_users as conv_users2 on conversations.conversation_id = conv_users2.conversation_id where conv_users1.user_id = ? and conv_users2.user_id = ? and conversations.isGroupChat = 0');
+				$stmt->bind_param('ii', $_SESSION["user_id"], $user2_id);
 				$stmt->execute();
+				$userConversations = $stmt->get_result()->fetch_all();
 
-				// Retrieving created conversation id
-				$conversation_id = $stmt->insert_id;
+				// If conversation doesn't exist, make new convo
+				if ($userConversations == null){
+					// Datetime, made in php because then the timestamp can be saved, and used to find the conversation after creation (temporarily)
+					$timestamp = new DateTime();
+					$timestamp = $timestamp->format('Y-m-d H:i');
+					$stmt = $con->prepare('INSERT INTO conversations (created_by, created_at) VALUES (?, ?)');
+					$stmt->bind_param('is', $_SESSION["user_id"], $timestamp);
+					$stmt->execute();
 
-				// Preparing a statement for binding users to conversation, se Setup.sql for database structure
-				$stmt = $con->prepare('INSERT INTO conv_users (conversation_id, user_id, color, isAdmin) VALUES (?, ?, ?, ?)');
-				$stmt->bind_param('iisi', $conversation_id, $insert_UID, $color, $isAdmin);
+					// Retrieving created conversation id
+					$conversation_id = $stmt->insert_id;
 
-				// First user input is current user
-				$insert_UID = $_SESSION["user_id"];
-				$color = randomColor();
-				$isAdmin = 1;
-				$stmt->execute();
-				
-				//Swapping user ids to second user
-				$insert_UID = $user2_id;
-				$color = randomColor();
-				$isAdmin = 0;
-				$stmt->execute();
+					// Preparing a statement for binding users to conversation, se Setup.sql for database structure
+					$stmt = $con->prepare('INSERT INTO conv_users (conversation_id, user_id, color, isAdmin) VALUES (?, ?, ?, ?)');
+					$stmt->bind_param('iisi', $conversation_id, $insert_UID, $color, $isAdmin);
 
-				// updating message and setting what chat the user is being sent too, then sending the user to the chat
-				$message = "Samtalen ble laget!";
-				$_SESSION["chatid"] = $conversation_id;
-				header('Location: chat.php');
-				exit;
-			}else{
-				$message = "Samtalen finnes allerede.";
-			}
-		}else{
-			$message = "Finner ikke brukeren.";
-		}
+					// First user input is current user
+					$insert_UID = $_SESSION["user_id"];
+					$color = randomColor();
+					$isAdmin = 1;
+					$stmt->execute();
+					
+					//Swapping user ids to second user
+					$insert_UID = $user2_id;
+					$color = randomColor();
+					$isAdmin = 0;
+					$stmt->execute();
+
+					// updating message and setting what chat the user is being sent too, then sending the user to the chat
+					$message = "Samtalen ble laget!";
+					$_SESSION["chatid"] = $conversation_id;
+					header('Location: chat.php');
+					exit;
+				}else{$message = "Samtalen finnes allerede.";}
+			}else{$message = "Finner ikke brukeren.";}
+		}else{$message = "Du kan desverre ikke lage samtale med deg selv :(";}
 	}
 ?>
 
