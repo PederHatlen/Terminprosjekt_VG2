@@ -36,13 +36,10 @@
 	}
 
 	if (isset($_GET["theme"]) and constant("allowTheme") == true and in_array($_GET["theme"], $themes)){
-		if(isset($_SESSION["theme"]) and $_SESSION["theme"] == $_GET["theme"]){
+		if((isset($_SESSION["theme"]) and $_SESSION["theme"] == $_GET["theme"]) or $_GET["theme"] == "normal"){
 			unset($_SESSION["theme"]);
-			refreshNoGET();
-		}else{
-			$_SESSION["theme"] = $_GET["theme"];
-			refreshNoGET();
-		}
+		}else{$_SESSION["theme"] = $_GET["theme"];}
+		refreshNoGET();
 	}
 	
 	// Basic connect functions

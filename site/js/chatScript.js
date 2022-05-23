@@ -28,7 +28,7 @@ socket.onopen = function () {
 
 		console.log(`[${ftime}] MSG from ${data["user"]}`);
 
-		chatWindow.innerHTML += `<p><span ${(unicorn? '':'style="color: '+data["color"]+'"')};><span class='time'>[${ftime}]</span> ${data["user"]}:</span> ${data["msg"]}</p>`;
+		chatWindow.innerHTML += `<p><span ${(theme? '':'style="color: '+data["color"]+'"')};><span class='time'>[${ftime}]</span> ${data["user"]}:</span> ${data["msg"]}</p>`;
 		chatWindow.scrollTop = chatWindow.scrollHeight;
 	};
 	
