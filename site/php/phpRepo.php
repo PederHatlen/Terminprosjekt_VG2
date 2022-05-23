@@ -3,7 +3,7 @@
 	session_start();             // Start tracking of session
 
 	if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-		echo "<pre>Ingenting √• se her.</pre>\n<pre>Se p√• dette istede: <a href=\"https://youtu.be/dQw4w9WgXcQ\">PHP hacking for n00bs</a>";
+		echo "<pre>Ingenting Â se her.</pre>\n<pre>Se Â dette istede: <a href=\"https://youtu.be/dQw4w9WgXcQ\">PHP hacking for n00bs</a>";
 		exit;
 	}
 
