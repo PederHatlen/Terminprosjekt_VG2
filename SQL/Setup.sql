@@ -1,6 +1,6 @@
-CREATE DATABASE binærchatdb;
+CREATE DATABASE binaerchatdb;
 
-USE binærchatdb;
+USE binaerchatdb;
 
 -- Users, the password is hashed and salted in php, created_at is just there for context/debuging
 CREATE TABLE users (
@@ -9,6 +9,7 @@ CREATE TABLE users (
 	password TEXT NOT NULL,
 	created_at DATETIME DEFAULT NOW()
 );
+INSERT INTO users (user_id, username, password) VALUES(1, "Server", "1"); -- Not hashed password, so can not be used for logins
 
 -- Just tokens with the normal created_at and expires_at
 CREATE TABLE tokens (
