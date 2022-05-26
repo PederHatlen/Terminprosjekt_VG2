@@ -1,14 +1,30 @@
 import asyncio
+import random
+import math
 import time
 import socket
 import websockets
 import json
 import re
 import MySQLdb
+import os
 from termcolor import colored
+
+# Colored output Table
+# IP/property	=	cyan
+# Client	 	=	magenta
+# Server		=	yellow
+# Error/Discon	=	red
+# Success		=	green
+# Info			=	blue
+# id			=	white
+
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 conversations = {}
 eksternSQL = True
+arbeidsmiljolovenMode = True
 
 async def handler(websocket):
 	userIP = colored("[{0}]".format(websocket.remote_address[0]), "magenta")
@@ -78,6 +94,16 @@ async def handler(websocket):
 						await i.send(json.dumps(sendData))
 						sendtTo.append(colored(websocket.remote_address[0], "cyan"))
 					print(colored("Sendt to", "green"), colored(", ", "green").join(sendtTo))
+				if arbeidsmiljolovenMode and (message == "011000010111001001100010011001010110100101100100011100110110110101101001011011000110101011000011101110000110110001101111011101100110010101101110"):
+					jsondata = json.loads(open(os.path.join(__location__, "servermessage.json"), "r", encoding="utf_8").read())
+					messages = json.loads(open(os.path.join(__location__, "arbeid_messages.json"), "r", encoding="utf_8").read())
+					msgNumber = math.floor(random.random()*len(messages))
+					jsondata["msg"] = messages[msgNumber]
+					jsondata["time"] = unixtime
+					print(userIP, colored("Activated arbeidsmiljøloven mode! Initializing propaganda blast. Message number", "yellow"), colored(msgNumber, "cyan"), colored("was chosen.", "yellow"))
+					for i in conversations[chatId]:
+						await i.send(json.dumps(jsondata))
+
 			except websockets.exceptions.ConnectionClosed:
 				break
 			except Exception as err:
