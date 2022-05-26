@@ -8,6 +8,7 @@ import MySQLdb
 from termcolor import colored
 
 conversations = {}
+eksternSQL = True
 
 async def handler(websocket):
 	userIP = colored("[{0}]".format(websocket.remote_address[0]), "magenta")
@@ -97,7 +98,11 @@ async def main():
 	global conn
 	global cursor
 
-	try: conn = MySQLdb.connect("localhost", "root", "", "binærchatdb")
+	try: 
+		if eksternSQL:
+			conn = MySQLdb.connect("10.0.13.38", "binaerio", "Zfn4mu8%wtEtMPD8Q4jMR4tL6^nS^CDdU@G3E90b", "binaerchatdb")
+		else:
+			conn = MySQLdb.connect("localhost", "root", "", "binaerchatdb")
 	except: 
 		print(colored("Can't connect to database.", "red"))
 		return False
