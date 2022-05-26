@@ -32,12 +32,38 @@ Eller en bildekopi her:
 - **PHP**: [**Lisens**](https://www.php.net/license/index.php), [**Kilde (Via XAMPP)**](https://www.apachefriends.org/index.html), *Copyright © 2001-2022 The PHP Group*
 - **Apache**: [**Lisens**](https://www.apache.org/licenses/LICENSE-2.0), [**Kilde (Via XAMPP)**](https://www.apachefriends.org/index.html), *Copyright © 2022 The Apache Software Foundation*
 
-## Oppsett av Python
+## Oppsett
 
-Jeg har brukt python versjon **3.10.4** for dette prosjektet.  
-Bibliotek blir brukt for websockets, mysql tilkonling og farger i terminal.  
+### Apache:
 
-#### Oppsett kode:
+- `Apache 2.4.53`
+
+### SQL:
+
+- MySQL/MariaDB
+	- Testet på MySQL versjon `8.0.29`
+	- Testet på MariaDB versjon `10.4.24`
+- Brukeren `binaerio` er laget, og har privlegier
+- Oppsett er gjort med `Setup.sql` filen
+
+### PHP:
+
+- Versjon `8.1.5`
+- MYSQLI aktivert
+- Satt opp med apache
+- MySQL Login detaljer i `dblogin.php`
+
+### Python
+
+- Versjon `3.10.4`
+- Ekstra pakker:
+	- `websockets`
+	- `mysqlclient`
+	- `termcolor`
+
+Python blir brukt til websockets.
+
+#### Python oppsett kode:
 ```ps1
 pip install websockets mysqlclient termcolor
 ```
