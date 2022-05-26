@@ -1,12 +1,12 @@
-CREATE DATABASE binaerchatdb;
+CREATE DATABASE IF NOT EXISTS binaerchatdb;
 
 USE binaerchatdb;
 
 -- Users, the password is hashed and salted in php, created_at is just there for context/debuging
 CREATE TABLE users (
 	user_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	username TEXT NOT NULL UNIQUE,
-	password TEXT NOT NULL,
+	username VARCHAR(512) NOT NULL UNIQUE,
+	password VARCHAR(255) NOT NULL,
 	created_at DATETIME DEFAULT NOW()
 );
 INSERT INTO users (user_id, username, password) VALUES(1, "Server", "1"); -- Not hashed password, so can not be used for logins
@@ -59,7 +59,7 @@ CREATE TABLE messages (
 	message_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	conversation_id INT NOT NULL,
 	sender_id INT NOT NULL,
-	messagetext TEXT NOT NULL,
+	messagetext BLOB NOT NULL,
 	sent_at DATETIME NOT NULL DEFAULT NOW(),
 	FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id) ON DELETE CASCADE,
 	FOREIGN KEY (sender_id) REFERENCES users(user_id) ON DELETE CASCADE
@@ -68,7 +68,7 @@ CREATE TABLE messages (
 -- Basic help-ticket system
 CREATE TABLE help_tickets (
 	ticket_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	messagetext TEXT NOT NULL,
+	messagetext BLOB NOT NULL,
 	email VARCHAR(255) NOT NULL,
 	user_id INT, -- Can be non existent if user fx. has problems logging in
 	sent_at DATETIME NOT NULL DEFAULT NOW()
