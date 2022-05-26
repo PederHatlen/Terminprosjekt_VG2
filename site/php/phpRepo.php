@@ -47,7 +47,7 @@
 		require 'dblogin.php';
 		
 		// login Details is retrieved from dblogin.php, which is gitignored
-		$con = mysqli_connect(constant("DB_HOST"), constant("DB_USERNAME"), constant("DB_PASSWORD"), "binærchatdb");
+		$con = mysqli_connect(constant("DB_HOST"), constant("DB_USERNAME"), constant("DB_PASSWORD"), constant("DB_NAME"));
 		// Check connection
 		if (!$con) {die("Connection failed: " . mysqli_connect_error());}
 	
