@@ -88,9 +88,11 @@ async def handler(websocket):
 		username = ("Torshken" if ress[2] == "1" else ress[2])
 		color = ress[3]
 	except Exception as err:
+		# If data was wrong or an error occured
 		print(userIP, colored("Init went wrong:", "red"), err)
 		await websocket.close()
 		return False
+	# Run as long as the websocket is open
 	while websocket.open:
 		try:
 			# striping everything not binary, and ignoring message if nothing
