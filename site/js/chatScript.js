@@ -20,6 +20,7 @@ socket.onopen = function () {
 		messageFormEL.onsubmit = null;
 	}
 	
+	// Render message
 	socket.onmessage = function (e) {
 		let data = JSON.parse(e.data);
 		
@@ -32,16 +33,19 @@ socket.onopen = function () {
 		chatWindow.scrollTop = chatWindow.scrollHeight;
 	};
 	
+	// If the socket is open, overwrite default behaviour
 	messageFormEL.onsubmit = function (e) {
 		e.preventDefault();
 		send();
 	}
 };
 
+// Send function, takes eather text or the input value from messageel
 function send(message = messageEL.value) {
 	socket.send(JSON.stringify({msg:message}));
 	messageEL.value = "";
 }
+// Toggle the chat setting
 function togglesettings(){
 	if (settCEl.style.display == "none"){
 		settCEl.style.display = "inline-block";
@@ -51,4 +55,5 @@ function togglesettings(){
 		menuIconBTN.style.background = "";
 	}
 }
+// Scroll to the bottom/newest message
 chatWindow.scrollTop = chatWindow.scrollHeight;

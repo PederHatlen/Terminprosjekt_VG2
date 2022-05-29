@@ -3,7 +3,7 @@
 	session_start();             // Start tracking of session
 
 	if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
-		echo "<pre>Ingenting å se her.</pre>\n<pre>Se å dette istede: <a href=\"https://youtu.be/dQw4w9WgXcQ\">PHP hacking for n00bs</a>";
+		echo "<pre>Ingenting ï¿½ se her.</pre>\n<pre>Se ï¿½ dette istede: <a href=\"https://youtu.be/dQw4w9WgXcQ\">PHP hacking for n00bs</a>";
 		exit;
 	}
 
@@ -24,17 +24,20 @@
 		exit;
 	}
 
+	// Developer mode to display execution time on the page
 	if (isset($_GET["devmode"]) and constant("allowDevMode") == true){
 		if (isset($_SESSION["devmode"])){unset($_SESSION["devmode"]);}
 		else {$_SESSION["devmode"] = "true";}
 		refreshNoGET();
 	}
+	// hexclock changes color of page header to be the current time in hex
 	if (isset($_GET["hexclock"]) and constant("allowHexClock") == true){
 		if (isset($_SESSION["hexclock"])){unset($_SESSION["hexclock"]);}
 		else {$_SESSION["hexclock"] = "true";}
 		refreshNoGET();
 	}
 
+	// get data with themes? set the theme in session variables and refresh without get
 	if (isset($_GET["theme"]) and constant("allowTheme") == true and in_array($_GET["theme"], $themes)){
 		if((isset($_SESSION["theme"]) and $_SESSION["theme"] == $_GET["theme"]) or $_GET["theme"] == "normal"){
 			unset($_SESSION["theme"]);
@@ -118,6 +121,7 @@
 		}else return TRUE;
 	}
 
+	// Regex for binary check
 	function checkBinary($str){return (preg_match("/[^10]+/", $str)? false:true);}
 
 	// Get random color (Used for individual colors in chat)

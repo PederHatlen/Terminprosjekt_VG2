@@ -5,6 +5,7 @@
 	$msgText = '';
 	$conversation_id;
 
+	// If chatid is set, set it in session, and remove get data
 	if (isset($_GET["chatid"])){
 		$_SESSION["chatid"] = $_GET["chatid"];
 		header("Location: http://".$_SERVER['HTTP_HOST'].parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH));
@@ -19,6 +20,7 @@
 		exit;
 	}
 
+	// Get conversation id, else send to index
 	if (isset($_SESSION["chatid"])) {
 		$conversation_id = $_SESSION["chatid"];
 	}else{
@@ -26,16 +28,8 @@
 		header('Location: ../index.php');
 		exit;
 	}
-	$stmt = $con->prepare('SELECT * FROM conversations WHERE conversation_id = ?');
-	$stmt->bind_param('i', $conversation_id);
-	$stmt->execute();
-	$conversationInfo = $stmt->get_result()->fetch_assoc();
-	if ($conversationInfo == null){
-		unset($_SESSION["chatid"]);
-		header('Location: ../index.php');
-		exit;
-	}
 
+	// If user is not in the conversation, unset chat id and send to index
 	$stmt = $con->prepare('SELECT * FROM conv_users WHERE conversation_id = ? and user_id = ?');
 	$stmt->bind_param('ii', $conversation_id, $_SESSION["user_id"]);
 	$stmt->execute();
@@ -46,69 +40,74 @@
 		exit;
 	}
 
-	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-		if (isset($_POST["form"])){
-			if ($_POST["form"] == "changeColor"){
-				if (isset($_POST["color"]) and preg_match('/^#([0-9A-F]{3}){1,2}$/i', $_POST["color"])){
-					$color = $_POST["color"];
-					if (luminance($color) > 50){
-						$Fcolor = "";
-						if(strlen($color) == 3) $Fcolor = "#".$color[0].$color[0].$color[1].$color[1].$color[2].$color[2];
-						$stmt = $con->prepare('UPDATE conv_users SET color = ? WHERE conversation_id = ? and user_id = ?');
-						$stmt->bind_param('sii', $color, $conversation_id, $_SESSION["user_id"]);
+	// Settings posting ++ (Messages are posted to seperate document)
+	if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["form"])) {
+		// 
+		if ($_POST["form"] == "changeColor"){
+			if (isset($_POST["color"]) and preg_match('/^#([0-9A-F]{3}){1,2}$/i', $_POST["color"])){
+				$color = $_POST["color"];
+				if (luminance($color) > 50){
+					$Fcolor = "";
+					if(strlen($color) == 3) $Fcolor = "#".$color[0].$color[0].$color[1].$color[1].$color[2].$color[2];
+					$stmt = $con->prepare('UPDATE conv_users SET color = ? WHERE conversation_id = ? and user_id = ?');
+					$stmt->bind_param('sii', $color, $conversation_id, $_SESSION["user_id"]);
+					$stmt->execute();
+
+					$msgText = "Fargen din ble oppdatert!";
+				}else{$msgText = "Den fargen er for mørk.";}
+			}else{$msgText = "Det er ikke et støttet format.";}
+		}else if ($conversation_user["isAdmin"]){
+			switch ($_POST["form"]){
+				case 'addPerson':
+					// Error messages break the case, to eliminate tree formations in the code
+					if (!isset($_POST["addPersonName"])){$msgText = "Det ble ikke sendt med nokk data"; break;}
+
+					$stmt = $con->prepare('SELECT user_id FROM users WHERE username = ?');
+					$stmt->bind_param('s', $_POST["addPersonName"]);
+					$stmt->execute();
+					$user_id = $stmt->get_result()->fetch_assoc();
+						
+					if ($user_id == null){$msgText = "Brukeren finnes ikke."; break;}
+
+					// If user is allready in the chat
+					$stmt = $con->prepare('SELECT * FROM conv_users WHERE conversation_id = ? and user_id = ?');
+					$stmt->bind_param('ii', $conversation_id, $user_id["user_id"]);
+					$stmt->execute();
+					$res = $stmt->get_result()->fetch_assoc();
+
+					if ($res != null){$msgText = "Brukeren er allerede i chaten."; break;}
+
+					// Add user to the chat
+					$stmt = $con->prepare('INSERT INTO conv_users (conversation_id, user_id) VALUES (?, ?)');
+					$stmt->bind_param('ii', $conversation_id, $user_id["user_id"]);
+					$stmt->execute();
+
+					// Set to groupchat
+					if ($conversationInfo["isGroupChat"] == 0) {
+						$stmt = $con->prepare('UPDATE conversations SET isGroupChat = 1 WHERE conversation_id = ?');
+						$stmt->bind_param('i', $conversation_id);
 						$stmt->execute();
-	
-						$msgText = "Fargen din ble oppdatert!";
-					}else{$msgText = "Den fargen er for mørk.";}
-				}else{$msgText = "Det er ikke et støttet format.";}
-			}else if ($conversation_user["isAdmin"]){
-				switch ($_POST["form"]){
-					case 'addPerson':
-						if (isset($_POST["addPersonName"])){
-	
-							$stmt = $con->prepare('SELECT user_id FROM users WHERE username = ?');
-							$stmt->bind_param('s', $_POST["addPersonName"]);
-							$stmt->execute();
-							$user_id = $stmt->get_result()->fetch_assoc();
-							
-							if ($user_id != null){
-								$stmt = $con->prepare('SELECT * FROM conv_users WHERE conversation_id = ? and user_id = ?');
-								$stmt->bind_param('ii', $conversation_id, $user_id["user_id"]);
-								$stmt->execute();
-								$res = $stmt->get_result()->fetch_assoc();
+					}
+					$msgText = "Brukeren ble lagt til.";					
+					break;
+				case 'removePerson':
+					if (!isset($_POST["removePersonID"])){$msgText = "Det ble ikke sendt med nokk data"; break;}
 
-								if ($res == null){
-									$stmt = $con->prepare('INSERT INTO conv_users (conversation_id, user_id) VALUES (?, ?)');
-									$stmt->bind_param('ii', $conversation_id, $user_id["user_id"]);
-									$stmt->execute();
+					// Check if in chat
+					$stmt = $con->prepare('SELECT * FROM conv_users WHERE conversation_id = ? and user_id = ?');
+					$stmt->bind_param('ii', $conversation_id, $_POST["removePersonID"]);
+					$stmt->execute();
+					$res = $stmt->get_result()->fetch_assoc();
+					
+					if ($res != null){$msgText = "Det er ikke en person i chatten."; break;}
 
-									if ($conversationInfo["isGroupChat"] == 0) {
-										$stmt = $con->prepare('UPDATE conversations SET isGroupChat = 1 WHERE conversation_id = ?');
-										$stmt->bind_param('i', $conversation_id);
-										$stmt->execute();
-									}
-									$msgText = "Brukeren ble lagt til.";
-								}else{$msgText = "Brukeren er allerede i chaten.";}
-							}else{$msgText = "Brukeren finnes ikke.";}
-						}else{$msgText = "Det ble ikke sendt med nokk data";}
-						break;
-					case 'removePerson':
-						if (isset($_POST["removePersonID"])){
-							$stmt = $con->prepare('SELECT * FROM conv_users WHERE conversation_id = ? and user_id = ?');
-							$stmt->bind_param('ii', $conversation_id, $_POST["removePersonID"]);
-							$stmt->execute();
-							$res = $stmt->get_result()->fetch_assoc();
-							
-							if ($res != null){
-								$stmt = $con->prepare('DELETE FROM conv_users WHERE conversation_id = ? and user_id = ?');
-								$stmt->bind_param('ii', $conversation_id, $_POST["removePersonID"]);
-								$stmt->execute();
+					// Remove user
+					$stmt = $con->prepare('DELETE FROM conv_users WHERE conversation_id = ? and user_id = ?');
+					$stmt->bind_param('ii', $conversation_id, $_POST["removePersonID"]);
+					$stmt->execute();
 
-								$msgText = "Personen ble fjernet.";
-							}else{$msgText = "Det er ikke en person i chatten.";}
-						}else{$msgText = "Det ble ikke sendt med nokk data";}
-						break;
-				}
+					$msgText = "Personen ble fjernet.";
+					break;
 			}
 		}
 	}
@@ -119,6 +118,7 @@
 	$stmt->execute();
 	$participants = $stmt->get_result()->fetch_all();
 
+	// Creating a connection token for the websocket
 	$wsToken = bin2hex(random_bytes(16));
 	$time = date('Y-m-d H:i:s', strtotime("now +15 seconds"));
 
@@ -160,6 +160,7 @@
 						</form>
 						
 						<?php 
+							// If use is admin print out the admin options (Not great, but it's fine)
 							if ($conversation_user["isAdmin"]){
 								echo "<hr><br>
 								<h3>Admin instillinger</h3>
@@ -188,7 +189,7 @@
 					</div>
 				</div>
 				<h3>Chatter med: <?php 
-				// Outputing all conversation participants, intended for future expansion to group chats, also translates user 1 to Torshken (ME)
+				// Outputing all conversation participants, also translates user 1 to Torshken (ME)
 				for ($i=0; $i < count($participants); $i++) {
 					echo ($participants[$i][0] == "1"? "Torshken":$participants[$i][0]);
 					if ($i != count($participants)-1){echo ", ";}

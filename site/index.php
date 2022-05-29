@@ -21,7 +21,7 @@
 			if (isset($_SESSION["user_id"])) {
 				echo("<p>Du er pålogget som $_SESSION[username] <a href=\"php/logoff.php\">Logg av</a></p>
 				<p>For å finne samtalene dine kan du gå her: <a href=\"php/conversations.php\">Samtaler</a></p>");
-				if ($_SESSION["user_id"] == "1") {
+				if ($_SESSION["username"] == "1") {
 					$con = connect();
 					$stmt = $con->prepare('SELECT count(ticket_id) FROM help_tickets');
 					$stmt->execute();

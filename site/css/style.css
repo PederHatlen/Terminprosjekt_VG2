@@ -1,10 +1,10 @@
 /* Custom font from google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;400&display=swap');
 
+/**** Genneral styling ****/
+
 /* Styling of html to make page 100% of the screen height */
 html{height: 100%;}
-
-/* Genneral styling */
 /* Declaring grid areas for body (Used on all pages) + extra styling for body*/
 body{
 	padding: 0;
@@ -30,6 +30,8 @@ a{
 	color: var(--text-color, #fff);
 	text-underline-offset: 1px;
 }
+a:hover{opacity: 50%;}
+/* Input fields and user engageable */
 input, textarea, select, button{
 	padding: 4px;
 	border: #000 solid 1px;
@@ -37,7 +39,6 @@ input, textarea, select, button{
 	background: #fff;
 	font-family: 'Inconsolata', monospace;
 }
-
 ::placeholder{color: #000;}
 :focus-visible::placeholder{color: #555;}
 input:focus-visible, textarea:focus-visible, select:focus-visible{
@@ -53,16 +54,26 @@ input:disabled, input[disabled]{
 input:disabled:hover, input:disabled:focus{
 	background: gray;
 }
+.verticalForm{
+	display: flex;
+	flex-direction: column;
+	align-items: baseline;
+}
+.horisontalForm{
+	display: flex;
+	flex-direction: row;
+	/* align-items: center; */
+}
 
 
-/* Header */
+/**** Header ****/
+header, footer{padding: 0 2rem;}
 header{
 	grid-area: Header;
 	display: flex;
 	align-items: center;
 	background: #05456E;
 	background: var(--header-color, #05456E);
-	/* background-image: linear-gradient(135deg, #05456E 3.5rem,  #000 3.5rem); */
 	font-weight: bolder;
 	justify-content: space-between;
 }
@@ -87,7 +98,7 @@ hr {
 	border-bottom: 1px solid #fff;
 }
 
-/* Main content for all pages */
+/**** Main ****/
 main{
 	grid-area: Content;
 	padding: 0 2rem;
@@ -100,7 +111,7 @@ main a, .linkButton{
 	padding: 0.25rem 0.5rem;
 }
 
-/* Footer */
+/**** Footer ****/
 footer{
 	display: flex;
 	align-items: center;
@@ -108,7 +119,6 @@ footer{
 	background: var(--footer-color, #05456E);
 	justify-content: space-between;
 }
-footer, header{padding: 0 2rem;}
 #themeDropdown{
 	display: none;
 	flex-direction: column;
@@ -124,21 +134,8 @@ footer, header{padding: 0 2rem;}
 	margin: 0 0 5px 0;
 }
 
-a:hover{opacity: 50%;}
 
-.verticalForm{
-	display: flex;
-	flex-direction: column;
-	align-items: baseline;
-}
-.horisontalForm{
-	display: flex;
-	flex-direction: row;
-	/* align-items: center; */
-}
-
-
-/* Extra styling for the help page */
+/**** Help Page ****/
 #helpMain{padding-bottom: 2rem;}
 .question{
 	padding: 0.5rem 1rem;
@@ -149,23 +146,12 @@ a:hover{opacity: 50%;}
 .question a{padding: 0; margin: 0;}
 .answer{padding: 0.2rem 0; margin: 0; font-weight: 200;}
 
-.exit{
-	color:red;
-	font-weight: 900;
-	font-size: 2rem;
-}
-.exit:hover{
-	color: darkred;
-	opacity: 100%;
-}
 
-/* The options for the table */
+/**** Conversations page ****/
 #tableoptions{
 	display: flex;
 	justify-content: space-between;
 }
-
-/* Table styling */
 #conversationtable, #useradmintable{
 	list-style-type: none;
 	padding: 0.25rem;
@@ -198,6 +184,8 @@ td, th{
 	width: 100%;
 }
 
+
+/**** User page/Delete user ****/
 .fullPopup{
 	left: 0;
 	top: 0;
@@ -224,7 +212,6 @@ td, th{
 	padding: 0;
 	margin: 0;
 }
-
 .deleteBtn{
 	background-color: red;
 	color: white;
@@ -234,10 +221,18 @@ td, th{
 	color: white;
 	background-color: darkred;
 }
-
 .danger{
 	color: red;
 	font-weight: bold;
+}
+.exit{
+	color:red;
+	font-weight: 900;
+	font-size: 2rem;
+}
+.exit:hover{
+	color: darkred;
+	opacity: 100%;
 }
 
 /* In case the display device is portrait (fx. a phone) */
