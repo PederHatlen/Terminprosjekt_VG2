@@ -63,7 +63,8 @@ Eller en bildekopi her:
 
 Python blir brukt til websockets.
 
-#### Python oppsett kode:
+#### Python oppsettkode:
+
 ```ps1
 pip install websockets mysqlclient termcolor
 ```
