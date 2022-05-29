@@ -22,7 +22,7 @@ from termcolor import colored
 # Declaring global variables
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 conversations = {}
-eksternSQL = False
+externalSQL = False
 arbeidsmiljolovenMode = True
 
 # From https://stackoverflow.com/a/40559005 and https://stackoverflow.com/a/13110762
@@ -144,9 +144,9 @@ async def main():
 	global conn
 	global cursor
 
-	# Try connecting to database, database is set by eksternSQL
+	# Try connecting to database, database is set by externalSQL
 	try: 
-		if eksternSQL: conn = MySQLdb.connect("10.0.13.38", "binaerio", "Zfn4mu8%wtEtMPD8Q4jMR4tL6^nS^CDdU@G3E90b", "binaerchatdb")
+		if externalSQL: conn = MySQLdb.connect("10.0.13.38", "binaerio", "Zfn4mu8%wtEtMPD8Q4jMR4tL6^nS^CDdU@G3E90b", "binaerchatdb")
 		else: conn = MySQLdb.connect("localhost", "root", "", "binaerchatdb")
 	except: 
 		print(colored("Can't connect to database.", "red"))
