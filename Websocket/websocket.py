@@ -1,5 +1,4 @@
 import asyncio
-from encodings import utf_8
 import random
 import math
 import time
@@ -120,7 +119,7 @@ async def handler(websocket):
 			
 			# Arbeidsmiljøloven mode, sends a random law to a conversation when a user writes hms or arbeidsmiljøloven
 			decoded_string = decode_binary_string(message).lower()
-			if arbeidsmiljolovenMode and (decoded_string == "arbeidsmiljøloven" or decoded_string == "hms"):
+			if arbeidsmiljolovenMode and (decoded_string == "arbeidsmiljøloven" or decoded_string == "arbeidsmiljoloven" or decoded_string == "arbeidsmiljloven" or decoded_string == "hms"):
 				# Function for retrieving and sending random message
 				await send_arbeidsmiljo_msg(userIP, chatId)
 			
@@ -170,5 +169,6 @@ async def main():
 		await asyncio.Future()  # run forever
 	conn.close()
 
+# If the document is not imported (Best practice)
 if __name__ == "__main__":
 	asyncio.run(main())
